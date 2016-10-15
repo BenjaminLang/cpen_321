@@ -45,7 +45,9 @@ class database_server():
         print(name)
         print(database_input)
 
-        db.name.insert_one(database_input)
+        # Save vs insert_one
+        # Save updates and insert adds another one
+        db.name.save(database_input)
 
         # getting min value
         user_req_name = query()
@@ -57,7 +59,6 @@ class database_server():
                                            sort=[("price", 1)])["price"]
 
         print(min_price)
-
 
         while True:
             connection, addr = server_socket.accept()
