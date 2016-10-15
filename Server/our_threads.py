@@ -14,5 +14,3 @@ class myThread(threading.Thread):
         elif self.name == 'crawler':
             # get the crawler to start in here
             print('in crawler thread')
-
-
