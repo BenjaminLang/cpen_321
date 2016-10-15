@@ -10,7 +10,6 @@ class query:
         self.host = socket.gethostname()
         self.port = 6969
         self.data = {}
-        self.data_2 = {}
 
     def start_query(self):
         self.data['name'] = 'oranges'
@@ -23,19 +22,22 @@ class query:
         self.sock.send(json_formatted_data.encode())
         # self.sock.close()
 
-        self.data_2['name'] = 'oranges'
-        self.data_2['store'] = 'superstore'
-        self.data_2['price'] = '1.50'
-        json_formatted_data_2 = json.dumps(self.data_2)
+    def start_query2(self):
+        self.data['name'] = 'oranges'
+        self.data['store'] = 'superstore'
+        self.data['price'] = '1.50'
+        json_formatted_data_2 = json.dumps(self.data)
         print(json_formatted_data_2)
 
-        # self.sock.connect((self.host, self.port))
+        self.sock.connect((self.host, self.port))
         self.sock.send(json_formatted_data_2.encode())
         self.sock.close()
 
 if __name__ == "__main__":
     x = query()
+    y = query()
     x.start_query()
+    y.start_query2()
 
 
 
