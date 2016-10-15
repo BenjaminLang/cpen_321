@@ -24,3 +24,10 @@ class database_server:
             print(json_data['store'])
             connection.close()
 
+            connection_2, addr_2 = server_socket.accept()
+            data_2 = connection_2.recv(1024).decode()
+            json_data_2 = json.loads(data_2)
+            print(json_data_2['name'])
+            print(json_data_2['price'])
+            print(json_data_2['store'])
+            connection_2.close()
