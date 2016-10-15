@@ -8,8 +8,6 @@ def main():
     thread_stack.append(myThread('crawler'))
     thread_stack[1].start()
 
-
-
 if __name__ == "__main__":
     main()
 
