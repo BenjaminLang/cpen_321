@@ -1,25 +1,29 @@
 # Take in Crawler Data and sends it to server
 # Take in User Request and sends back item
 import socket
-import pickle
-from message import find_message, insert_message, message_type
+import json
+
 
 class query:
-    def __init__(self, type):
+    def __init__(self):
         self.sock = socket.socket()
         self.host = socket.gethostname()
         self.port = 6969
-        self.message = find_message(type)
+        self.data = {}
 
     def start_query(self):
+        self.data['name'] = 'oranges'
+        self.data['store'] = 'save on foods'
+        self.data['price'] = '1.69'
+        json_formatted_data = json.dumps(self.data)
+        print(json_formatted_data)
+
         self.sock.connect((self.host, self.port))
-        request = pickle.dump(self.message)
-        self.sock.send(request)
-        print('client recieved: ',  repr(self.sock.recv(1024)))
+        self.sock.send(json_formatted_data.encode())
         self.sock.close()
 
 if __name__ == "__main__":
-    x = query(message_type.find)
+    x = query()
     x.start_query()
 
 
