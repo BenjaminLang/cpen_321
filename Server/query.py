@@ -12,10 +12,12 @@ class query:
         self.data = {}
 
     def start_query(self):
+        self.message = {}
         self.data['name'] = 'oranges'
         self.data['store'] = 'save on foods'
         self.data['price'] = '1.69'
-        json_formatted_data = json.dumps(self.data)
+        self.message['data'] = self.data
+        json_formatted_data = json.dumps(self.message)
         print(json_formatted_data)
 
         self.sock.connect((self.host, self.port))
@@ -35,9 +37,9 @@ class query:
 
 if __name__ == "__main__":
     x = query()
-    y = query()
+    # y = query()
     x.start_query()
-    y.start_query2()
+    # y.start_query2()
 
 
 
