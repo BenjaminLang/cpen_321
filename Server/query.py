@@ -10,58 +10,57 @@ class query:
         self.host = socket.gethostname()
         self.port = 6969
         self.data = {}
+        self.message = {}
+        self._id = 1
 
     def start_query(self):
-        self.message = {}
-        self.data['name'] = 'oranges'
+        self.message['message_type'] = "write"
+        self.message['collection'] = "oranges"
+        self.message['_id'] = self._id
+        self.data['name'] = 'mandarin oranges'
         self.data['store'] = 'save on foods'
         self.data['price'] = '1.69'
         self.message['data'] = self.data
         json_formatted_data = json.dumps(self.message)
-        print(json_formatted_data)
+        # print(json_formatted_data)
 
         self.sock.connect((self.host, self.port))
         self.sock.send(json_formatted_data.encode())
-        # self.sock.close()
+        self.sock.close()
 
     def start_query2(self):
-        self.data['name'] = 'oranges'
+        self.message['message_type'] = "write"
+        self.message['collection'] = "oranges"
+        self.message['_id'] = self._id
+        self.data['name'] = 'mandarin oranges'
         self.data['store'] = 'superstore'
         self.data['price'] = '1.50'
-        json_formatted_data_2 = json.dumps(self.data)
-        print(json_formatted_data_2)
+        self.message['data'] = self.data
+        json_formatted_data = json.dumps(self.message)
+        # print(json_formatted_data)
 
         self.sock.connect((self.host, self.port))
-        self.sock.send(json_formatted_data_2.encode())
+        self.sock.send(json_formatted_data.encode())
+        self.sock.close()
+
+    def start_query3(self):
+        self.message['message_type'] = "read"
+        self.message['collection'] = "oranges"
+        json_formatted_data = json.dumps(self.message)
+        # print(json_formatted_data)
+
+        self.sock.connect((self.host, self.port))
+        self.sock.send(json_formatted_data.encode())
         self.sock.close()
 
 if __name__ == "__main__":
     x = query()
-    # y = query()
+    y = query()
+    y._id = x._id + 1
+
     x.start_query()
-    # y.start_query2()
+    y.start_query2()
+    x._id += 1
 
-
-
-"""
-def query():
-    user_request = "Oranges"
-    # print(user_request)
-    return user_request
-
-
-def spider():
-    data_in = {
-        "name": "Oranges",
-        "store": "SuperStore",
-        "price": 2.99
-    }
-
-    name = "Oranges"
-    # print(name)
-    # print(data_in)
-    return name, data_in
-
-
-"""
-
+    z = query()
+    z.start_query3()

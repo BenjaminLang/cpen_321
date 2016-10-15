@@ -1,6 +1,9 @@
 import socket
+
+import pymongo
 from pymongo import MongoClient
 import json
+
 
 class database_server:
     def test_server(self):
@@ -19,7 +22,23 @@ class database_server:
             connection, addr = server_socket.accept()
             data = connection.recv(1024).decode()
             json_data = json.loads(data)
-            print(json_data['data']['name'])
-            print(json_data['data']['price'])
-            print(json_data['data']['store'])
+            # print(json_data['data']['name'])
+            # print(json_data['data']['price'])
+            # print(json_data['data']['store'])
+            # print(json_data['message_type'])
+            # print(json_data['collection'])
+
+            que_type = json_data['message_type']
+
+            if que_type == 'write':
+                collection = json_data['collection']
+                db[collection].save(json_data)
+
+            if que_type == 'read':
+                # Sort by price and return first
+                # Assumptions:
+                # Price is a valid field in the document
+                collection = json_data['collection']
+                min_price = db[collection].find_one({"data.price": {"$exists": True}}, sort=[("data.price", pymongo.ASCENDING)])
+                print(min_price)
             connection.close()
