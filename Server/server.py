@@ -32,6 +32,7 @@ class database_server:
 
             if que_type == 'write':
                 collection = json_data['collection']
+                del json_data['message_type']
                 db[collection].save(json_data)
 
             if que_type == 'read':
@@ -40,5 +41,7 @@ class database_server:
                 # Price is a valid field in the document
                 collection = json_data['collection']
                 min_price = db[collection].find_one({"data.price": {"$exists": True}}, sort=[("data.price", pymongo.ASCENDING)])
-                print(min_price)
+                # print(min_price)
+                response = json.dumps(min_price)
+                connection.send(response.encode())
             connection.close()

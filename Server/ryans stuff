@@ -3,6 +3,8 @@
 
         """firstInput = db.oranges.insert_one(
             {
+                "message_type" : "insert"
+                "_id" : "efhweufhwuegfuwehfbw"
                 "data" : {
                     "name" : "mandarin oranges",
                     "store" : "save on foods",
