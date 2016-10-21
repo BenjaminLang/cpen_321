@@ -1,0 +1,70 @@
+Message Types:
+    //placed into JSON message for server to understand
+    - Write / Write response
+    - Read :
+        - ReadMinPrice
+        - ReadLocation
+        - ReadwithStores
+    - ReadCollectionDocuments
+    - UpdateCollection
+    - CreateNewAcc
+    - Login
+    - Signout
+    //maybe pictures
+
+MessageExample JSON:
+
+FOR READ and subtypes:
+
+    {   "messageType" : "read",
+        "userID" : "id"
+        "collectionType" : "collection",
+        "options" : {
+            "locationX" : "x_coord",
+            "locationY" : "y_coord",
+            "Radius" : "radius",
+            "stores" : ["store1", "store2" ...]
+            "subcategories" : ["red apples", "green apples" ... ]
+        }
+        "data" : {
+            //empty for read
+        }
+    }
+
+FOR READ RESPONSE:
+    {   "messageType" : "response",
+        "response data" : {
+            "collection" : {
+                "data" : {
+                "name" : "Green Apples",
+                "price" : "1.50",
+                "store" : "save on foods",
+                "image link" : "www.link.com"
+                "URL to page" : "www.link.com"
+                }
+                ...
+                ...
+                ...
+
+            }
+            ...
+            ...
+            ...
+        }
+    }
+
+
+FOR WRITE:
+    {   "messageType" : "write",
+        "collectionType" : "collection",
+        "options" : {
+            //unsure of what options to put in here
+        }
+        "data" : {
+            "name" : "Green Apples",
+            "price" : "1.50",
+            "store" : "save on foods",
+            "image link" : "www.link.com"
+            "URL to page" : "www.link.com"
+        }
+    }
