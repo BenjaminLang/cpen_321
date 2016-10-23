@@ -1,7 +1,7 @@
 import pymongo
 
-class RequestHandler:
-    def _init(self, mongo_db):
+class RequestHandler():
+    def __init__(self, mongo_db):
         self.mongo_db = mongo_db
 
     def handle_request(self, req_type, json_data):
@@ -51,9 +51,6 @@ class RequestHandler:
         return response
 
     """
-    def handle_update_collection(self, json_data):
-        return response
-
     def handle_read_collection_documents(self, json_data):
         return response
     """

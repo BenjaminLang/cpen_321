@@ -1,5 +1,5 @@
 from our_threads import myThread
-import server
+import subprocess
 
 def main():
     thread_stack = list()
