@@ -68,3 +68,16 @@ FOR WRITE:
             "URL to page" : "www.link.com"
         }
     }
+
+COLLECTION DATA:
+    {
+        "collections": {
+                "milk" : {
+                    "type" : ["2%", "1%", "fat-free"]
+                }
+                ...
+                ...
+                ...
+                ...
+            }
+    }
