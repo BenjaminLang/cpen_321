@@ -1,0 +1,128 @@
+Message Types:
+    //placed into JSON message for server to understand
+    - Write / Write response
+    - Read :
+        - ReadMinPrice
+        - ReadLocation
+        - ReadwithStores
+<<<<<<< HEAD
+    - ReadCollectionDocuments (Categories)
+=======
+    - ReadCollectionDocuments
+>>>>>>> 7626ce951f81372f519712926584742f2e64891d
+    - UpdateCollection
+    - CreateNewAcc
+    - Login
+    - Signout
+<<<<<<< HEAD
+    - UserLists
+=======
+>>>>>>> 7626ce951f81372f519712926584742f2e64891d
+    //maybe pictures
+
+MessageExample JSON:
+
+FOR READ and subtypes:
+
+<<<<<<< HEAD
+    {   "messageType" : "type",
+=======
+    {   "messageType" : "read",
+        "userID" : "id"
+>>>>>>> 7626ce951f81372f519712926584742f2e64891d
+        "collectionType" : "collection",
+        "options" : {
+            "locationX" : "x_coord",
+            "locationY" : "y_coord",
+            "Radius" : "radius",
+<<<<<<< HEAD
+            "min" : "number",
+            "stores" : [store_1, store_2, ..., store_n]
+        }
+    }
+
+- Returns with requested data.
+- All read results are filtered by price, with default case being 100 items returned
+- Has "options" field for the differing types of read
+    - "locationX", "locationY", and "Radius" are used to limit the search for items with location
+    - "min" is used to restrict the amount of items returned by algorithm
+        - Can set to only return the cheapest item (min = 1) or cheapest 5 items (min = 5)
+    - "stores" is used to limit the search for items to only certain stores
+
+FOR WRITE and UPDATE:
+    {   "messageType" : "write",
+        "collectionType" : "collection",
+        "__id" : "id",
+        "data" : {
+            "__id" : "id",
+            "dataType" : "data",
+            "store" : "store",
+            "price" : "price",
+            "URL" : "url"
+        }
+    }
+
+- Returns returnmessage of : "Write Success"
+- Has field "__id" to take advantage of MongoDB's save() function, as when we want to update the data in the database,
+  we don't have to insert and then iterate through the database to find the correct data and delete. Updating through
+  the save() function saves time and has better performance.
+
+    - ReadCollectionDocuments
+    - UpdateCollection
+    - CreateNewAcc
+    - Login
+    - Signout
+    
+FOR NEW ACC / LOGIN / SIGNOUT:
+    {
+        "requestType" : "request",
+        
+    }
+
+=======
+            "stores" : ["store1", "store2" ...]
+            "subcategories" : ["red apples", "green apples" ... ]
+        }
+        "data" : {
+            //empty for read
+        }
+    }
+
+FOR READ RESPONSE:
+    {   "messageType" : "response",
+        "response data" : {
+            "collection" : {
+                "data" : {
+                "name" : "Green Apples",
+                "price" : "1.50",
+                "store" : "save on foods",
+                "image link" : "www.link.com"
+                "URL to page" : "www.link.com"
+                }
+                ...
+                ...
+                ...
+
+            }
+            ...
+            ...
+            ...
+        }
+    }
+
+
+FOR WRITE:
+    {   "messageType" : "write",
+        "collectionType" : "collection",
+        "options" : {
+            //unsure of what options to put in here
+        }
+        "data" : {
+            "name" : "Green Apples",
+            "price" : "1.50",
+            "store" : "save on foods",
+            "image link" : "www.link.com"
+            "URL to page" : "www.link.com"
+        }
+    }
+>>>>>>> 7626ce951f81372f519712926584742f2e64891d
