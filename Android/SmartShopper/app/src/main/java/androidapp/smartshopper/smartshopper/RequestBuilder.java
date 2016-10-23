@@ -4,26 +4,30 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
 /**
  * Created by Ben on 10/22/2016.
  */
 public class RequestBuilder {
     public RequestBuilder(){}
 
-    public String buildReadReq(List<String> items, SearchOptions[] options, String[] collections){
+    public String buildReadReq(String[] items, SearchOptions[] options){
+        String[] queryCollections = getSuperString(items);
         JSONObject request = new JSONObject();
         try {
+            //insert message type
             request.put("message_type", "read");
+
+            //insert options
             JSONObject opt = new JSONObject();
             for(SearchOptions option : options)
                 opt.put(option.getOptionType(), option.getOption());
             request.put("options", opt);
+
+            //insert item names
             JSONArray searchCollections = new JSONArray();
-            for(String col : collections)
-                searchCollections.put(col);
-            request.put("collections", searchCollections);
+            for(int i = 0; i < items.length; i++)
+                searchCollections.put(new JSONObject().put(items[i], queryCollections[i]));
+
             return request.toString(2);
         } catch (JSONException e){
             return "cannot generate message";
@@ -40,4 +44,9 @@ public class RequestBuilder {
         }
     }
 
+    private String[] getSuperString(String[] items){
+        String[] collections = Collections.getInstance().getCollection();
+        //this is hard
+        return null;
+    }
 }
