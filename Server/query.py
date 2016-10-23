@@ -19,7 +19,7 @@ class query:
         self.message['_id'] = self._id
         self.data['name'] = 'mandarin oranges'
         self.data['store'] = 'save on foods'
-        self.data['price'] = '1.69'
+        self.data['price'] = '1.50'
         self.message['data'] = self.data
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
@@ -34,7 +34,7 @@ class query:
         self.message['_id'] = self._id
         self.data['name'] = 'mandarin oranges'
         self.data['store'] = 'superstore'
-        self.data['price'] = '1.50'
+        self.data['price'] = '1.40'
         self.message['data'] = self.data
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
@@ -51,6 +51,9 @@ class query:
 
         self.sock.connect((self.host, self.port))
         self.sock.send(json_formatted_data.encode())
+        response = self.sock.recv(1024).decode()
+        dict = json.loads(response)
+        print(response)
         self.sock.close()
 
 if __name__ == "__main__":
@@ -61,6 +64,7 @@ if __name__ == "__main__":
     x.start_query()
     y.start_query2()
     x._id += 1
+
 
     z = query()
     z.start_query3()
