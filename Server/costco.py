@@ -1,11 +1,11 @@
-import urllib2
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import json
 
 
 # take in a url and return a soup
 def get_soup(url):
-    html = urllib2.urlopen(url).read()
+    html = urlopen(url).read()
     return BeautifulSoup(html, 'html.parser')
 
 
@@ -43,25 +43,26 @@ def get_products(soup):
                 if list_price:
                     price = str(list_price[0]).split('$')[1].split('</')[0]
                 else:
-                    continue # no price for this item
+                    continue  # no price for this item
 
                 list_description = caption.find_all('p', 'description')
                 if list_description:
-                    description= list_description[0]
+                    description = list_description[0]
                     name = str(list_description[0]).split('>')[1].split('<')[0]
                 else:
-                    continue # no name for this item
+                    continue  # no name for this item
             else:
-                continue # no info for this item
+                continue  # no info for this item
 
             data = {}
+            data['name'] = name
+            data['price'] = price
             data['url'] = url
             data['image'] = image
-            data['price'] = price
-            data['name'] = name
+            data['store'] = 'costco'
 
             retList.append(data)
-        
+
     return retList
 
 
@@ -69,11 +70,25 @@ def get_products(soup):
 def strip_name(url):
     return url.split('costco.ca/')[1].split('.html')[0]
 
+def send_to_db(dep_name, cat_name):
+    catSoup = get_soup(category)
+    subCats = get_links(catSoup, 'div', 'col-xs-6 col-md-3')
+    if not subCats:  # subCats is empty for this category
+        mega_list[dep_name][cat_name] = get_products(catSoup)
+    else:
+        mega_list[dep_name][cat_name] = {}
+        for subCat in subCats:
+            subCat_name = strip_name(subCat)
+            productSoup = get_soup(subCat)
+            mega_list[dep_name][cat_name][subCat_name] = get_products(productSoup)
+            # break
+            # uncomment this break ^ to quickly see the output for 1 department to figure out how it's laid out
+
 
 if __name__ == '__main__':
     soup = get_soup('http://www.costco.ca')
     departments = get_links(soup, 'li', 'category-level-1')
-    
+
     mega_list = {}
 
     for department in departments:
@@ -84,23 +99,11 @@ if __name__ == '__main__':
         categories = get_links(depSoup, 'div', 'col-xs-6 col-md-3')
         for category in categories:
             cat_name = strip_name(category)
-
-            catSoup = get_soup(category)
-            subCats = get_links(catSoup, 'div', 'col-xs-6 col-md-3')
-            if not subCats: # subCats is empty for this category
-                mega_list[dep_name][cat_name] = get_products(catSoup)
-            else:
-                mega_list[dep_name][cat_name] = {}
-                for subCat in subCats:
-                    subCat_name = strip_name(subCat)
-                    productSoup = get_soup(subCat)
-                    mega_list[dep_name][cat_name][subCat_name] = get_products(productSoup)
-        # break
-        # uncomment this break ^ to quickly see the output for 1 department to figure out how it's laid out
+            send_to_db(dep_name, cat_name)
 
     json_mega_list = json.dumps(mega_list, indent=2)
 
-    print json_mega_list
+    print(json_mega_list)
 
     # todo:
     # add category exclusion list
