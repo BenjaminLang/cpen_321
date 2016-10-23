@@ -1,5 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from query import DataHandler
 import json
 
 
@@ -77,7 +78,7 @@ def send_to_db(dep_name, cat_name):
     data = {}
     sub_data = {}
     item['message_type'] = "write"
-    item['collection'] = "dep_name"
+    item['collection'] = dep_name
 
     catSoup = get_soup(category)
     subCats = get_links(catSoup, 'div', 'col-xs-6 col-md-3')
@@ -91,8 +92,11 @@ def send_to_db(dep_name, cat_name):
             sub_data = get_products(productSoup)
             data[subCat_name] = sub_data
     item['data'] = data
-    json_data = json.dumps(item)
-    return json_data.encode()
+    json_data = json.dumps(item, indent = 2)
+    service = DataHandler
+    service.send_data(json_data)
+
+    return json_data
 
 
 if __name__ == '__main__':

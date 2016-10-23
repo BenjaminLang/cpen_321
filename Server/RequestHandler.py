@@ -1,29 +1,38 @@
 import pymongo
 
-
 class RequestHandler:
     def _init(self, mongo_db):
         self.mongo_db = mongo_db
 
     def handle_request(self, req_type, json_data):
+        global json_response
         if req_type == 'write':
             json_response = self.handle_write(json_data)
         elif req_type == 'read':
             json_response = self.handle_read(json_data)
         elif req_type == 'update_collection':
             json_response = self.handle_update_collection(json_data)
-        elif req_type == 'read_collection_documents':
-            json_response = self.handle_read_collection_documents(json_data)
+        # elif req_type == 'read_collection_documents':
+            # json_response = self.handle_read_collection_documents(json_data)
         # else return a ill-formed message response
 
         return json_response
 
     def handle_write(self, json_data):
         # insert the data into the database
+        # If item is already in, update data
+        global response
         try:
+            # Checking
             collection = json_data['collection']
             del json_data['message_type']
-            self.mongo_db[collection].save(json_data)
+            data = self.mongo_db['collection'].find(json_data)
+
+            if data:
+                __id = data['__id']
+                json_data['__id'] = __id
+
+            self.mongo_db['collection'].save(json_data)
             response = {}
             response['message_type'] = 'write_response'
 
@@ -53,7 +62,7 @@ class RequestHandler:
 
     def handle_update_collection(self, json_data):
         # insert the data into the database
-        return 0
+        return "ben ur a nigger"
 
     """
     def handle_read_collection_documents(self, json_data):
