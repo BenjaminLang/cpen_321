@@ -16,7 +16,7 @@ MessageExample JSON:
 
 FOR READ and subtypes:
 
-    {   "messageType" : "read",
+    {   "message_type" : "read",
         "userID" : "id",
         "options" : {
             "locationX" : "x_coord",
@@ -26,9 +26,22 @@ FOR READ and subtypes:
         },
         "collections" : ["col_name_1", ...]
     }
+    
+FOR UPDATE COLLECTION REQUEST //gets the list of collection types in database
+    {   "message_type" : "collection_request"   }
+    
+FOR COLLECTION REQUEST RESPONSE //returns list of collection types
+    {   "message_type" : "collection_request_response",
+        "collections" : [   "col_name_1",
+                            "col_name_2",
+                            "col_name_3",
+                            ...
+                            "col_name_n"],
+    }
+                            
 
 FOR READ RESPONSE:
-    {   "messageType" : "response",
+    {   "message_type" : "response",
         "collections" : ["col_name_1", ...],
         "collection1" : {
             "item1" : {
@@ -51,7 +64,7 @@ FOR READ RESPONSE:
 
 
 FOR WRITE:
-    {   "messageType" : "write",
+    {   "message_type" : "write",
         "collectionType" : "collection",
         "options" : {
             //unsure of what options to put in here
