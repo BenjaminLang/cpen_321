@@ -98,7 +98,7 @@ if __name__ == '__main__':
         # break
         # uncomment this break ^ to quickly see the output for 1 department to figure out how it's laid out
 
-    json_mega_list = json.dumps(mega_list)
+    json_mega_list = json.dumps(mega_list, indent=2)
 
     print json_mega_list
 
