@@ -93,7 +93,7 @@ def send_to_db(dep_name, cat_name):
             data[subCat_name] = sub_data
     item['data'] = data
     json_data = json.dumps(item, indent = 2)
-    service = DataHandler
+    service = DataHandler()
     service.send_data(json_data)
 
     return json_data

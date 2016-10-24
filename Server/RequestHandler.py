@@ -1,11 +1,11 @@
 import pymongo
 
 class RequestHandler:
-    def _init(self, mongo_db):
+    def __init__(self, mongo_db):
         self.mongo_db = mongo_db
 
     def handle_request(self, req_type, json_data):
-        global json_response
+        json_response = {}
         if req_type == 'write':
             json_response = self.handle_write(json_data)
         elif req_type == 'read':
@@ -15,13 +15,12 @@ class RequestHandler:
         # elif req_type == 'read_collection_documents':
             # json_response = self.handle_read_collection_documents(json_data)
         # else return a ill-formed message response
-
         return json_response
 
     def handle_write(self, json_data):
         # insert the data into the database
         # If item is already in, update data
-        global response
+        json_response = {}
         try:
             # Checking
             collection = json_data['collection']
