@@ -1,11 +1,11 @@
-import urllib2
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import json
 
 
 # take in a url and return a soup
 def get_soup(url):
-    html = urllib2.urlopen(url).read()
+    html = urlopen(url).read()
     return BeautifulSoup(html, 'html.parser')
 
 
@@ -95,12 +95,12 @@ if __name__ == '__main__':
                     subCat_name = strip_name(subCat)
                     productSoup = get_soup(subCat)
                     mega_list[dep_name][cat_name][subCat_name] = get_products(productSoup)
-        # break
+        break
         # uncomment this break ^ to quickly see the output for 1 department to figure out how it's laid out
 
     json_mega_list = json.dumps(mega_list, indent=2)
 
-    print json_mega_list
+    print(json_mega_list)
 
     # todo:
     # add category exclusion list
