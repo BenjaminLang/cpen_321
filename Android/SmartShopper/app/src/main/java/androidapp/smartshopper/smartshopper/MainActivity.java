@@ -13,12 +13,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    ListView listView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        listView = (ListView) findViewById(R.id.search_result_list);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -60,15 +65,15 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onQueryTextSubmit(String s) {
                         List<String> searchTerm = new ArrayList<String>();
                         searchTerm.add(s);
+                        String[] searchArray = searchTerm.toArray(new String[0]);
 
                         SearchOptions emptyOpt = new SearchOptions("", "");
-                        SearchOptions[] dummy1 = {emptyOpt};
-                        String[] dummy2 = {""};
+                        SearchOptions[] dummy = {emptyOpt};
 
                         RequestBuilder rb = new RequestBuilder();
-                        String dbRequest = rb.buildReadReq(searchTerm, dummy1, dummy2);
+                        //String dbRequest = rb.buildReadReq(searchArray, dummy);
 
-                        new SendSearchRequest().execute(dbRequest);
+                        new SendSearchRequest().execute("hi");
 
                         //Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show();
                         //Toast.makeText(MainActivity.this, dbRequest, Toast.LENGTH_LONG).show();
