@@ -33,12 +33,21 @@ public class JsonParser {
                     JSONArray items = collections.getJSONArray(i);
 
                     for(int j = 0; j < items.length(); j++) {
+                        JSONObject currItem = items.getJSONObject(i);
+                        String name = currItem.getString(NAME_TAG);
+                        String price = currItem.getString(PRICE_TAG);
+                        String store = currItem.getString(STORE_TAG);
+                        String img = "dummy.com";
 
+                        Product currProduct = new Product(name, price, store, img);
+                        parseList.add(currProduct);
                     }
                 }
             }catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            return parseList;
         }
         else {
             return null;
