@@ -1,12 +1,13 @@
 from pymongo import MongoClient
-
 from RequestHandler import RequestHandler
+import json
 
 
 class DataHandler:
-    def send_data(input_data):
+    def send_data(self, input_data):
+        msg = json.loads(input_data)
         # process input_data from costco.py
-        msg_type = input_data['message_type']
+        msg_type = msg['message_type']
 
         client = MongoClient()
         db = client.test

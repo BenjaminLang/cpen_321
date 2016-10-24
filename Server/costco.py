@@ -77,7 +77,7 @@ def send_to_db(dep_name, cat_name):
     item = {}
     data = {}
     sub_data = {}
-    item['message_type'] = "write"
+    item['message_type'] = 'write'
     item['collection'] = dep_name
 
     catSoup = get_soup(category)
