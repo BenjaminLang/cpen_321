@@ -112,6 +112,8 @@ if __name__ == '__main__':
             cat_name = strip_name(category)
             print(send_to_db(dep_name, cat_name))
             print("\n")
+            break
+        break
 
     # todo:
     # add category exclusion list

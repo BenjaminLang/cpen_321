@@ -22,27 +22,30 @@ class RequestHandler:
     def handle_write(self, json_data):
         # insert the data into the database
         # If item is already in, update data
-        json_response = {}
         response = {}
         try:
             # Checking
             msg = json.loads(json_data)
             collection = msg['collection']
             del msg['message_type']
-            data = self.mongo_db['collection'].find(msg)
+            del msg['collection']
+            """
+            data = self.mongo_db[collection].find(msg)
 
             if data:
                 __id = data['__id']
                 json_data['__id'] = __id
+            """
+            for item in msg['data']:
+                print(self.mongo_db[collection].insert_one(item))
+                
 
-            json_send_data = json.dumps(msg)
-
-            self.mongo_db['collection'].save(json_send_data)
             response['message_type'] = 'write_response'
 
         # construct response message
         except Exception:
             response['status'] = 'failed'
+            print('gotrekt')
 
         response['status'] = 'completed'
         return response
