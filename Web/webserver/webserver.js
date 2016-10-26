@@ -8,20 +8,15 @@ var io = require('socket.io')(http);
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.on('connection', function (socket) {
-	console.log( 'Hello World' );
-	/*
-    socket.on( "echo", function ( msg, callback ) {
-        callback( msg );
-    } );
-    */
+	console.log( 'Client connected.' );
 	
   socket.on('disconnect', function () {
-  	console.log( 'Goodbye' );
+  	console.log( 'Client disconnected.' );
   });
 
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
+  // 
+  socket.on('search item', function (item) {
+    console.log(item);
   });
 
 });
@@ -32,6 +27,7 @@ io.on('disconnect', function (socket) {
 	console.log( 'Goodbye' );
 }); 
 */
+
 /* Binds and listens for connections on port 80.
 Also prints a relevant statement to the console */
 http.listen(80, function() {
