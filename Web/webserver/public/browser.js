@@ -6,6 +6,7 @@ $('#search-btn').click( function() {
 });
 
 $('#search-input').keyup( function(event) {
+	// Enter key
 	if (event.keyCode == 13) {
 		$('#search-btn').click();
 	}
