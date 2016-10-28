@@ -3,7 +3,11 @@ var express = require('express'),
 	app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var other_server = require("socket.io-client")('http://localhost:6969');
+// var other_server = require("socket.io-client")('http://localhost:6969');
+var net = require('net');
+var client = net.connect({port: 6969}, function() {
+  console.log('connected to server!');
+});
 
 // Serve static files (HTML, CSS, JS) from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -14,13 +18,14 @@ io.on('connection', function (socket) {
   socket.on('disconnect', function () {
   	console.log( 'Client disconnected.' );
   });
-
-  // 
+ 
   socket.on('search item', function (item) {
     var json_request = {"message_type" : "read", "collection" : item};
+    
     // send json_request to main server
-    other_server.emit('read request', json_request);
-    //console.log(json_request.collection);
+    // other_server.emit('read request', json_request);
+    client.write(json_request);
+    
   });
 
 });
@@ -31,13 +36,6 @@ other_server.on('connect', function(){
     console.log("Disconnected from main server.");
   });
 });
-
-// This doesn't work; need to use "socket.on" within io.on{} above
-/* 
-io.on('disconnect', function (socket) {
-	console.log( 'Goodbye' );
-}); 
-*/
 
 /* Binds and listens for connections on port 80.
 Also prints a relevant statement to the console */
