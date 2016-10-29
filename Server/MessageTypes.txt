@@ -70,3 +70,31 @@ FOR WRITE:
             "URL to page" : "www.link.com"
         }
     }
+    
+FOR CREATENEWACC:
+    {   "message_type" : "acc_create",
+        "userID" : "id",
+        "password" : "pass"
+    }
+    
+FOR CREATENEWACC RESPONSE:
+    {   "message_type" : "acc_create_response",
+        "acc_created" : "true"    
+    }
+
+FOR LOGIN:
+    {   "message_type" : "acc_login",
+        "userID" : "id",
+        "password" : "pass",
+    }
+    
+FOR LOGIN RESPONSE:
+    {   "message_type" : "acc_login_response",
+        "acc_exists" : "true",
+        "correct_password" : "true"
+    }
+    
+FOR LOGOUT:
+    {   "message_type" : "acc_logout",
+        "userID" : "id"
+    }
