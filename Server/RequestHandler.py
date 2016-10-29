@@ -38,8 +38,8 @@ class RequestHandler:
             """
             for item in msg['data']:
                 print(self.mongo_db[collection].insert_one(item))
-                
-            response['message_type'] = 'write_response'
+        
+	    response['message_type'] = 'write_response'
 
         # construct response message
         except Exception:
