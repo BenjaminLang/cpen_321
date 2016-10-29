@@ -39,7 +39,6 @@ class RequestHandler:
             for item in msg['data']:
                 print(self.mongo_db[collection].insert_one(item))
                 
-
             response['message_type'] = 'write_response'
 
         # construct response message
@@ -69,7 +68,7 @@ class RequestHandler:
 
     def handle_update_collection(self, json_data):
         # insert the data into the database
-        return "ben ur a nigger"
+        return "TODO"
 
     """
     def handle_read_collection_documents(self, json_data):
