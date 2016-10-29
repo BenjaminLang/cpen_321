@@ -71,6 +71,20 @@ def get_products(soup):
 def strip_name(url):
     return url.split('costco.ca/')[1].split('.html')[0]
 
+def send_to_db(dep_name, cat_name):
+    catSoup = get_soup(category)
+    subCats = get_links(catSoup, 'div', 'col-xs-6 col-md-3')
+    if not subCats:  # subCats is empty for this category
+        mega_list[dep_name][cat_name] = get_products(catSoup)
+    else:
+        mega_list[dep_name][cat_name] = {}
+        for subCat in subCats:
+            subCat_name = strip_name(subCat)
+            productSoup = get_soup(subCat)
+            mega_list[dep_name][cat_name][subCat_name] = get_products(productSoup)
+            # break
+            # uncomment this break ^ to quickly see the output for 1 department to figure out how it's laid out
+
 
 # Sending individual categories (documents) to database
 def send_to_db(dep_name, cat_name):
@@ -102,6 +116,11 @@ def send_to_db(dep_name, cat_name):
 if __name__ == '__main__':
     soup = get_soup('http://www.costco.ca')
     departments = get_links(soup, 'li', 'category-level-1')
+<<<<<<< HEAD
+=======
+
+    mega_list = {}
+>>>>>>> 7da31060deb2f4528a8b0d01498b32479ae6091a
 
     for department in departments:
         dep_name = strip_name(department)
@@ -110,10 +129,18 @@ if __name__ == '__main__':
         categories = get_links(depSoup, 'div', 'col-xs-6 col-md-3')
         for category in categories:
             cat_name = strip_name(category)
+<<<<<<< HEAD
             print(send_to_db(dep_name, cat_name))
             print("\n")
             break
         break
+=======
+            send_to_db(dep_name, cat_name)
+
+    json_mega_list = json.dumps(mega_list, indent=2)
+
+    print(json_mega_list)
+>>>>>>> 7da31060deb2f4528a8b0d01498b32479ae6091a
 
     # todo:
     # add category exclusion list
