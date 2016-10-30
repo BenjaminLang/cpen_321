@@ -26,7 +26,6 @@ io.on('connection', function (socket) {
     // send json_request to main server
     // other_server.emit('read request', json_request);
     client.write(JSON.stringify(json_request));
-    //client.pipe(client);
   });
 
 });
@@ -34,7 +33,29 @@ io.on('connection', function (socket) {
 client.on('data', function(data) {
   // send the response to the website
   io.emit('search response', data.toString());
-  console.log(data.toString());
+});
+
+/* Handle error events between web server and main server */
+client.on('error', function(error){
+  if (error.code === 'ECONNREFUSED') {
+    console.log("Error: main server is not available.");
+  }
+  else if (error.code === 'ECONNRESET') {
+    console.log("Error: connection to main server closed abruptly.");
+  }
+  else {
+    console.log("Error: " + error.code);
+  }
+});
+
+client.on('close', function() {
+  http.close();
+  //console.log("CLOSED");
+  /*
+  client.connect({port: 6969}, function() {
+    console.log("Attempting to reconnect");
+  });
+  */
 });
 
 /*

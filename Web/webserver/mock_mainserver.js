@@ -15,7 +15,7 @@ io.on("connection", function(socket){
         console.log("User searched for: " + data.collection);
     });
 });*/
-
+var port = 6969;
 var net = require('net');
 var server = net.createServer(function(connection) { 
    console.log('Webserver connected');
@@ -25,14 +25,11 @@ var server = net.createServer(function(connection) {
    });
 
    connection.on('data', function(request) {
-      console.log(JSON.parse(request).collection + ' kappa');
-      //console.log(JSON.stringify(JSON.parse(request).collection));
+      // for now, just send back the request concatenated with a word
       connection.write(JSON.parse(request).collection + ' kappa');
-      //connection.pipe(connection);
    });
-
 });
 
-server.listen(6969, function() { 
+server.listen(port, function() { 
    console.log('server is listening');
 });
