@@ -12,6 +12,12 @@ $('#search-input').keyup( function(event) {
 	}
 });
 
+socket.on('search response', function(response) {
+	console.log(response);
+});
+
+
+
 /*$("button").click( function() {
     $.getJSON("json_website_data.json", function(data) { 
 	    $.each(data, function(key, value){ 
