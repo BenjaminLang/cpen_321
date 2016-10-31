@@ -17,19 +17,19 @@ io.on("connection", function(socket){
 });*/
 var port = 6969;
 var net = require('net');
-var server = net.createServer(function(connection) { 
+var server = net.createServer((connection) => { 
    console.log('Webserver connected');
    
-   connection.on('end', function() {
+   connection.on('end', () => {
       console.log('Webserver disconnected');
    });
 
-   connection.on('data', function(request) {
+   connection.on('data', (request) => {
       // for now, just send back the request concatenated with a word
       connection.write(JSON.parse(request).collection + ' kappa');
    });
 });
 
-server.listen(port, function() { 
+server.listen(port, () => { 
    console.log('server is listening');
 });
