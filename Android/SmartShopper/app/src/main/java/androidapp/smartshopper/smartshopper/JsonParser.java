@@ -21,7 +21,7 @@ public class JsonParser {
 
     public JsonParser() {}
 
-    public List<Product> ParseJSON(String json) {
+    public List<Product> parseJSON(String json) {
         if(json != null) {
             List<Product> parseList = new ArrayList<Product>();
 

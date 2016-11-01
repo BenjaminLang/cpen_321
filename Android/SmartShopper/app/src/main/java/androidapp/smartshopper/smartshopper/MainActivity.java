@@ -64,33 +64,29 @@ public class MainActivity extends AppCompatActivity {
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String s) {
-                        List<String> searchTerm = new ArrayList<String>();
-                        searchTerm.add(s);
-                        String[] searchArray = searchTerm.toArray(new String[0]);
-
-                        SearchOptions emptyOpt = new SearchOptions("", "");
-                        SearchOptions[] dummy = {emptyOpt};
+                        String[] dummyArray = {" ", " "};
+                        SearchOptions dummyOptions = new SearchOptions(" ", " ", " ", " ", " ", dummyArray);
 
                         RequestBuilder rb = new RequestBuilder();
-                        //String dbRequest = rb.buildReadReq(searchArray, dummy);
+                        String dbRequest = rb.buildReadReq(s, dummyOptions, " ");
 
                         String jsonResponse;
                         try {
-                            jsonResponse = new SendSearchRequest().execute(s).get();
+                            jsonResponse = new SendSearchRequest().execute(dbRequest).get();
                             Toast.makeText(MainActivity.this, jsonResponse, Toast.LENGTH_LONG).show();
 
                             JsonParser parser = new JsonParser();
                             //List<Product> result = parser.parseJSON(jsonResponse);
 
-                            List<Product> result = new ArrayList<Product>(Arrays.asList(
+                            List<Product> dummyResult = new ArrayList<Product>(Arrays.asList(
                                     new Product("apple", "1.99", "somewhere", "asdf"),
                                     new Product("orange", "2.99", "somewhere", "asdf"),
-                                    new Product("lemons", "3.99", "somewhere", "asdf"),
-                                    new Product("chocolate milk", "4.99", "somewhere", "asdf"),
-                                    new Product("strawberries", "2.50", "somewhere", "asdf")
+                                    new Product("something", "3.99", "somewhere", "asdf"),
+                                    new Product("ayyyy", "4.99", "somewhere", "asdf"),
+                                    new Product("GTX 1080", "999.99", "somewhere", "asdf")
                             ));
 
-                            ProductAdapter adapter = new ProductAdapter(MainActivity.this, R.layout.search_result, (ArrayList)result);
+                            ProductAdapter adapter = new ProductAdapter(MainActivity.this, R.layout.search_result, (ArrayList)dummyResult);
                             listView.setAdapter(adapter);
                         } catch(Exception e){
                             e.printStackTrace();
