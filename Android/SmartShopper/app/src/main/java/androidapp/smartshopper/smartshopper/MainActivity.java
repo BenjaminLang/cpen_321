@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -73,10 +74,27 @@ public class MainActivity extends AppCompatActivity {
                         RequestBuilder rb = new RequestBuilder();
                         //String dbRequest = rb.buildReadReq(searchArray, dummy);
 
-                        new SendSearchRequest().execute("hi");
+                        String jsonResponse;
+                        try {
+                            jsonResponse = new SendSearchRequest().execute(s).get();
+                            Toast.makeText(MainActivity.this, jsonResponse, Toast.LENGTH_LONG).show();
 
-                        //Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show();
-                        //Toast.makeText(MainActivity.this, dbRequest, Toast.LENGTH_LONG).show();
+                            JsonParser parser = new JsonParser();
+                            //List<Product> result = parser.parseJSON(jsonResponse);
+
+                            List<Product> result = new ArrayList<Product>(Arrays.asList(
+                                    new Product("apple", "1.99", "somewhere", "asdf"),
+                                    new Product("orange", "2.99", "somewhere", "asdf"),
+                                    new Product("lemons", "3.99", "somewhere", "asdf"),
+                                    new Product("chocolate milk", "4.99", "somewhere", "asdf"),
+                                    new Product("strawberries", "2.50", "somewhere", "asdf")
+                            ));
+
+                            ProductAdapter adapter = new ProductAdapter(MainActivity.this, R.layout.search_result, (ArrayList)result);
+                            listView.setAdapter(adapter);
+                        } catch(Exception e){
+                            e.printStackTrace();
+                        }
 
                         return false;
                     }
@@ -103,8 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String request) {
-            Toast.makeText(MainActivity.this, request, Toast.LENGTH_LONG).show();
-            return;
+            super.onPostExecute(request);
         }
     }
 }
