@@ -28,7 +28,18 @@ var server = net.createServer((connection) => {
       // for now, just send back the request concatenated with a word
       connection.write(JSON.parse(request).collection + ' kappa');
    });
+
+   connection.on('error',(error) => {
+      if (error.code === 'ECONNRESET') {
+        console.log("Error: webserver disconnected.");
+      }
+      else {
+        console.log("Error: " + error.code);
+      }
+   });
 });
+
+
 
 server.listen(port, () => { 
    console.log('server is listening');

@@ -5,10 +5,6 @@
 const WEBSERVER_PORT = 8080;
 const MAINSERVER_PORT = 6969;
 
-/*---------------------------------------------------------------------------*/
-
-var ip = require("ip");
-
 /*------------------------------------------------------------------------------*/
 
 var path = require('path');
@@ -18,6 +14,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 // var other_server = require("socket.io-client")('http://localhost:6969');
 var net = require('net');
+var ip = require("ip");
 var client = net.connect({port: MAINSERVER_PORT, host : ip.address()}, () => {
   console.log('connected to main server!');
 });
@@ -66,8 +63,7 @@ client.on('data',(data) => {
 /**
  * Handle error events between web server and main server.
  */
-//client.on('error',(error) => {
-  /*
+client.on('error',(error) => {
   if (error.code === 'ECONNREFUSED') {
     console.log("Error: main server is not available.");
   }
@@ -76,9 +72,8 @@ client.on('data',(data) => {
   }
   else {
     console.log("Error: " + error.code);
-  }
-  */
-//});
+  } 
+});
 
 /**
  * Terminate web server when connection between web server and main server closes
