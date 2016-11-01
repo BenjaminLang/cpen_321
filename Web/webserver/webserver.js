@@ -2,7 +2,7 @@
  * The web server for smart_shopper
  */
 
-const WEBSERVER_PORT = 80;
+const WEBSERVER_PORT = 8080;
 const MAINSERVER_PORT = 6969;
 
 /*------------------------------------------------------------------------------*/
@@ -15,7 +15,7 @@ var io = require('socket.io')(http);
 // var other_server = require("socket.io-client")('http://localhost:6969');
 var net = require('net');
 var client = net.connect({port: MAINSERVER_PORT}, () => {
-  console.log('connected to server!');
+  console.log('connected to main server!');
 });
 
 /*------------------------------------------------------------------------------*/
@@ -29,16 +29,19 @@ app.use(express.static(path.join(__dirname, 'public')));
  * Listener for socket between browser client and web server
  */
 io.on('connection', (socket) => {
-	console.log( 'Client connected.' );
-	
+  console.log( 'Client connected.' );
+  
   socket.on('disconnect', () => {
-  	console.log( 'Client disconnected.' );
+    console.log( 'Client disconnected.' );
   });
  
+  // When browser client submits a search request...
   socket.on('search item', (item) => {
+
+    // ...convert request to a JSON object...
     var json_request = {"message_type" : "read", "collection" : item};
     
-    // send json_request to main server
+    // ... and send it to the main server
     // other_server.emit('read request', json_request);
     client.write(JSON.stringify(json_request));
   });
@@ -49,6 +52,10 @@ io.on('connection', (socket) => {
  * Send data from the main server to the website.
  */
 client.on('data',(data) => {
+  // Need to check what kind of response I'm getting from the main server
+  // 
+  // Upon receiving search response data from main server, inform the browser client and
+  // send it to the browser
   io.emit('search response', data.toString());
 });
 
@@ -80,6 +87,16 @@ client.on('close', () => {
   */
 });
 
+/**
+ * Binds and listens for connections on the webserver port.
+ * Also prints a relevant statement to the console.
+ */
+http.listen(WEBSERVER_PORT , () => {
+  console.log('Listening on port ' + WEBSERVER_PORT + '...');
+});
+
+/*---------------------------------TEST STUFF---------------------------------*/
+
 /*
 other_server.on('connect',() => {
   console.log("Connected to main server.");
@@ -88,15 +105,6 @@ other_server.on('connect',() => {
   });
 });
 */
-
-/**
- * Binds and listens for connections on the webserver port.
- * Also prints a relevant statement to the console.
- */
-http.listen(WEBSERVER_PORT ,() => {
-	console.log('Listening on port ' + WEBSERVER_PORT);
-});
-
 
 
 
