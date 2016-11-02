@@ -1,0 +1,11 @@
+ul.products {
+    margin: 0 auto;
+    max-width: 1200px;
+    margin-top: 40px;  
+}
+
+ul.products li {
+    width: 200px;
+    display: inline-block;
+    vertical-align: top; 
+}
