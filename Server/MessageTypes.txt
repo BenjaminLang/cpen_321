@@ -24,7 +24,7 @@ FOR READ and subtypes:
             "Radius" : "radius",
             "stores" : ["store1", "store2" ...]
         },
-        "collections" : ["col_name_1", ...]
+        "items" : ["item name"]
     }
     
 FOR UPDATE COLLECTION REQUEST //gets the list of collection types in database
