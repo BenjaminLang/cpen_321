@@ -16,9 +16,10 @@ class DatabaseServer:
 
         # connect to MongoDB
         client = MongoClient()
-        db = client.test
+        categories_db = client.categories
+        item_db = client.items
 
-        request_handler = RequestHandler(db)
+        request_handler = RequestHandler(categories_db, item_db)
 
         while True:
             connection, addr = server_socket.accept()
