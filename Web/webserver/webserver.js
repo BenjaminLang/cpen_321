@@ -16,15 +16,46 @@ var io = require('socket.io')(http);
 var net = require('net');
 var ip = require("ip");
 var client = net.connect({port: MAINSERVER_PORT, host : ip.address()}, () => {
-  console.log('connected to main server!');
+  console.log('Connected to main server!');
 });
 
 /*------------------------------------------------------------------------------*/
 
+var price_1 = 0;
+var price_2 = 0;
+app.set('views', './views');
+app.set('view engine', 'pug');
+
 /**
- * Serve static files (HTML, CSS, JS) from the public directory
+ * Serve static files (HTML, CSS, JS) from the public directory.
+ * The express object now looks in the public directory for website files.
  */
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', function(req, res) {
+  res.sendFile('index.html');
+});
+
+app.get('/register', function(req, res) {
+  res.sendFile('register.html');
+});
+
+app.get('/login', function(req, res) {
+  res.sendFile('login.html');
+});
+
+app.get('/logged_in_dashboard', function(req, res) {
+  res.render('logged_in_dashboard');
+});
+
+app.get('/item_searched', function(req, res) {
+  res.render('item_searched', { 'price_1' : price_1, 'price_2' : price_2 });
+});
+
+update_prices = function(item) {
+  price_1 = item;
+  price_2 = item;
+}
 
 /**
  * Listener for socket between browser client and web server
@@ -39,12 +70,15 @@ io.on('connection', (socket) => {
   // When browser client submits a search request...
   socket.on('search item', (item) => {
 
+    update_prices(item);
+    /*
     // ...convert request to a JSON object...
     var json_request = {"message_type" : "read", "collection" : item};
     
     // ... and send it to the main server
     // other_server.emit('read request', json_request);
     client.write(JSON.stringify(json_request));
+    */
   });
 
 });

@@ -1,0 +1,52 @@
+doctype html
+html(lang='en')
+  head
+    title 	SmartShop.ca 
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(href='css/bootstrap.min.css', rel='stylesheet')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+    script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js')
+    link(href='css/navbar.css', rel='stylesheet', type='text/css')
+    link(href='css/searh_bar.css', rel='stylesheet', type='text/css')
+  body
+    // NAVIGATION BAR
+    #custom-bootstrap-menu.navbar.navbar-default(role='navigation')
+      .container-fluid
+        .navbar-header
+          a.navbar-brand(href='smartshopper.html') SmartShop
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-menubuilder')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        .collapse.navbar-collapse.navbar-menubuilder
+          ul.nav.navbar-nav.navbar-right
+            // DROP DOWN MENU
+            li.dropdown
+              | - var profileName = "Leo";
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | Hello, #{profileName}
+                span.caret
+              ul.dropdown-menu
+                li
+                  a(href='previous_lists.html') Previous Lists
+                li
+                  a(href='logout.html') Logout
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | Lists
+                span.caret
+              ul.dropdown-menu
+                li
+                  a(href='#') View Full Cart
+    // SEARCH BAR
+    .container
+      .row.top-buffer
+        .col-md-12
+          #custom-search-input
+            .input-group.col-md-12
+              input.form-control.input-lg(type='text', placeholder='Search')
+              span.input-group-btn
+                button.btn.btn-info.btn-lg(type='button')
+                  i.glyphicon.glyphicon-search
