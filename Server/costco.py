@@ -1,42 +1,34 @@
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-from query import DataHandler
+from urllib2 import urlopen
 import json
+from crawl_lib import *
 
-
-# take in a url and return a soup
-def get_soup(url):
-    html = urlopen(url).read()
-    return BeautifulSoup(html, 'html.parser')
-
+base_url = 'http://www.costco.ca'
 
 # take in a soup, tag_name, class_name and return all "a href" links in that soup
-def get_links(soup, tag_name, class_name):
+def _get_links(soup, tag_name, class_name):
     links = list()
     for tag in soup.find_all(tag_name, class_name):
         for tagLink in tag.find_all('a'):
             links.append(tagLink['href'])
     return links
 
-
-# take a soup and return a list of all products (including price, url, name, image)
-def get_products(soup):
-    retList = list()
+# Takes a soup and sends all products to the db (including price, url, name, image)
+def _send_products(soup, cat_item):
     for prod in soup.find_all('div', 'col-xs-6 col-md-4 col-xl-3 product'):
         list_a = prod.find_all('a')
         if list_a:
             thumbnail = list_a[0]
             url = thumbnail['href']
-            image = 'image_not_found_special_code'
+            image = ''
             list_img = thumbnail.find_all('img')
-            price = 0
-            name = 'name'
+
             if list_img:
                 img = list_img[0]
                 if img.has_attr('src'):
                     image = img['src']
                 elif img.has_attr('data-src'):
                     image = img['data-src']
+
             list_caption = thumbnail.find_all('div', 'caption')
             if list_caption:
                 caption = list_caption[0]
@@ -48,7 +40,6 @@ def get_products(soup):
 
                 list_description = caption.find_all('p', 'description')
                 if list_description:
-                    description = list_description[0]
                     name = str(list_description[0]).split('>')[1].split('<')[0]
                 else:
                     continue  # no name for this item
@@ -60,64 +51,37 @@ def get_products(soup):
             data['price'] = price
             data['url'] = url
             data['image'] = image
-            data['store'] = 'costco'
+            data['store'] = 'Costco'
 
-            retList.append(data)
+            send_to_db(cat_item, data)
+    return
 
-    return retList
-
-
-# take a costco.ca url and return the part after the slash (usually a category name)
-def strip_name(url):
-    return url.split('costco.ca/')[1].split('.html')[0]
-
-
-# Sending individual categories (documents) to database
-def send_to_db(dep_name, cat_name):
-    item = {}
-    data = {}
-    sub_data = {}
-    item['message_type'] = 'write'
-    item['collection'] = dep_name
-
-    catSoup = get_soup(category)
-    subCats = get_links(catSoup, 'div', 'col-xs-6 col-md-3')
-    if not subCats:  # subCats is empty for this category
-        data = get_products(catSoup)
-    else:
-        data = {}
-        for subCat in subCats:
-            subCat_name = strip_name(subCat)
-            productSoup = get_soup(subCat)
-            sub_data = get_products(productSoup)
-            data[subCat_name] = sub_data
-    item['data'] = data
-    json_data = json.dumps(item, indent = 2)
-    service = DataHandler()
-    service.send_data(json_data)
-
-    return json_data
-
-
-if __name__ == '__main__':
-    soup = get_soup('http://www.costco.ca')
-    departments = get_links(soup, 'li', 'category-level-1')
+# Parses starting from the base_url and sends the data to the db
+def parse():
+    soup = get_soup(base_url)
+    departments = _get_links(soup, 'li', 'category-level-1')
 
     for department in departments:
-        dep_name = strip_name(department)
 
-        depSoup = get_soup(department)
-        categories = get_links(depSoup, 'div', 'col-xs-6 col-md-3')
+        dep_soup = get_soup(department)
+        categories = _get_links(dep_soup, 'div', 'col-xs-6 col-md-3')
         for category in categories:
-            cat_name = strip_name(category)
-            print(send_to_db(dep_name, cat_name))
-            print("\n")
-            break
-        break
+            cat_name = strip_name(category, 'costco.ca/', '.html')
+
+            cat_soup = get_soup(category)
+            sub_cats = _get_links(cat_soup, 'div', 'col-xs-6 col-md-3')
+            if not sub_cats: # subCats is empty for this category
+                _send_products(cat_soup, cat_name)
+            else:
+                for subcat in sub_cats:
+                    subcat_name = strip_name(subcat, 'www.costco.ca', '.html')
+                    product_soup = get_soup(subcat)
+                    _send_products(product_soup, subcat_name)
+    return
+
+if __name__ == '__main__':
+    parse()
 
     # todo:
     # add category exclusion list
     # send timestamp along with json doc to server
-    # server should parse doc and update prices in the database??
-
-    # change get_products to return a dictionary too, with key being id of product??
