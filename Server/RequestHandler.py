@@ -1,7 +1,5 @@
 import json
 
-
-
 class RequestHandler:
 
     def __init__(self, categories_db, items_db):

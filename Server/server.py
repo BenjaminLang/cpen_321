@@ -1,6 +1,7 @@
 import socket
 import json
 from pymongo import MongoClient
+import bson.json_util
 
 from RequestHandler import RequestHandler
 
@@ -29,6 +30,6 @@ class DatabaseServer:
             response = request_handler.handle_request(json_data['message_type'], json_data)
             # response = {'message_type': 'read_response', 'items': ['maple syrup']}
             print(response)
-            json_response = json.dumps(response)
+            json_response = bson.json_util.dumps(response)
             connection.send(json_response.encode())
             connection.close()
