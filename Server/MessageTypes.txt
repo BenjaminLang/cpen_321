@@ -42,18 +42,13 @@ FOR COLLECTION REQUEST RESPONSE //returns list of collection types
 
 FOR READ RESPONSE:
     {   "message_type" : "response",
-        "collections" : [{"col_name_1" : ["item1" : {"name" : "Green Apples",
-                                                    "price" : "1.50",
-                                                    "store" : "save on foods"},
-                                         "item2 : {"name" : ...
-                                                            ...
-                                                            ...},
-                                          ]},
-                         ...
-                         ...
-                         ...
-                         ]
-    }
+        "items" : [["data" : {"name" : "Green Apples",
+                                    "price" : "1.50",
+                                    "store" : "save on foods"},
+                          "data" : {"name" : "Red Apples",
+                                    "price" : "1.42",
+                                    "store" : CostCo}], ... <extra results>]}
+
 
 
 FOR WRITE:
