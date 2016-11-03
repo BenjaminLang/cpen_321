@@ -9,7 +9,7 @@ class DatabaseServer:
     def test_server(self):
         # set up server socket
         server_socket = socket.socket()
-        host = socket.gethostname()
+        host = socket.gethostbyname(socket.gethostname())
         port = 6969
         server_socket.bind((host, port))
         server_socket.listen(10)
@@ -27,6 +27,8 @@ class DatabaseServer:
             json_data = json.loads(data)
 
             response = request_handler.handle_request(json_data['message_type'], json_data)
+            # response = {'message_type': 'read_response', 'items': ['maple syrup']}
+            print(response)
             json_response = json.dumps(response)
             connection.send(json_response.encode())
             connection.close()

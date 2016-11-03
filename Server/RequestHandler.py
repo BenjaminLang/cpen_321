@@ -1,5 +1,5 @@
 import json
-from pymongo import collection
+
 
 
 class RequestHandler:
@@ -26,71 +26,59 @@ class RequestHandler:
             # convert JSON to dictionary type and extract indexing information
             msg = json.loads(json_data)
             collection = msg['collection']
-            item_name = msg['info_object']['name']
-            words = item_name.split(' ')
-            store_name = json_data['info_object']['store']
+            item_name = msg['data']['name']
+            words = item_name.split()
+            store_name = msg['data']['store']
+            msg['words'] = words
             del msg['message_type']
             del msg['collection']
 
             for word in words:
                 # insert them into the database
                 self.__categories_db[collection].insert({'item': word})
-                valid_ID = self.__items_db[word]\
-                    .find({'store': {'$exists': True, '$eq': store_name, '$eq': item_name}})['_id']
-                json_data['words'] = words
+                data = list(self.__items_db[word].find({'$and': [{'store': {'$exists': True, '$eq': store_name}},
+                                            {'name': {'$exists': True, '$eq': item_name}}]}))
 
                 # if you get a valid ID, you know that the item exists, so update
-                if valid_ID:
-                    json_data['_id'] = valid_ID
-                    self.__items_db[word].save(json_data)
+                if len(data) != 0:
+                    valid_ID = data[0]
+                    msg['_id'] = valid_ID
+                    self.__items_db[word].save(msg)
                 # otherwise make a new item
-                self.__items_db[word].insert(json_data)
+                self.__items_db[word].insert(msg)
 
         # construct response message
         except Exception :
             response['status'] = 'failed'
-            print('gotrekt')
+            print(Exception)
 
         response['status'] = 'completed'
         return response
 
     def __handle_read(self, json_data):
-        # set up appropriate indexing information
+        # set up appropriate indexing information, json_data is a dict
         response = {}
         response['message_type'] = 'read_response'
         items = json_data['items']
-        category_names = self.__categories_db.collection_names
         results = []
 
         for item in items:
-            item_words = item.split(' ')
-            for word in item_words:
-                if word in category_names:
-                    query_array = []
-                    query = {}
-                    for item_word in item_words:
-                        query_array.append({'words': {'$in': [item_word]}})
-                    query = {'$and': query_array}
-                    results.append(self.__items_db[word].find(query))
-                # Else go through the entire database
-                # Can flag collection to avoid a few more checks
-                else:
-                    # For each word in request
-                    query = {}
-                    for word_2 in item_words:
-                        # Construct an array to search
-                        query_array.append({'words': {'$in': [word_2]}})
-                    query = {'$and': query_array}
-                    # For every collection
-                    # Checking each all documents for items
-                    result = self.__items_db[word].find(query)
-                    if result is not None:
-                        results.append(result)
-                        break
+            item_words = item.split()
+            query_array = []
 
-        # results will be a 2 dimensional array containing results for each item
+            # For each word in request
+            for searchable_item in item_words:
+                query_array.append({'words': {'$in': [searchable_item]}})
+
+            query = {'$and': query_array}
+            for searchable_item in item_words:
+                result = list(self.__items_db[searchable_item].find(query))
+                if result is not None:
+                    results.append(result)
+                    break
+
         response['items'] = results
-
         return response
+
 
 

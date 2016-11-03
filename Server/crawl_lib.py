@@ -1,4 +1,4 @@
-from urllib2 import urlopen
+from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from RequestHandler import RequestHandler
 import json
@@ -13,7 +13,7 @@ def strip_name(string, pre, post):
     return string.split(pre)[1].split(post)[0]
 
 # Sending individual categories (documents) to database
-def send_to_db(cat_name, info_object):
+def send_to_db(cat_name, info_object, categories_db, items_db):
     item = {}
     data = {}
     sub_data = {}
@@ -22,7 +22,7 @@ def send_to_db(cat_name, info_object):
 
     item['data'] = info_object
     json_data = json.dumps(item, indent = 2)
-    print json_data
-    service = RequestHandler()
+    # print(json_data)
+    service = RequestHandler(categories_db, items_db)
     service.handle_request('write', json_data)
     return

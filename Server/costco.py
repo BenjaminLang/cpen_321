@@ -1,8 +1,12 @@
-from urllib2 import urlopen
-import json
 from crawl_lib import *
+from pymongo import MongoClient
+import unicodedata
+
 
 base_url = 'http://www.costco.ca'
+client = MongoClient()
+categories_db = client.categories
+item_db = client.items
 
 # take in a soup, tag_name, class_name and return all "a href" links in that soup
 def _get_links(soup, tag_name, class_name):
@@ -47,13 +51,14 @@ def _send_products(soup, cat_item):
                 continue  # no info for this item
 
             data = {}
-            data['name'] = name
+            name.encode('ascii', 'ignore')
+            data['name'] = name.replace('.', '-')
             data['price'] = price
             data['url'] = url
             data['image'] = image
             data['store'] = 'Costco'
 
-            send_to_db(cat_item, data)
+            send_to_db(cat_item, data, categories_db, item_db)
     return
 
 # Parses starting from the base_url and sends the data to the db
@@ -62,6 +67,9 @@ def parse():
     departments = _get_links(soup, 'li', 'category-level-1')
 
     for department in departments:
+
+        if department != 'http://www.costco.ca/food.html':
+            continue
 
         dep_soup = get_soup(department)
         categories = _get_links(dep_soup, 'div', 'col-xs-6 col-md-3')
@@ -74,7 +82,7 @@ def parse():
                 _send_products(cat_soup, cat_name)
             else:
                 for subcat in sub_cats:
-                    subcat_name = strip_name(subcat, 'www.costco.ca', '.html')
+                    subcat_name = strip_name(subcat, 'www.costco.ca/', '.html')
                     product_soup = get_soup(subcat)
                     _send_products(product_soup, subcat_name)
     return
