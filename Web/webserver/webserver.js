@@ -50,10 +50,6 @@ app.get('/logged_in_dashboard', function(req, res) {
   res.render('logged_in_dashboard');
 });
 
-
-/**
- * 
- */
 app.get('/item_searched', function(req, res) {
   res.render('item_searched', {'list_items': list_items_response});
 });
@@ -64,7 +60,6 @@ app.post('/register', function(req, res) {
   // main server, and then transfer user to a new page
 });
 */
-
 
 /**************************************************************************/
 /* LISTENERS */
@@ -93,7 +88,7 @@ io.on('connection', (socket) => {
     };
     
     // ... and send it to the main server
-    client.write(JSON.stringify(json_request));
+    client.write(json_request);
   });
 
   // When browser client submits a new account request...
@@ -119,7 +114,7 @@ io.on('connection', (socket) => {
     };
 
     // ... and send it to the main server
-    client.write(json_request);
+    client.write(JSON.stringify(json_request));
   });
 
 });
