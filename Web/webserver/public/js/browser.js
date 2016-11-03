@@ -1,8 +1,12 @@
 var socket = io();
 
-// Ways to enter the search result			  			  			  
+/**
+ * Ways to enter a search result
+ */
 $('#search-btn').click( function() {
-	socket.emit('search item', $('#search-input').val());
+	socket.emit('search_request', $('#search-input').val());
+	// View the search results in a different page
+	window.location.href = '/item_searched';
 });
 
 $('#search-input').keyup( function(event) {
@@ -15,8 +19,6 @@ $('#search-input').keyup( function(event) {
 socket.on('search response', function(response) {
 	console.log(response);
 });
-
-
 
 /*$("button").click( function() {
     $.getJSON("json_website_data.json", function(data) { 

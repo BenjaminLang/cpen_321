@@ -2,6 +2,10 @@
  * The web server for smart_shopper
  */
 
+/*------------------------------------------------------------------------------*/
+/**
+ * Ports
+ */
 const WEBSERVER_PORT = 8080;
 const MAINSERVER_PORT = 6969;
 
@@ -21,6 +25,7 @@ var client = net.connect({port: MAINSERVER_PORT, host : ip.address()}, () => {
 
 /*------------------------------------------------------------------------------*/
 
+var response_rdy = false;
 var price_1 = 0;
 var price_2 = 0;
 app.set('views', './views');
@@ -48,11 +53,22 @@ app.get('/logged_in_dashboard', function(req, res) {
   res.render('logged_in_dashboard');
 });
 
+/**
+ * 
+ */
 app.get('/item_searched', function(req, res) {
+  // Need to update the item_searched page based on what I get
+  // from the main server here
   res.render('item_searched', { 'price_1' : price_1, 'price_2' : price_2 });
 });
 
-update_prices = function(item) {
+/*
+app.post('/register', function(req, res) {
+  // when user submits their account info on this page, need to send it to the 
+  // main server, and then transfer user to a new page
+});
+*/
+var update_prices = function(item) {
   price_1 = item;
   price_2 = item;
 }
@@ -68,7 +84,7 @@ io.on('connection', (socket) => {
   });
  
   // When browser client submits a search request...
-  socket.on('search item', (item) => {
+  socket.on('search_request', (item) => {
 
     update_prices(item);
     /*
@@ -81,17 +97,42 @@ io.on('connection', (socket) => {
     */
   });
 
+  // When browser client submits a new account request...
+  socket.on('create_account_request', () => {
+
+  });
+
+  // When browser client submits a login request...
+  socket.on('login_request', () => {
+
+  });
+
 });
 
 /**
- * Send data from the main server to the website.
+ * Listener for responses from the main server
  */
 client.on('data',(data) => {
   // Need to check what kind of response I'm getting from the main server
-  // 
+
+  // Is it a response to an item search request?
+  if (data.message_type === 'response') {
+    // need to update the appropriate variables in the item_searched template
+  }
+  else if (data.message_type === 'acc_create_response') {
+    // check if acc_created is true or false
+  }
+  else {
+    //
+  }
+
+  // ---------------- not doing this most likely
   // Upon receiving search response data from main server, inform the browser client and
   // send it to the browser
-  io.emit('search response', data.toString());
+  // io.emit('search response', data.toString());
+  // 
+
+  // 
 });
 
 /**
@@ -115,6 +156,7 @@ client.on('error',(error) => {
  */
 client.on('close', () => {
   http.close();
+  // Should we attempt to reconnect?
   /*
   client.connect({port: 6969},() => {
     console.log("Attempting to reconnect");
@@ -124,7 +166,6 @@ client.on('close', () => {
 
 /**
  * Binds and listens for connections on the webserver port.
- * Also prints a relevant statement to the console.
  */
 http.listen(WEBSERVER_PORT , () => {
   console.log('Listening on port ' + WEBSERVER_PORT + '...');
