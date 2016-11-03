@@ -1,0 +1,34 @@
+{
+    "message_type" : "response",
+    "collections" : [
+        {
+          "samsung" : [
+                    "item1" : {"name" : "Class KS9500 Curved 4k SUHD TV",
+                                              "price" : "19999.99",
+                                              "store" : "Samsung"},
+                                   "item2 : {"name" : "Class KS9500 Curved 4K SUHD TV",
+                                             "price" : "6999.99",
+                                             "store" : "Best Buy"},
+                                  ]
+                    }]
+}
+
+{
+  "message_type": "response",
+  "collections": [
+    {
+      "samsung": [
+        {
+          "name": "Class KS9500 Curved 4k SUHD TV",
+          "price": "19999.99",
+          "store": "Samsung"
+        },
+        {
+          "name": "Class KS9500 Curved 4K SUHD TV",
+          "price": "6999.99",
+          "store": "Best Buy"
+        }
+      ]
+    }
+  ]
+}

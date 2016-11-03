@@ -13,9 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        final Menu myMenu = menu;
+
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
 
         SearchManager searchManager =
@@ -58,20 +64,58 @@ public class MainActivity extends AppCompatActivity {
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String s) {
-                        List<String> searchTerm = new ArrayList<String>();
-                        searchTerm.add(s);
-
-                        SearchOptions emptyOpt = new SearchOptions("", "");
-                        SearchOptions[] dummy1 = {emptyOpt};
-                        String[] dummy2 = {""};
+                        String[] dummyArray = {" ", " "};
+                        SearchOptions dummyOptions = new SearchOptions(" ", " ", " ", " ", " ", dummyArray);
 
                         RequestBuilder rb = new RequestBuilder();
-                        String dbRequest = rb.buildReadReq(searchTerm, dummy1, dummy2);
+                        String dbRequest = rb.buildReadReq(s, dummyOptions, " ");
 
-                        new SendSearchRequest().execute(dbRequest);
+                        try {
+                            String jsonResponse;
+                            jsonResponse = new SendSearchRequest().execute(dbRequest).get();
+                            Toast.makeText(MainActivity.this, jsonResponse, Toast.LENGTH_LONG).show();
 
-                        //Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show();
-                        //Toast.makeText(MainActivity.this, dbRequest, Toast.LENGTH_LONG).show();
+                            //JsonParser parser = new JsonParser();
+                            //List<Product> result = parser.parseJSON(jsonResponse);
+
+                            /*
+                            String testJson = "{\n" +
+                                    "  \"message_type\": \"response\",\n" +
+                                    "  \"collections\": [\n" +
+                                    "    {\n" +
+                                    "      \"samsung\": [\n" +
+                                    "        {\n" +
+                                    "          \"name\": \"Class KS9500 Curved 4k\",\n" +
+                                    "          \"price\": \"19999.99\",\n" +
+                                    "          \"store\": \"Samsung\"\n" +
+                                    "        },\n" +
+                                    "        {\n" +
+                                    "          \"name\": \"Class KS9500 Curved 4K\",\n" +
+                                    "          \"price\": \"6999.99\",\n" +
+                                    "          \"store\": \"Best Buy\"\n" +
+                                    "        }\n" +
+                                    "      ]\n" +
+                                    "    }\n" +
+                                    "  ]\n" +
+                                    "}";
+                                    */
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("json_response", jsonResponse);
+                            ResultFragment newResFrag = new ResultFragment();
+                            newResFrag.setArguments(bundle);
+
+                            FragmentManager fragMan = getSupportFragmentManager();
+                            fragMan.beginTransaction()
+                                    .replace(R.id.result_frame, newResFrag)
+                                    .addToBackStack("search_result")
+                                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                    .commit();
+
+                            (myMenu.findItem(R.id.search)).collapseActionView();
+                        } catch(Exception e){
+                            e.printStackTrace();
+                        }
 
                         return false;
                     }
@@ -79,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onQueryTextChange(String s) {
                         //Do the auto-correct suggestions here
-
                         return false;
                     }
                 }
@@ -88,18 +131,25 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragMan = getSupportFragmentManager();
+        if(fragMan.getBackStackEntryCount() > 0)
+            fragMan.popBackStack();
+        else
+            super.onBackPressed();
+    }
+
     private class SendSearchRequest extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... request) {
-            //SmartShopClient client = new SmartShopClient();
-            //client.sendRequest(request[0]);
-            return request[0];
+            SmartShopClient client = new SmartShopClient();
+            return client.sendRequest(request[0]);
         }
 
         @Override
         protected void onPostExecute(String request) {
-            Toast.makeText(MainActivity.this, request, Toast.LENGTH_LONG).show();
-            return;
+            super.onPostExecute(request);
         }
     }
 }

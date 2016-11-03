@@ -10,26 +10,35 @@ import org.json.JSONObject;
 public class RequestBuilder {
     public RequestBuilder(){}
 
-    public String buildReadReq(String[] items, SearchOptions[] options){
-        String[] queryCollections = getSuperString(items);
+    public String buildReadReq(String item, SearchOptions options, String userId){
         JSONObject request = new JSONObject();
         try {
             //insert message type
             request.put("message_type", "read");
 
+            //user empty for now
+            request.put("userID", userId);
+
             //insert options
             JSONObject opt = new JSONObject();
-            for(SearchOptions option : options)
-                opt.put(option.getOptionType(), option.getOption());
+            opt.put("locationX", options.getLocationX());
+            opt.put("locationY", options.getLocationY());
+            opt.put("Radius", options.getRadius());
+            JSONArray stores = new JSONArray();
+            for(String currStore : options.getStores())
+                stores.put(currStore);
+            opt.put("stores", stores);
+
             request.put("options", opt);
 
             //insert item names
-            JSONArray searchCollections = new JSONArray();
-            for(int i = 0; i < items.length; i++)
-                searchCollections.put(new JSONObject().put(items[i], queryCollections[i]));
-
+            //String[] collections = item.split(" ");
+            JSONArray searchItems = new JSONArray();
+            searchItems.put(item);
+            request.put("items", searchItems);
             return request.toString(2);
         } catch (JSONException e){
+            e.printStackTrace();
             return "cannot generate message";
         }
     }

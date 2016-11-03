@@ -11,13 +11,13 @@ import java.net.Socket;
  * Created by Ben on 2016-10-22.
  */
 public class SmartShopClient {
-    int port = 1010;
-    String addr = "ipaddress";
-    Socket connection;
-    BufferedWriter outputStream;
-    BufferedReader inputStream;
+    private int port = 6969;
+    private String addr = "192.168.0.10";
+    private Socket connection;
+    private BufferedWriter outputStream;
+    private BufferedReader inputStream;
 
-    public SmartShopClient(){
+    public SmartShopClient() {
         try {
             connection = new Socket(addr, port);
             outputStream = new BufferedWriter(
@@ -35,6 +35,7 @@ public class SmartShopClient {
             outputStream.write(request);
             outputStream.flush();
             String response = inputStream.readLine();
+            System.out.println(response);
             return response;
         } catch (IOException e){
             e.printStackTrace();
