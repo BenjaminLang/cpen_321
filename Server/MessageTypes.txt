@@ -45,17 +45,14 @@ FOR READ RESPONSE:
     	"message_type": "response",
     	"items": [
     		[{
-    			"data": {
-    				"name": "Green Apples",
-    				"price": "1.50",
-    				"store": "save on foods"
-    			}
+    			"name": "Green Apples",
+    			"price": "1.50",
+    			"store": "save on foods"
     		}, {
-    			"data": {
-    				"name": "Red Apples",
-    				"price": "1.42",
-    				"store": "CostCo"
-    			}
+    			"name": "Red Apples",
+    			"price": "1.42",
+    			"store": "CostCo"
+
     		}]
     	]
     }
