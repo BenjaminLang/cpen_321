@@ -27,8 +27,7 @@ var client = net.connect({port: MAINSERVER_PORT, host : ip.address()}, () => {
 /* ROUTING AND MIDDLEWARE */
 /**************************************************************************/
 
-var response_rdy = false;
-var items_response = [];
+var list_items_response = [[]];
 app.set('views', './views');
 app.set('view engine', 'pug');
 
@@ -59,10 +58,7 @@ app.get('/logged_in_dashboard', function(req, res) {
  * 
  */
 app.get('/item_searched', function(req, res) {
-  // Need to update the item_searched page based on what I get
-  // from the main server here
-  // 
-  res.render('item_searched', {'items': items_response});
+  res.render('item_searched', {'list_items': list_items_response});
 });
 
 /*
@@ -137,7 +133,7 @@ client.on('data',(data) => {
   if (json_data.message_type === 'read_response') {
     // need to extract array of items from data and pass it to the render call
     // only feasible way is to store this in a global variable
-    items_response = json_data.items.slice();
+    list_items_response = json_data.items.slice();
   }
   else if (data.message_type === 'acc_create_response') {
     // check if acc_created is true or false
@@ -190,12 +186,6 @@ client.on('close', () => {
 http.listen(WEBSERVER_PORT , () => {
   console.log('Listening on port ' + WEBSERVER_PORT + '...');
 });
-
-/**************************************************************************/
-/* MISC. FUNCTIONS */
-/**************************************************************************/
-
-
 
 /**************************************************************************/
 /* EXPERIMENTAL CODE */

@@ -9,23 +9,27 @@ var server = net.createServer((connection) => {
 
    connection.on('data', (request) => {
       // for now, just send back the request concatenated with a word
-      var sample_item = {
+      var sample_item_data = {
         'name' : 'Green Apples',
         'price' : '1.50',
         'store' : 'save on foods',
         'image link' : 'green-apple.png'
+        //'image link' : 'http://www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
       };
+
+      var sample_item = {
+        'id' : '123',
+        'data' : sample_item_data
+      }
 
       var json_response = {
         'message_type' : 'read_response',
-        'items' : [sample_item]
+        'items' : [[]]
       };
 
       for (var i = 0; i < 100; i++) {
-        json_response.items.push(sample_item);
+        json_response.items[0].push(sample_item);
       }
-
-      //console.log(json_response);
 
       connection.write(JSON.stringify(json_response)); 
       //connection.write(JSON.parse(request).collection + ' kappa');

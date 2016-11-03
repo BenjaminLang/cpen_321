@@ -66,13 +66,14 @@ html(lang='en')
         // more list items
 
     ul.products        
-      for item in items
-        li
-          a(href='#')
-            img(src=item["image link"])
-            h4 #{item.name}
-          p Price: #{item.price}
-          p Store: #{item.store}
+      for items in list_items
+        for item in items
+          li
+            a(href='#')
+              img(src=item.data["image link"])
+              h4 #{item.data.name}
+            p Price: #{item.data.price}
+            p Store: #{item.data.store}
 
     script(src='js/jquery-3.1.1.min.js', type='text/javascript')
     script(src='http://localhost:80/socket.io/socket.io.js')
