@@ -52,7 +52,7 @@ def _send_products(soup, cat_item):
 
             data = {}
             name.encode('ascii', 'ignore')
-            data['name'] = name.replace('.', '-')
+            data['name'] = name.replace('.', '-').lower()
             data['price'] = price
             data['url'] = url
             data['image'] = image
