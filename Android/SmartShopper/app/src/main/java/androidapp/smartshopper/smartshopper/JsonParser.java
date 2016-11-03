@@ -18,7 +18,7 @@ public class JsonParser {
     private String NAME_TAG = "name";
     private String PRICE_TAG = "price";
     private String STORE_TAG = "store";
-    private String URL_TAG = "image url";
+    private String URL_TAG = "image";
 
     public JsonParser() {}
 
@@ -37,11 +37,12 @@ public class JsonParser {
                     //Iterator<?> colleKeys = currColle.keys();
                     for(int j = 0; j < currColle.length(); j++){
                         JSONObject currItem = currColle.getJSONObject(j);
+                        JSONObject currData = currItem.getJSONObject("data");
 
-                        String name = currItem.getString(NAME_TAG);
-                        String price = currItem.getString(PRICE_TAG);
-                        String store = currItem.getString(STORE_TAG);
-                        String img = currItem.getString(URL_TAG);
+                        String name = currData.getString(NAME_TAG);
+                        String price = currData.getString(PRICE_TAG);
+                        String store = currData.getString(STORE_TAG);
+                        String img = currData.getString(URL_TAG);
 
                         Product currProduct = new Product(name, price, store, img);
                         parseList.add(currProduct);
