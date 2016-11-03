@@ -5,7 +5,7 @@ import json
 
 # Parses starting from the base_url and sends the data to the db
 def parse():
-    full_json = json.load(urlopen('http://api.walmartlabs.com/v1/taxonomy?format=json&apiKey=' + api_key))
+    full_json = json.loads(urlopen('http://api.walmartlabs.com/v1/taxonomy?format=json&apiKey=' + api_key).read().decode('utf8'))
 
     departments = full_json['categories']
 
@@ -22,7 +22,7 @@ def parse():
                 cat_id = subcat['id']
                 cat_name = subcat['name']
 
-                cat_json = json.load(urlopen('http://api.walmartlabs.com/v1/paginated/items?format=json&category=' + cat_id + '&apiKey=' + api_key))
+                cat_json = json.loads(urlopen('http://api.walmartlabs.com/v1/paginated/items?format=json&category=' + cat_id + '&apiKey=' + api_key).read().decode('utf8'))
                 items = cat_json['items']
 
                 for item in items:
