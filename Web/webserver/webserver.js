@@ -19,9 +19,6 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var net = require('net');
 var ip = require('ip');
-var client = net.connect({port: MAINSERVER_PORT, host : ip.address()}, () => {
-  console.log('Connected to main server!');
-});
 
 /**************************************************************************/
 /* ROUTING AND MIDDLEWARE */
@@ -73,6 +70,10 @@ app.post('/register', function(req, res) {
 /* LISTENERS */
 /**************************************************************************/
 
+var client = net.connect({port: MAINSERVER_PORT, host : ip.address()}, () => {
+  console.log('Connected to main server!');
+});
+
 /**
  * Listener for socket between browser client and web server
  */
@@ -118,7 +119,7 @@ io.on('connection', (socket) => {
     };
 
     // ... and send it to the main server
-    client.write(JSON.stringify(json_request));
+    client.write(json_request);
   });
 
 });
@@ -128,12 +129,12 @@ io.on('connection', (socket) => {
  */
 client.on('data',(data) => {
   // Need to check what kind of response I'm getting from the main server
-  var json_data = JSON.parse(data);
+  // var json_data = JSON.parse(data);
   // Is it a response to an item search request?
-  if (json_data.message_type === 'read_response') {
+  if (data.message_type === 'read_response') {
     // need to extract array of items from data and pass it to the render call
     // only feasible way is to store this in a global variable
-    list_items_response = json_data.items.slice();
+    list_items_response = data.items.slice();
   }
   else if (data.message_type === 'acc_create_response') {
     // check if acc_created is true or false
