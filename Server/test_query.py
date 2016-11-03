@@ -13,7 +13,7 @@ class query:
 
     def start_query(self):
         self.message['message_type'] = 'read'
-        self.message['items'] = ['syrup']
+        self.message['items'] = ['Syrup']
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
 
@@ -23,7 +23,7 @@ class query:
 
     def start_query_2(self):
         self.message['message_type'] = 'read'
-        self.message['items'] = ['chocolate']
+        self.message['items'] = ['Chocolate']
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
 

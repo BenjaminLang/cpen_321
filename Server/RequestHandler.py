@@ -68,7 +68,7 @@ class RequestHandler:
 
             # For each word in request
             for searchable_item in item_words:
-                query_array.append({'words': {'$in': [searchable_item]}})
+                query_array.append({'words': {'$elemMatch': {'$eq': searchable_item}}})
 
             query = {'$and': query_array}
             for searchable_item in item_words:
