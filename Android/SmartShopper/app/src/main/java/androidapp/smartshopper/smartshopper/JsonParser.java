@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public class JsonParser {
-    private String COLLECTIONS_TAG = "collections";
+    private String ITEMS_TAG = "items";
     private String COLUMN_TAG = "col_name_1";
     private String NAME_TAG = "name";
     private String PRICE_TAG = "price";
@@ -28,24 +28,23 @@ public class JsonParser {
 
             try{
                 JSONObject jsonObj = new JSONObject(json);
-                JSONArray collections = jsonObj.getJSONArray(COLLECTIONS_TAG);
+                JSONArray items = jsonObj.getJSONArray(ITEMS_TAG);
 
-                for(int i = 0; i < collections.length(); i++) {
-                    JSONObject currColle = collections.getJSONObject(i);
+                for(int i = 0; i < items.length(); i++) {
+                    //JSONObject currColle = collections.getJSONObject(i);
+                    JSONArray currColle = items.getJSONArray(i);
 
-                    Iterator<?> colleKeys = currColle.keys();
-                    while(colleKeys.hasNext()){
-                        JSONArray items = currColle.getJSONArray(colleKeys.next().toString());
-                        for(int j = 0; j < items.length(); j++) {
-                            JSONObject currItem = items.getJSONObject(j);
-                            String name = currItem.getString(NAME_TAG);
-                            String price = currItem.getString(PRICE_TAG);
-                            String store = currItem.getString(STORE_TAG);
-                            String img = currItem.getString(URL_TAG);
+                    //Iterator<?> colleKeys = currColle.keys();
+                    for(int j = 0; j < currColle.length(); j++){
+                        JSONObject currItem = currColle.getJSONObject(j);
 
-                            Product currProduct = new Product(name, price, store, img);
-                            parseList.add(currProduct);
-                        }
+                        String name = currItem.getString(NAME_TAG);
+                        String price = currItem.getString(PRICE_TAG);
+                        String store = currItem.getString(STORE_TAG);
+                        String img = currItem.getString(URL_TAG);
+
+                        Product currProduct = new Product(name, price, store, img);
+                        parseList.add(currProduct);
                     }
                 }
             }catch (JSONException e) {
