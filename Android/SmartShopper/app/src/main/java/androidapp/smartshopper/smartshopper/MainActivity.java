@@ -15,14 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    ListView listView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        listView = (ListView) findViewById(R.id.search_result_list);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        final Menu myMenu = menu;
+
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
 
         SearchManager searchManager =
@@ -70,24 +70,49 @@ public class MainActivity extends AppCompatActivity {
                         RequestBuilder rb = new RequestBuilder();
                         String dbRequest = rb.buildReadReq(s, dummyOptions, " ");
 
-                        String jsonResponse;
                         try {
+                            String jsonResponse;
                             jsonResponse = new SendSearchRequest().execute(dbRequest).get();
                             Toast.makeText(MainActivity.this, jsonResponse, Toast.LENGTH_LONG).show();
 
-                            JsonParser parser = new JsonParser();
+                            //JsonParser parser = new JsonParser();
                             //List<Product> result = parser.parseJSON(jsonResponse);
 
-                            List<Product> dummyResult = new ArrayList<Product>(Arrays.asList(
-                                    new Product("apple", "1.99", "somewhere", "asdf"),
-                                    new Product("orange", "2.99", "somewhere", "asdf"),
-                                    new Product("something", "3.99", "somewhere", "asdf"),
-                                    new Product("ayyyy", "4.99", "somewhere", "asdf"),
-                                    new Product("GTX 1080", "999.99", "somewhere", "asdf")
-                            ));
+                            /*
+                            String testJson = "{\n" +
+                                    "  \"message_type\": \"response\",\n" +
+                                    "  \"collections\": [\n" +
+                                    "    {\n" +
+                                    "      \"samsung\": [\n" +
+                                    "        {\n" +
+                                    "          \"name\": \"Class KS9500 Curved 4k\",\n" +
+                                    "          \"price\": \"19999.99\",\n" +
+                                    "          \"store\": \"Samsung\"\n" +
+                                    "        },\n" +
+                                    "        {\n" +
+                                    "          \"name\": \"Class KS9500 Curved 4K\",\n" +
+                                    "          \"price\": \"6999.99\",\n" +
+                                    "          \"store\": \"Best Buy\"\n" +
+                                    "        }\n" +
+                                    "      ]\n" +
+                                    "    }\n" +
+                                    "  ]\n" +
+                                    "}";
+                                    */
 
-                            ProductAdapter adapter = new ProductAdapter(MainActivity.this, R.layout.search_result, (ArrayList)dummyResult);
-                            listView.setAdapter(adapter);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("json_response", jsonResponse);
+                            ResultFragment newResFrag = new ResultFragment();
+                            newResFrag.setArguments(bundle);
+
+                            FragmentManager fragMan = getSupportFragmentManager();
+                            fragMan.beginTransaction()
+                                    .replace(R.id.result_frame, newResFrag)
+                                    .addToBackStack("search_result")
+                                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                    .commit();
+
+                            (myMenu.findItem(R.id.search)).collapseActionView();
                         } catch(Exception e){
                             e.printStackTrace();
                         }
@@ -98,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onQueryTextChange(String s) {
                         //Do the auto-correct suggestions here
-
                         return false;
                     }
                 }
@@ -107,12 +131,20 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragMan = getSupportFragmentManager();
+        if(fragMan.getBackStackEntryCount() > 0)
+            fragMan.popBackStack();
+        else
+            super.onBackPressed();
+    }
+
     private class SendSearchRequest extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... request) {
-            //SmartShopClient client = new SmartShopClient();
-            //client.sendRequest(request[0]);
-            return request[0];
+            SmartShopClient client = new SmartShopClient();
+            return client.sendRequest(request[0]);
         }
 
         @Override

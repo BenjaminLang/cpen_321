@@ -32,11 +32,10 @@ public class RequestBuilder {
             request.put("options", opt);
 
             //insert item names
-            String[] collections = item.split(" ");
+            //String[] collections = item.split(" ");
             JSONArray searchItems = new JSONArray();
-            for(String currColle : collections)
-                searchItems.put(currColle);
-            request.put("collections", searchItems);
+            searchItems.put(item);
+            request.put("items", searchItems);
             return request.toString(2);
         } catch (JSONException e){
             e.printStackTrace();

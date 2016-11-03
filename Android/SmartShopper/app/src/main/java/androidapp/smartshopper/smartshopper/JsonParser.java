@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class JsonParser {
     private String NAME_TAG = "name";
     private String PRICE_TAG = "price";
     private String STORE_TAG = "store";
-    private String URL_TAG = "image link";
+    private String URL_TAG = "image url";
 
     public JsonParser() {}
 
@@ -30,17 +31,21 @@ public class JsonParser {
                 JSONArray collections = jsonObj.getJSONArray(COLLECTIONS_TAG);
 
                 for(int i = 0; i < collections.length(); i++) {
-                    JSONArray items = collections.getJSONArray(i);
+                    JSONObject currColle = collections.getJSONObject(i);
 
-                    for(int j = 0; j < items.length(); j++) {
-                        JSONObject currItem = items.getJSONObject(i);
-                        String name = currItem.getString(NAME_TAG);
-                        String price = currItem.getString(PRICE_TAG);
-                        String store = currItem.getString(STORE_TAG);
-                        String img = "dummy.com";
+                    Iterator<?> colleKeys = currColle.keys();
+                    while(colleKeys.hasNext()){
+                        JSONArray items = currColle.getJSONArray(colleKeys.next().toString());
+                        for(int j = 0; j < items.length(); j++) {
+                            JSONObject currItem = items.getJSONObject(j);
+                            String name = currItem.getString(NAME_TAG);
+                            String price = currItem.getString(PRICE_TAG);
+                            String store = currItem.getString(STORE_TAG);
+                            String img = currItem.getString(URL_TAG);
 
-                        Product currProduct = new Product(name, price, store, img);
-                        parseList.add(currProduct);
+                            Product currProduct = new Product(name, price, store, img);
+                            parseList.add(currProduct);
+                        }
                     }
                 }
             }catch (JSONException e) {

@@ -12,6 +12,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +26,9 @@ public class ProductAdapter extends ArrayAdapter<Product>{
 
     private Context context;
     int layoutId;
-    private ArrayList<Product> products;
+    private List<Product> products;
 
-    public ProductAdapter(Context context, int resource, ArrayList<Product> products){
+    public ProductAdapter(Context context, int resource, List<Product> products){
         super(context, resource, products);
 
         this.layoutId = resource;
@@ -74,13 +76,7 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         holder.name.setText(currProduct.getName());
         holder.price.setText(currProduct.getPrice());
         holder.store.setText(currProduct.getStore());
-        try{
-            URL imgLink = new URL(currProduct.getImg());
-            Bitmap bmp = BitmapFactory.decodeStream(imgLink.openConnection().getInputStream());
-            holder.img.setImageBitmap(bmp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Picasso.with(context).load(currProduct.getImg()).into(holder.img);
 
         return view;
     }
