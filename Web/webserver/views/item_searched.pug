@@ -49,20 +49,31 @@ html(lang='en')
               span.input-group-btn
                 button.btn.btn-info.btn-lg(type='button')
                   i.glyphicon.glyphicon-search
-    ul.products
-      li
-        a(href='#')
-          img(src='red-apple.png')
-          h4 Red Apple
-        p Price: $#{price_1}
-        p Store: Walmart
-      li
-        a(href='#')
-          img(src='green-apple.png')
-          h4 Green Apple
-        p Price: $#{price_2}
-        p Store: Save on Foods
-      // more list items
+    //-                  
+      ul.products
+        li
+          a(href='#')
+            img(src='red-apple.png')
+            h4 Red Apple
+          p Price: $#{price_1}
+          p Store: Walmart
+        li
+          a(href='#')
+            img(src='green-apple.png')
+            h4 Green Apple
+          p Price: $#{price_2}
+          p Store: Save on Foods
+        // more list items
+
+    ul.products        
+      for item in items
+        li
+          a(href='#')
+            img(src=item["image link"])
+            h4 #{item.name}
+          p Price: #{item.price}
+          p Store: #{item.store}
+
     script(src='js/jquery-3.1.1.min.js', type='text/javascript')
     script(src='http://localhost:80/socket.io/socket.io.js')
     script(src='js/browser.js', type='text/javascript')
