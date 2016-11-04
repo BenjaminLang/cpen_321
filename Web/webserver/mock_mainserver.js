@@ -1,9 +1,9 @@
 var port = 6969;
-// var net = require('net');
+var net = require('net');
 var jot = require('json-over-tcp');
 
-//var server = net.createServer(); 
-var server = jot.createServer();
+var server = net.createServer(); 
+//var server = jot.createServer();
 
 server.on('connection', (socket) => {
 
@@ -14,6 +14,7 @@ server.on('connection', (socket) => {
    });
 
    socket.on('data', (request) => {
+
       var sample_item_data = {
         'name' : 'Green Apples',
         'price' : '1.50',
@@ -35,8 +36,9 @@ server.on('connection', (socket) => {
       for (var i = 0; i < 100; i++) {
         json_response.items[0].push(sample_item);
       }
-      socket.write(json_response); 
+      socket.write(JSON.stringify(json_response)); 
    });
+
 
    socket.on('error',(error) => {
       if (error.code === 'ECONNRESET') {
@@ -46,6 +48,7 @@ server.on('connection', (socket) => {
         console.log("Error: " + error.code);
       }
    });
+  
 });
 
 server.listen(port, () => { 

@@ -17,7 +17,7 @@ var express = require('express'),
     app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-// var net = require('net');
+var net = require('net');
 var ip = require('ip');
 var jot = require('json-over-tcp');
 
@@ -65,13 +65,14 @@ app.post('/register', function(req, res) {
 /**************************************************************************/
 /* LISTENERS */
 /**************************************************************************/
-/*
+
 var client = net.connect({port: MAINSERVER_PORT, host : ip.address()}, () => {
   console.log('Connected to main server!');
-});*/
+});
+/*
 var client = jot.connect({port: MAINSERVER_PORT, host: ip.address()}, () => {
   console.log('Connected to main server!');
-});
+});*/
 /*
 client.connect(MAINSERVER_PORT, ip.address());
 client.on('connect', () => {
@@ -92,11 +93,11 @@ io.on('connection', (socket) => {
     // ...convert request to a JSON object...
     var json_request = {
       'message_type' : 'read',
-      'items' : item
+      'items' : [item]
     };
     
     // ... and send it to the main server
-    client.write(json_request);
+    client.write(JSON.stringify(json_request));
   });
   /*
   // When browser client submits a new account request...
