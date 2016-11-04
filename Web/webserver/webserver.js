@@ -135,11 +135,13 @@ client.on('data',(data) => {
   // Need to check what kind of response I'm getting from the main server
   // var json_data = JSON.parse(data);
   // Is it a response to an item search request?
-
-  if (data.message_type === 'read_response') {
+  var message = JSON.parse(data.toString());
+  var type = message.message_type;
+  if (type === 'read_response') {
     // need to extract array of items from data and pass it to the render call
     // only feasible way is to store this in a global variable
-    list_items_response = data.items.slice();
+    list_items_response = message.items.slice();
+    console.log(list_items_response);
   }
   else if (data.message_type === 'acc_create_response') {
     // check if acc_created is true or false
