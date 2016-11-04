@@ -25,6 +25,7 @@ class DatabaseServer:
         while True:
             connection, addr = server_socket.accept()
             data = connection.recv(1024).decode()
+            print(data)
             json_data = json.loads(data)
 
             response = request_handler.handle_request(json_data['message_type'], json_data)

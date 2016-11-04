@@ -52,7 +52,7 @@ def _send_products(soup, cat_item):
 
             data = {}
             name.encode('ascii', 'ignore')
-            data['name'] = name.replace('.', '-')
+            data['name'] = name.replace('.', '-').lower()
             data['price'] = price
             data['url'] = url
             data['image'] = image
@@ -68,8 +68,8 @@ def parse():
 
     for department in departments:
 
-        if department != 'http://www.costco.ca/food.html':
-            continue
+        #if department != 'http://www.costco.ca/food.html':
+        #   continue
 
         dep_soup = get_soup(department)
         categories = _get_links(dep_soup, 'div', 'col-xs-6 col-md-3')
