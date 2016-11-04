@@ -17,8 +17,9 @@ var express = require('express'),
     app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var net = require('net');
+// var net = require('net');
 var ip = require('ip');
+var jot = require('json-over-tcp');
 
 /**************************************************************************/
 /* ROUTING AND MIDDLEWARE */
@@ -64,11 +65,18 @@ app.post('/register', function(req, res) {
 /**************************************************************************/
 /* LISTENERS */
 /**************************************************************************/
-
+/*
 var client = net.connect({port: MAINSERVER_PORT, host : ip.address()}, () => {
   console.log('Connected to main server!');
+});*/
+var client = jot.connect({port: MAINSERVER_PORT, host: ip.address()}, () => {
+  console.log('Connected to main server!');
 });
-
+/*
+client.connect(MAINSERVER_PORT, ip.address());
+client.on('connect', () => {
+  console.log('Connected to main server!');
+})*/
 /**
  * Listener for socket between browser client and web server
  */
@@ -84,13 +92,13 @@ io.on('connection', (socket) => {
     // ...convert request to a JSON object...
     var json_request = {
       'message_type' : 'read',
-      'collection' : item
+      'items' : item
     };
     
     // ... and send it to the main server
     client.write(json_request);
   });
-
+  /*
   // When browser client submits a new account request...
   socket.on('create_account_request', (acc_info) => {
 
@@ -114,9 +122,9 @@ io.on('connection', (socket) => {
     };
 
     // ... and send it to the main server
-    client.write(JSON.stringify(json_request));
+    client.sendMessage(json_request);
   });
-
+  */
 });
 
 /**
@@ -126,6 +134,7 @@ client.on('data',(data) => {
   // Need to check what kind of response I'm getting from the main server
   // var json_data = JSON.parse(data);
   // Is it a response to an item search request?
+
   if (data.message_type === 'read_response') {
     // need to extract array of items from data and pass it to the render call
     // only feasible way is to store this in a global variable

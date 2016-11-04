@@ -1,14 +1,19 @@
 var port = 6969;
-var net = require('net');
-var server = net.createServer((connection) => { 
+// var net = require('net');
+var jot = require('json-over-tcp');
+
+//var server = net.createServer(); 
+var server = jot.createServer();
+
+server.on('connection', (socket) => {
+
    console.log('Webserver connected');
    
-   connection.on('end', () => {
+   socket.on('end', () => {
       console.log('Webserver disconnected');
    });
 
-   connection.on('data', (request) => {
-      // for now, just send back the request concatenated with a word
+   socket.on('data', (request) => {
       var sample_item_data = {
         'name' : 'Green Apples',
         'price' : '1.50',
@@ -30,12 +35,10 @@ var server = net.createServer((connection) => {
       for (var i = 0; i < 100; i++) {
         json_response.items[0].push(sample_item);
       }
-
-      connection.write(JSON.stringify(json_response)); 
-      //connection.write(JSON.parse(request).collection + ' kappa');
+      socket.write(json_response); 
    });
 
-   connection.on('error',(error) => {
+   socket.on('error',(error) => {
       if (error.code === 'ECONNRESET') {
         console.log("Error: webserver disconnected.");
       }
