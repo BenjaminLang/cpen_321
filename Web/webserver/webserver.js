@@ -3,12 +3,6 @@
  */
 
 /**************************************************************************/
-/* PORTS */
-/**************************************************************************/
-const WEBSERVER_PORT = 8080;
-const MAINSERVER_PORT = 6969;
-
-/**************************************************************************/
 /* REQUIRED MODULES */
 /**************************************************************************/
 
@@ -19,7 +13,30 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var net = require('net');
 var ip = require('ip');
-var jot = require('json-over-tcp');
+
+/**************************************************************************/
+/* PORTS */
+/**************************************************************************/
+const WEBSERVER_PORT = 8080;
+const MAINSERVER_PORT = 6969;
+
+/**************************************************************************/
+/* REQUESTS */
+/**************************************************************************/
+
+const SEARCH_REQ = 'search_request';
+const CREATE_ACC_REQ = 'create_account_request';
+const LOGIN_REQ = 'login_request';
+// more to be added
+
+/**************************************************************************/
+/* RESPONSES */
+/**************************************************************************/
+
+const READ_RSP = 'read_response';
+const CREATE_ACC_RSP = 'acc_create_response';
+const LOGIN_RSP = 'acc_login_response';
+// more to be added
 
 /**************************************************************************/
 /* ROUTING AND MIDDLEWARE */
@@ -69,15 +86,7 @@ app.post('/register', function(req, res) {
 var client = net.connect({port: MAINSERVER_PORT, host : ip.address()}, () => {
   console.log('Connected to main server!');
 });
-/*
-var client = jot.connect({port: MAINSERVER_PORT, host: ip.address()}, () => {
-  console.log('Connected to main server!');
-});*/
-/*
-client.connect(MAINSERVER_PORT, ip.address());
-client.on('connect', () => {
-  console.log('Connected to main server!');
-})*/
+
 /**
  * Listener for socket between browser client and web server
  */
@@ -88,90 +97,39 @@ io.on('connection', (socket) => {
     console.log('Client disconnected.');
   });
  
-  // When browser client submits a search request...
-  socket.on('search_request', (item) => {
-    // ...convert request to a JSON object...
-    var json_request = {
-      'message_type' : 'read',
-      'items' : [item]
-    };
-    
-    // ... and send it to the main server
-    client.write(JSON.stringify(json_request));
+  // browser client submits a search request
+  socket.on(SEARCH_REQ, (item) => {
+  	send_request(client, item, SEARCH_REQ);
   });
-  /*
-  // When browser client submits a new account request...
-  socket.on('create_account_request', (acc_info) => {
-
-    var json_request = {
-      'message_type' : 'acc_create',
-      'userID' : acc_info.userID,
-      'password' : acc_info.password,
-    };
-
-    // ... and send it to the main server
-    client.write(JSON.stringify(json_request));
+  
+  // browser client submits a new account request
+  socket.on(CREATE_ACC_REQ, (acc_info) => {
+  	send_request(client, acc_info, CREATE_ACC_REQ);
   });
 
-  // When browser client submits a login request...
-  socket.on('login_request', (acc_info) => {
-
-    var json_request = {
-      'message_type' : 'acc_login',
-      'userID' : acc_info.userID,
-      'password' : acc_info.password,
-    };
-
-    // ... and send it to the main server
-    client.sendMessage(json_request);
-  });
-  */
+  // browser client submits a login request
+  socket.on(LOGIN_REQ, (acc_info) => {
+  	send_request(client, acc_info, LOGIN_REQ);
+  })
 });
 
 /**
  * Listener for responses from the main server
  */
-client.on('data',(data) => {
-  // Need to check what kind of response I'm getting from the main server
-  // var json_data = JSON.parse(data);
-  // Is it a response to an item search request?
-  var message = JSON.parse(data.toString());
-  var type = message.message_type;
-  if (type === 'read_response') {
-    // need to extract array of items from data and pass it to the render call
-    // only feasible way is to store this in a global variable
-    list_items_response = message.items.slice();
-    console.log(list_items_response);
-  }
-  else if (data.message_type === 'acc_create_response') {
-    // check if acc_created is true or false
-  }
-  else {
-    //
-  }
-
+client.on('data', (response) => {
+  handle_response(response);
   // ---------------- not doing this most likely
   // Upon receiving search response data from main server, inform the browser client and
   // send it to the browser
-  // io.emit('search response', data.toString());
-  // 
-
+  // io.emit('search response', response.toString());
   // 
 });
 
 /**
- * Handle error events between web server and main server.
+ * Listener for error events between web server and main server
  */
 client.on('error',(error) => {
-  if (error.code === 'ECONNREFUSED') {
-    console.log("Error: main server is not available.");
-  }
-  else if (error.code === 'ECONNRESET') {
-    console.log("Error: connection to main server closed abruptly.");
-  }
-  else {
-    console.log("Error: " + error.code);
-  } 
+  handle_error(error);
 });
 
 /**
@@ -187,7 +145,7 @@ client.on('close', () => {
   });
   */
 });
-
+	
 /**
  * Binds and listens for connections on the webserver port.
  */
@@ -196,19 +154,77 @@ http.listen(WEBSERVER_PORT , () => {
 });
 
 /**************************************************************************/
-/* EXPERIMENTAL CODE */
+/* HELPER FUNCTIONS */
 /**************************************************************************/
 
-// var other_server = require("socket.io-client")('http://localhost:6969');
-// other_server.emit('read request', json_request);
-/*
-other_server.on('connect',() => {
-  console.log("Connected to main server.");
-  other_server.on('disconnect',()=> {
-    console.log("Disconnected from main server.");
-  });
-});
-*/
+/**
+ * Sends a request to the main server.
+ */
+function send_request(socket, data, type) {
 
+	var json_request = {};
 
+	switch(type) {
+		case SEARCH_REQ:  
+			json_request.message_type = 'read';
+			json_request.items = [data];
+			break;
+										
+		case CREATE_ACC_REQ:
+			json_request.message_type = 'acc_create';
+			json_request.userID = data.userID;
+			json_request.password = data.password;
+			break;
 
+		case LOGIN_REQ:
+			json_request.message_type = 'acc_login';
+			json_request.userID = data.userID;
+			json_request.password = data.password;
+			break;
+	}
+  
+  socket.write(JSON.stringify(json_request));
+};
+
+/**
+ * Handles responses from the main server.
+ */
+
+function handle_response(response) {
+	var message = JSON.parse(response.toString());
+  var type = message.message_type;
+
+  switch(type) {
+    // need to extract array of items from response and pass it to the render call
+    // only feasible way is to store this in a global variable
+  	case READ_RSP: 
+      list_items_response = message.items.slice();
+      break;
+    
+    // check if acc_created is true or false
+    case CREATE_ACC_RSP:
+      break;
+
+    case LOGIN_RSP:
+      break;
+  }
+};
+
+/**
+ * Handles errors between the web server and main server. 
+ */
+
+function handle_error(error) {
+  switch(error.code){
+    case 'ECONNREFUSED':
+      console.log("Error: main server is not available.");
+      break;
+
+    case 'ECONNRESET':
+      console.log("Error: connection to main server closed abruptly.");
+      break;
+
+    default:
+      console.log("Error: " + error.code); 
+  }
+};
