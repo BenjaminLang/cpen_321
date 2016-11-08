@@ -52,23 +52,23 @@ app.set('view engine', 'pug');
  */
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
   res.sendFile('index.html');
 });
 
-app.get('/register', function(req, res) {
+app.get('/register', (req, res) => {
   res.sendFile('register.html');
 });
 
-app.get('/login', function(req, res) {
+app.get('/login', (req, res) => {
   res.sendFile('login.html');
 });
 
-app.get('/logged_in_dashboard', function(req, res) {
+app.get('/logged_in_dashboard', (req, res) => {
   res.render('logged_in_dashboard');
 });
 
-app.get('/item_searched', function(req, res) {
+app.get('/item_searched', (req, res) => {
   res.render('item_searched', {'list_items': list_items_response});
 });
 
