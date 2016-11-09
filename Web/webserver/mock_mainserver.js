@@ -1,18 +1,46 @@
 var port = 6969;
 var net = require('net');
-var server = net.createServer((connection) => { 
+var jot = require('json-over-tcp');
+
+var server = net.createServer(); 
+//var server = jot.createServer();
+
+server.on('connection', (socket) => {
+
    console.log('Webserver connected');
    
-   connection.on('end', () => {
+   socket.on('end', () => {
       console.log('Webserver disconnected');
    });
 
-   connection.on('data', (request) => {
-      // for now, just send back the request concatenated with a word
-      connection.write(JSON.parse(request).collection + ' kappa');
+   socket.on('data', (request) => {
+
+      var sample_item_data = {
+        'name' : 'Green Apples',
+        'price' : '1.50',
+        'store' : 'save on foods',
+        'image link' : 'green-apple.png'
+        //'image link' : 'http://www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
+      };
+
+      var sample_item = {
+        'id' : '123',
+        'data' : sample_item_data
+      }
+
+      var json_response = {
+        'message_type' : 'read_response',
+        'items' : [[]]
+      };
+
+      for (var i = 0; i < 100; i++) {
+        json_response.items[0].push(sample_item);
+      }
+      socket.write(JSON.stringify(json_response)); 
    });
 
-   connection.on('error',(error) => {
+
+   socket.on('error',(error) => {
       if (error.code === 'ECONNRESET') {
         console.log("Error: webserver disconnected.");
       }
@@ -20,6 +48,7 @@ var server = net.createServer((connection) => {
         console.log("Error: " + error.code);
       }
    });
+  
 });
 
 server.listen(port, () => { 
