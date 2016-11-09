@@ -2,7 +2,7 @@
  * The web server for smart_shopper
  */
 
-const HOST = 'ec2-35-160-222-208.us-west-2.compute.amazonaws.com';
+//const HOST = 'ec2-35-160-222-208.us-west-2.compute.amazonaws.com';
 
 /**************************************************************************/
 /* REQUIRED MODULES */
@@ -16,7 +16,7 @@ var io = require('socket.io')(http);
 var net = require('net');
 var ip = require('ip');
 
-//const HOST = ip.address();
+const HOST = ip.address();
 
 /**************************************************************************/
 /* PORTS */
@@ -204,6 +204,15 @@ var handle_response = (response) => {
     // need to extract array of items from response and pass it to the render call
     // only feasible way is to store this in a global variable
   	case READ_RSP:
+      console.log(message.items.length);
+      /*
+      for (var i = 0; i < message.items.length; i++) {
+        for (var j = 0; i < message.items.) {
+          console.log(item);
+          item.data.name = to_title_case(item.data.name);
+        }
+      } 
+      */
       list_items_response = message.items.slice();
       break;
     
