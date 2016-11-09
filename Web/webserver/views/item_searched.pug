@@ -51,6 +51,7 @@ html(lang='en')
                   i.glyphicon.glyphicon-search
 
     // SEARCH RESULTS
+<<<<<<< HEAD
     #site
       #content
         #products
@@ -70,6 +71,17 @@ html(lang='en')
                       input#qty-1.qty(type='text', name='qty-1', value='1')
                     p
                       input.btn(type='submit', value='Add to cart')
+=======
+    ul.products        
+      for items in list_items
+        for item in items
+          li
+            a(href='javascript:void(0);')
+              img(src=('http:' + item.data.image))
+              h4 #{item.data.name}
+            p Price: #{item.data.price}
+            p Store: #{item.data.store}
+>>>>>>> 85668c7b99fc88219e9118775a6ff33de46bfbbf
 
 					  
 					  
