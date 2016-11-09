@@ -15,6 +15,6 @@
 ### Web Developement (Back End): Andy Wong 
 ### Web Crawler: Amrit Kooner
 ### Database & Server: Ben Lang, Ryan Liu
-### Android: John Sun 
+Android: John Sun 
 
 ##License
