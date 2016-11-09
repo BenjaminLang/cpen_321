@@ -15,7 +15,7 @@ html
     #custom-bootstrap-menu.navbar.navbar-default(role='navigation')
       .container-fluid
         .navbar-header
-          a.navbar-brand(href='index.html') SmartShop
+          a.navbar-brand(href='/index') SmartShop
           button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-menubuilder')
             span.sr-only Toggle navigation
             span.icon-bar
@@ -30,11 +30,10 @@ html
                 span.caret
               ul.dropdown-menu
                 li
-                  a(href='login.html') Login
+                  a(href='/login') Login
                 li
-                  a(href='register.html') Register
-                li
-                  a(href='logout.html') Logout
+                  a(href='/register') Register
+
             li.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown')
                 | Cart
@@ -44,13 +43,13 @@ html
                   a(href='#') View Full Cart
     // Login Form
     #login-page
-      form
-        h4  Login Information 
+      form 
         input.name(type='text', placeholder='Enter Email')
         input.pw(type='password', placeholder='Enter Password')
         li
           a(href='register.html') Register
-        input.button(type='submit', value='Log in')
+        input.button(id='login-btn' type='submit', value='Log in')
     script(src='js/jquery-3.1.1.min.js', type='text/javascript')
-    script(src='http://localhost:8080/socket.io/socket.io.js')
+    //script(src='http://localhost:8080/socket.io/socket.io.js')
+    script(src="/socket.io/socket.io.js", type='text/javascript')
     script(src='js/browser.js', type='text/javascript')

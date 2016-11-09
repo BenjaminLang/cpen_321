@@ -6,7 +6,12 @@ const ENTER_KEY = 13;
 $('#search-btn').click(() => {
 	socket.emit('search_request', $('#search-input').val());
 	// View the search results in a different page
-	window.location.href = '/item_searched';
+	if (window.location.href === '/item_searched') {
+		window.location.reload();
+	} 
+	else {
+		window.location.href = '/item_searched';
+	}
 });
 
 $('#search-input').keyup((event) => {
@@ -15,6 +20,11 @@ $('#search-input').keyup((event) => {
 	}
 });
 
+/*
+$('#login-btn').click(() => {
+	socket.emit('login_request', );
+});
+*/
 /*
 socket.on('search response', function(response) {
 	console.log(response);
