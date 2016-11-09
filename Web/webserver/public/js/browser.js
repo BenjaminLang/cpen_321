@@ -5,10 +5,11 @@ const ENTER_KEY = 13;
  */
 $('#search-btn').click(() => {
 	socket.emit('search_request', $('#search-input').val());
-	// View the search results in a different page
+	// Refresh the page if we're already viewing a search result
 	if (window.location.href === '/item_searched') {
 		window.location.reload();
 	} 
+	// Otherwise view the search results in a different page
 	else {
 		window.location.href = '/item_searched';
 	}
