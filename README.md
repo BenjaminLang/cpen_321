@@ -1,7 +1,7 @@
 #CheckedOut 
 
 ##Synopsis
-A Web and Androi application which allow its users to search for items, and create shopping lists. The items
+A Web and Android application which allows its users to search for items, and create shopping lists. The items
 searched will be prioritized by lowest price. The hope is to help save the user money by providing a fast and
 simple approach to determining which store provides the cheapest price for the desired item. 
 
