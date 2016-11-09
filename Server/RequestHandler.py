@@ -1,4 +1,5 @@
 import json
+import traceback
 
 class RequestHandler:
 
@@ -22,7 +23,9 @@ class RequestHandler:
         response['message_type'] = 'write_response'
         try:
             # convert JSON to dictionary type and extract indexing information
-            msg = json.loads(json_data)
+            print (json_data)
+            # msg = json.loads(json_data)
+            msg = json_data
             collection = msg['collection']
             item_name = msg['data']['name']
             words = item_name.split()
@@ -47,6 +50,7 @@ class RequestHandler:
 
         # construct response message
         except Exception :
+            traceback.print_exc()
             response['status'] = 'failed'
             print(Exception)
 

@@ -12,8 +12,13 @@ class query:
         self.message = {}
 
     def start_query(self):
-        self.message['message_type'] = 'read'
-        self.message['items'] = ['syrup']
+        data = {}
+        self.message['message_type'] = 'write'
+        self.message['collection'] = 'syrup'
+        data['name'] = 'syrup'
+        data['store'] = 'costco'
+        data['price'] = '69.69'
+        self.message['data'] = data
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
 
@@ -22,32 +27,29 @@ class query:
         self.sock.close()
 
     def start_query_2(self):
-        self.message['message_type'] = 'read'
-        self.message['items'] = ['chocolate milk']
+        data = {}
+        self.message['message_type'] = 'write'
+        self.message['collection'] = 'syrup'
+        data['name'] = 'syrup'
+        data['store'] = 'costco'
+        data['price'] = '69.69'
+        self.message['data'] = data
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
 
         self.sock.connect((self.host, self.port))
         self.sock.send(json_formatted_data.encode())
         self.sock.close()
+
 
     def start_query_3(self):
-        self.message['message_type'] = 'read'
-        self.message['items'] = ['samsung', 'smart', 'tv']
-        json_formatted_data = json.dumps(self.message)
-        # print(json_formatted_data)
-
-        self.sock.connect((self.host, self.port))
-        self.sock.send(json_formatted_data.encode())
-        self.sock.close()
-
-    def start_query_4(self):
-        self.message['message_type'] = 'read'
-        query = []
-        query.append('samsung')
-        query.append('smart')
-        query.append('tv')
-        self.message['items'] = query
+        data = {}
+        self.message['message_type'] = 'write'
+        self.message['collection'] = 'syrup'
+        data['name'] = 'syrup'
+        data['store'] = 'walmart'
+        data['price'] = '69.69'
+        self.message['data'] = data
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
 
@@ -61,9 +63,7 @@ if __name__ == "__main__":
     z = query()
     u = query()
 
-    # Queries 1 and 2 are ok, but 3 and 4 cause problems as our algorithm isn't made to handle that
-    # Is that of concern as we move forward?
     x.start_query()
     y.start_query_2()
     z.start_query_3()
-    u.start_query_4()
+    u.start_query_3()
