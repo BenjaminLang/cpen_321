@@ -60,7 +60,15 @@ html(lang='en')
               h4 #{to_title_case(item.data.name)}
             p Price: #{item.data.price}
             p Store: #{item.data.store}
+			form.add-to-cart(action='cart.html', method='post')
+  			  div
+    		    label(for='qty-1') Quantity
+   			    input#qty-1.qty(type='text', name='qty-1', value='1')
+  			  p
+    		    input.btn(type='submit', value='Add to cart')
+
 
     script(src='js/jquery-3.1.1.min.js', type='text/javascript')
     script(src='http://localhost:80/socket.io/socket.io.js')
     script(src='js/browser.js', type='text/javascript')
+	
