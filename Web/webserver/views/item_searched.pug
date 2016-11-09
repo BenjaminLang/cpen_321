@@ -56,8 +56,8 @@ html(lang='en')
         for item in items
           li
             a(href='javascript:void(0);')
-              img(src=item.data["image link"])
-              h4 #{to_title_case(item.data.name)}
+              img(src=('http:' + item.data.image))
+              h4 #{item.data.name}
             p Price: #{item.data.price}
             p Store: #{item.data.store}
 

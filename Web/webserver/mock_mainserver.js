@@ -17,8 +17,8 @@ server.on('connection', (socket) => {
         'name' : 'Green Apples',
         'price' : '1.50',
         'store' : 'save on foods',
-        'image link' : 'green-apple.png'
-        //'image link' : 'http://www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
+        //'image' : 'green-apple.png'
+        'image' : '//www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
       };
 
       var sample_item = {
