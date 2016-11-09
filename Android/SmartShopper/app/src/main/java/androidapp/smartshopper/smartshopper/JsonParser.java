@@ -20,6 +20,9 @@ public class JsonParser {
     private String STORE_TAG = "store";
     private String URL_TAG = "image";
 
+    private String CART_TAG = "cart_list";
+    private String QUANTITY_TAG = "quantity";
+
     public JsonParser() {}
 
     public List<Product> parseJSON(String json) {
@@ -43,12 +46,45 @@ public class JsonParser {
                         String price = currData.getString(PRICE_TAG);
                         String store = currData.getString(STORE_TAG);
                         String img = currData.getString(URL_TAG);
-                        String htmlImg = img.substring(2, img.length());
+                        String htmlImg = "http:" + img;
+                        //String htmlImg = img.substring(2, img.length());
 
-                        Product currProduct = new Product(name, price, store, htmlImg);
+                        Product currProduct = new Product(name, price, store, htmlImg, null);
                         parseList.add(currProduct);
                     }
                 }
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return parseList;
+        }
+        else {
+            return null;
+        }
+    }
+
+    public List<Product> parseCart(String json) {
+        if(json != null) {
+            List<Product> parseList = new ArrayList<Product>();
+
+            try{
+                JSONObject jsonObj = new JSONObject(json);
+                JSONArray items = jsonObj.getJSONArray(CART_TAG);
+
+                for(int i = 0; i < items.length(); i++) {
+                    JSONObject currItem = items.getJSONObject(i);
+
+                    String name = currItem.getString(NAME_TAG);
+                    String price = currItem.getString(PRICE_TAG);
+                    String store = currItem.getString(STORE_TAG);
+                    String img = currItem.getString(URL_TAG);
+                    String quantity = currItem.getString(QUANTITY_TAG);
+
+                    Product currProduct = new Product(name, price, store, img, quantity);
+                    parseList.add(currProduct);
+                }
+
             }catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -9,12 +9,14 @@ public class Product {
     private String price;
     private String store;
     private String imgURL;
+    private String quantity;
 
-    public Product(String name, String price, String store, String imgURL) {
+    public Product(String name, String price, String store, String imgURL, String quantity) {
         this.name = name;
         this.price = price;
         this.store = store;
         this.imgURL = imgURL;
+        this.quantity = quantity;
     }
 
     public String getName() {
@@ -32,4 +34,6 @@ public class Product {
     public String getImg() {
         return imgURL;
     }
+
+    public String getQuantity() { return quantity; }
 }

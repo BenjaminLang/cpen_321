@@ -64,6 +64,7 @@ public class ProductAdapter extends ArrayAdapter<Product>{
             holder.name = (TextView) view.findViewById(R.id.name);
             holder.price = (TextView) view.findViewById(R.id.price);
             holder.store = (TextView) view.findViewById(R.id.store);
+            holder.quantity = (TextView) view.findViewById(R.id.quantity);
             holder.img = (ImageView) view.findViewById(R.id.item_img);
 
             view.setTag(holder);
@@ -78,6 +79,9 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         holder.store.setText(currProduct.getStore());
         Picasso.with(context).load(currProduct.getImg()).into(holder.img);
 
+        if(currProduct.getQuantity() != null)
+            holder.quantity.setText("X" + currProduct.getQuantity());
+
         return view;
     }
 
@@ -85,6 +89,7 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         TextView name;
         TextView price;
         TextView store;
+        TextView quantity;
         ImageView img;
     }
 }

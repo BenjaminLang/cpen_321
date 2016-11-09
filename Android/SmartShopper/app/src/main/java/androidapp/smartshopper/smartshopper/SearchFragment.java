@@ -24,8 +24,8 @@ public class SearchFragment extends ListFragment implements OnItemClickListener 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.top_kek, android.R.layout.simple_list_item_1);
-        setListAdapter(adapter);
+        ///ArrayAdapter adapter = ArrayAdapter.createFromResource(getActivity(), R.array.top_kek, android.R.layout.simple_list_item_1);
+        //setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
 

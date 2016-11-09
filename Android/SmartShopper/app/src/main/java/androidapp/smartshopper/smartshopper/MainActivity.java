@@ -37,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Shopping List Here", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                ShoppingListFragment cartFrag = new ShoppingListFragment();
+
+                FragmentManager fragMan = getSupportFragmentManager();
+                fragMan.beginTransaction()
+                        .replace(R.id.result_frame, cartFrag)
+                        .addToBackStack("search_result")
+                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                        .commit();
             }
         });
     }
@@ -73,32 +82,6 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             String jsonResponse;
                             jsonResponse = new SendSearchRequest().execute(dbRequest).get();
-                            Toast.makeText(MainActivity.this, jsonResponse, Toast.LENGTH_LONG).show();
-
-                            //JsonParser parser = new JsonParser();
-                            //List<Product> result = parser.parseJSON(jsonResponse);
-
-                            /*
-                            String testJson = "{\n" +
-                                    "  \"message_type\": \"response\",\n" +
-                                    "  \"collections\": [\n" +
-                                    "    {\n" +
-                                    "      \"samsung\": [\n" +
-                                    "        {\n" +
-                                    "          \"name\": \"Class KS9500 Curved 4k\",\n" +
-                                    "          \"price\": \"19999.99\",\n" +
-                                    "          \"store\": \"Samsung\"\n" +
-                                    "        },\n" +
-                                    "        {\n" +
-                                    "          \"name\": \"Class KS9500 Curved 4K\",\n" +
-                                    "          \"price\": \"6999.99\",\n" +
-                                    "          \"store\": \"Best Buy\"\n" +
-                                    "        }\n" +
-                                    "      ]\n" +
-                                    "    }\n" +
-                                    "  ]\n" +
-                                    "}";
-                                    */
 
                             Bundle bundle = new Bundle();
                             bundle.putString("json_response", jsonResponse);

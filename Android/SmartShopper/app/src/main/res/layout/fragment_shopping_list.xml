@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="androidapp.smartshopper.smartshopper.ShoppingList">
+    tools:context="androidapp.smartshopper.smartshopper.ShoppingListFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
@@ -22,7 +22,7 @@
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@id/android:list"
+            android:id="@+id/cart_list"
             android:layout_below="@id/cart_summary" />
 
     </RelativeLayout>
