@@ -1,7 +1,7 @@
 doctype html
 html(lang='en')
   head
-    title 	SmartShop.ca 
+    title   SmartShop.ca 
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(href='css/bootstrap.min.css', rel='stylesheet')
@@ -52,22 +52,22 @@ html(lang='en')
 
     // SEARCH RESULTS
     ul.products
-	  for items in list_items
+      for items in list_items
         for item in items
           li
-	        a(href='javascript:void(0);')
+            a(href='javascript:void(0);')
               img(src=('http:' + item.data.image))
               h4 #{item.data.name}
-			p Price: #{item.data.price}
-			p Store: #{item.data.store}
+            p Price: #{item.data.price}
+            p Store: #{item.data.store}
 
-					  
-					  
+            
+            
     script(src='js/jquery-3.1.1.min.js', type='text/javascript')
     script(src='http://localhost:80/socket.io/socket.io.js')
     script(src='js/browser.js', type='text/javascript')
 
-	
-	
-	
+  
+  
+  
 
