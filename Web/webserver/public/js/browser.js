@@ -3,13 +3,13 @@ var socket = io();
 /**
  * Ways to enter a search result
  */
-$('#search-btn').click( function() {
+$('#search-btn').click(() => {
 	socket.emit('search_request', $('#search-input').val());
 	// View the search results in a different page
 	window.location.href = '/item_searched';
 });
 
-$('#search-input').keyup( function(event) {
+$('#search-input').keyup((event) => {
 	// Enter key
 	if (event.keyCode == 13) {
 		$('#search-btn').click();

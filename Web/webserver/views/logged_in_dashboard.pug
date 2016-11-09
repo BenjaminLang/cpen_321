@@ -8,13 +8,12 @@ html(lang='en')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
     script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js')
     link(href='css/navbar.css', rel='stylesheet', type='text/css')
-    link(href='css/searh_bar.css', rel='stylesheet', type='text/css')
   body
     // NAVIGATION BAR
     #custom-bootstrap-menu.navbar.navbar-default(role='navigation')
       .container-fluid
         .navbar-header
-          a.navbar-brand(href='smartshopper.html') SmartShop
+          a.navbar-brand(href='index.html') SmartShop
           button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-menubuilder')
             span.sr-only Toggle navigation
             span.icon-bar
@@ -24,9 +23,8 @@ html(lang='en')
           ul.nav.navbar-nav.navbar-right
             // DROP DOWN MENU
             li.dropdown
-              | - var profileName = "Leo";
               a.dropdown-toggle(href='#', data-toggle='dropdown')
-                | Hello, #{profileName}
+                | Hello, NAME
                 span.caret
               ul.dropdown-menu
                 li
@@ -50,3 +48,6 @@ html(lang='en')
               span.input-group-btn
                 button.btn.btn-info.btn-lg(type='button')
                   i.glyphicon.glyphicon-search
+    script(src='js/jquery-3.1.1.min.js', type='text/javascript')
+    script(src='http://localhost:8080/socket.io/socket.io.js')
+    script(src='js/browser.js', type='text/javascript')

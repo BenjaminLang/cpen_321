@@ -1,9 +1,7 @@
 var port = 6969;
 var net = require('net');
-var jot = require('json-over-tcp');
 
 var server = net.createServer(); 
-//var server = jot.createServer();
 
 server.on('connection', (socket) => {
 

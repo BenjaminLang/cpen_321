@@ -49,29 +49,15 @@ html(lang='en')
               span.input-group-btn
                 button.btn.btn-info.btn-lg(id='search-btn', type='button')
                   i.glyphicon.glyphicon-search
-    //-                  
-      ul.products
-        li
-          a(href='#')
-            img(src='red-apple.png')
-            h4 Red Apple
-          p Price: $#{price_1}
-          p Store: Walmart
-        li
-          a(href='#')
-            img(src='green-apple.png')
-            h4 Green Apple
-          p Price: $#{price_2}
-          p Store: Save on Foods
-        // more list items
 
+    // SEARCH RESULTS
     ul.products        
       for items in list_items
         for item in items
           li
             a(href='javascript:void(0);')
               img(src=item.data["image link"])
-              h4 #{item.data.name}
+              h4 #{to_title_case(item.data.name)}
             p Price: #{item.data.price}
             p Store: #{item.data.store}
 

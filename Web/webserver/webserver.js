@@ -2,6 +2,8 @@
  * The web server for smart_shopper
  */
 
+const HOST = 'ec2-35-160-222-208.us-west-2.compute.amazonaws.com';
+
 /**************************************************************************/
 /* REQUIRED MODULES */
 /**************************************************************************/
@@ -53,15 +55,15 @@ app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.sendFile('index.html');
+  res.render('index');
 });
 
 app.get('/register', (req, res) => {
-  res.sendFile('register.html');
+  res.render('register');
 });
 
 app.get('/login', (req, res) => {
-  res.sendFile('login.html');
+  res.render('login');
 });
 
 app.get('/logged_in_dashboard', (req, res) => {
@@ -83,7 +85,7 @@ app.post('/register', function(req, res) {
 /* LISTENERS */
 /**************************************************************************/
 
-var client = net.connect({port: MAINSERVER_PORT, host : ip.address()}, () => {
+var client = net.connect({port: MAINSERVER_PORT, host : HOST}, () => {
   console.log('Connected to main server!');
 });
 
@@ -150,7 +152,7 @@ client.on('close', () => {
  * Binds and listens for connections on the webserver port.
  */
 http.listen(WEBSERVER_PORT , () => {
-  console.log('Listening on port ' + WEBSERVER_PORT + '...');
+  console.log('Web server listening on port ' + WEBSERVER_PORT + '...');
 });
 
 /**************************************************************************/
@@ -160,7 +162,7 @@ http.listen(WEBSERVER_PORT , () => {
 /**
  * Sends a request to the main server.
  */
-function send_request(socket, data, type) {
+var send_request = (socket, data, type) => {
 
 	var json_request = {};
 
@@ -168,6 +170,8 @@ function send_request(socket, data, type) {
 		case SEARCH_REQ:  
 			json_request.message_type = 'read';
 			json_request.items = [data];
+      // json_request.userID 
+      // json_request.options
 			break;
 										
 		case CREATE_ACC_REQ:
@@ -190,14 +194,14 @@ function send_request(socket, data, type) {
  * Handles responses from the main server.
  */
 
-function handle_response(response) {
+var handle_response = (response) => {
 	var message = JSON.parse(response.toString());
   var type = message.message_type;
 
   switch(type) {
     // need to extract array of items from response and pass it to the render call
     // only feasible way is to store this in a global variable
-  	case READ_RSP: 
+  	case READ_RSP:
       list_items_response = message.items.slice();
       break;
     
@@ -214,7 +218,7 @@ function handle_response(response) {
  * Handles errors between the web server and main server. 
  */
 
-function handle_error(error) {
+var handle_error = (error) => {
   switch(error.code){
     case 'ECONNREFUSED':
       console.log("Error: main server is not available.");
@@ -227,4 +231,8 @@ function handle_error(error) {
     default:
       console.log("Error: " + error.code); 
   }
+};
+
+var to_title_case = (str) => {
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
