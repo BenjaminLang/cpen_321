@@ -1,3 +1,20 @@
-# Smart_Shopper
+#CheckedOut 
 
-### A user-friendly Android and web-based application that allows users to create shopping lists and plan shopping routes based on prices and/or proximity of stores.
+##Synopsis
+
+##Motivation
+
+##Installation 
+
+##API Reference
+
+##Tests
+
+##Contributors
+###Web Developement (Front End): Leo Belanger
+###Web Developement (Back End): Andy Wong 
+###Web Crawler: Amrit Kooner
+###Database & Server: Ben Lang, Ryan Liu
+###Android: John Sun 
+
+##License
