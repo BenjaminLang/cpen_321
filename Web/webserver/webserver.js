@@ -204,12 +204,12 @@ var handle_response = (response) => {
     // need to extract array of items from response and pass it to the render call
     // only feasible way is to store this in a global variable
   	case READ_RSP:
-      console.log(message.items.length);
+      //console.log(message.items.);
       /*
       for (var i = 0; i < message.items.length; i++) {
-        for (var j = 0; i < message.items.) {
-          console.log(item);
-          item.data.name = to_title_case(item.data.name);
+        for (var j = 0; j < message.items[i].length; j++) {
+          //console.log(item);
+          message.items[i][j].data.name = to_title_case(message.items[i][j].data.name);
         }
       } 
       */
