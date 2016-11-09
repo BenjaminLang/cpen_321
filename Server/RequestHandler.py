@@ -29,24 +29,22 @@ class RequestHandler:
             collection = msg['collection']
             item_name = msg['data']['name']
             words = item_name.split()
-            store_name = msg['data']['store']
+            url = msg['data']['url']
             msg['words'] = words
             del msg['message_type']
             del msg['collection']
 
             for word in words:
                 # insert them into the database
-                self.__categories_db[collection].insert({'item': word})
-                data = list(self.__items_db[word].find({'$and': [{'store': {'$exists': True, '$eq': store_name}},
-                                            {'name': {'$exists': True, '$eq': item_name}}]}))
-
+                data = list(self.__items_db[word].find({'data.url': {'$eq': url}}))
                 # if you get a valid ID, you know that the item exists, so update
                 if len(data) != 0:
-                    valid_ID = data[0]
+                    valid_ID = data[0]['_id']
                     msg['_id'] = valid_ID
                     self.__items_db[word].save(msg)
                 # otherwise make a new item
-                self.__items_db[word].insert(msg)
+                else:
+                    self.__items_db[word].insert(msg)
 
         # construct response message
         except Exception :
