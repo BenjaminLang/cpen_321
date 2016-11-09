@@ -19,13 +19,14 @@ var ip = require('ip');
 /* HOSTS */
 /**************************************************************************/
 
-const HOST = ip.address(); // returns local ip address
+//const HOST = ip.address(); // returns local ip address
 //const HOST = 'ec2-35-160-222-208.us-west-2.compute.amazonaws.com';
+const HOST = 'ryangroup.westus.cloudapp.azure.com';
 
 /**************************************************************************/
 /* PORTS */
 /**************************************************************************/
-const WEBSERVER_PORT = 8080;
+const WEBSERVER_PORT = 3000;
 const MAINSERVER_PORT = 6969;
 
 /**************************************************************************/
