@@ -2,8 +2,6 @@
  * The web server for smart_shopper
  */
 
-//const HOST = 'ec2-35-160-222-208.us-west-2.compute.amazonaws.com';
-
 /**************************************************************************/
 /* REQUIRED MODULES */
 /**************************************************************************/
@@ -16,7 +14,13 @@ var io = require('socket.io')(http);
 var net = require('net');
 var ip = require('ip');
 
-const HOST = ip.address();
+
+/**************************************************************************/
+/* HOSTS */
+/**************************************************************************/
+
+const HOST = ip.address(); // returns local ip address
+//const HOST = 'ec2-35-160-222-208.us-west-2.compute.amazonaws.com';
 
 /**************************************************************************/
 /* PORTS */
@@ -43,10 +47,17 @@ const LOGIN_RSP = 'acc_login_response';
 // more to be added
 
 /**************************************************************************/
+/* GLOBAL VARIABLES FOR COMMUNICATION WITH BROWSER */
+/**************************************************************************/
+
+// var list_items_response = [[]];
+// Queue for responses from main server
+var list_items_response = [];
+
+/**************************************************************************/
 /* ROUTING AND MIDDLEWARE */
 /**************************************************************************/
 
-var list_items_response = [[]];
 app.set('views', './views');
 app.set('view engine', 'pug');
 
@@ -73,7 +84,8 @@ app.get('/logged_in_dashboard', (req, res) => {
 });
 
 app.get('/item_searched', (req, res) => {
-  res.render('item_searched', {'list_items': list_items_response});
+  // res.render('item_searched', {'list_items': list_items_response});
+  res.render('item_searched', {'list_items': list_items_response.shift()});
 });
 
 /*
@@ -187,6 +199,8 @@ var send_request = (socket, data, type) => {
 			json_request.userID = data.userID;
 			json_request.password = data.password;
 			break;
+
+    // more requests to add
 	}
   
   socket.write(JSON.stringify(json_request));
@@ -204,16 +218,17 @@ var handle_response = (response) => {
     // need to extract array of items from response and pass it to the render call
     // only feasible way is to store this in a global variable
   	case READ_RSP:
-      //console.log(message.items.);
-      /*
+      
+      // Convert item names and stores to title case
       for (var i = 0; i < message.items.length; i++) {
         for (var j = 0; j < message.items[i].length; j++) {
-          //console.log(item);
           message.items[i][j].data.name = to_title_case(message.items[i][j].data.name);
+          message.items[i][j].data.store = to_title_case(message.items[i][j].data.store);
         }
       } 
-      */
-      list_items_response = message.items.slice();
+      
+      // list_items_response = message.items.slice();
+      list_items_response.push(message.items);
       break;
     
     // check if acc_created is true or false
@@ -222,6 +237,8 @@ var handle_response = (response) => {
 
     case LOGIN_RSP:
       break;
+
+    // more responses to add
   }
 };
 
@@ -243,6 +260,11 @@ var handle_error = (error) => {
       console.log("Error: " + error.code); 
   }
 };
+
+/**
+ * Converts the given string to title case.
+ * E.g. 'hello world' becomes 'Hello World'
+ */
 
 var to_title_case = (str) => {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});

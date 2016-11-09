@@ -1,5 +1,5 @@
 var socket = io();
-
+const ENTER_KEY = 13;
 /**
  * Ways to enter a search result
  */
@@ -10,15 +10,16 @@ $('#search-btn').click(() => {
 });
 
 $('#search-input').keyup((event) => {
-	// Enter key
-	if (event.keyCode == 13) {
+	if (event.keyCode == ENTER_KEY) {
 		$('#search-btn').click();
 	}
 });
 
+/*
 socket.on('search response', function(response) {
 	console.log(response);
 });
+*/
 
 /*$("button").click( function() {
     $.getJSON("json_website_data.json", function(data) { 

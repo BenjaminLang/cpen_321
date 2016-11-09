@@ -14,11 +14,12 @@ server.on('connection', (socket) => {
    socket.on('data', (request) => {
 
       var sample_item_data = {
-        'name' : 'Green Apples',
+        'name' : 'red apples',
         'price' : '1.50',
         'store' : 'save on foods',
         //'image' : 'green-apple.png'
-        'image' : '//www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
+        // 'image' : '//www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
+        'image' : '//www.epicurious.com/images/articlesguides/seasonalcooking/farmtotable/visualguides/apples_07.jpg'
       };
 
       var sample_item = {
