@@ -1,12 +1,47 @@
-doctype html
-html(lang='en')
+extends layout.pug
+
+block navigation-bar
+  #custom-bootstrap-menu.navbar.navbar-default(role='navigation')
+    .container-fluid
+      .navbar-header
+        a.navbar-brand(href='/index') Checkedout
+        button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-menubuilder')
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+      .collapse.navbar-collapse.navbar-menubuilder
+        ul.nav.navbar-nav.navbar-right
+          // DROP DOWN MENU
+          li.dropdown
+            a.dropdown-toggle(href='#', data-toggle='dropdown')
+              | Hello, NAME
+              span.caret
+            ul.dropdown-menu
+              li
+                a(href='/previous_lists') Previous Lists
+              li
+                a(href='/logout') Logout
+          li.dropdown
+            a.dropdown-toggle(href='#', data-toggle='dropdown')
+              | Lists
+              span.caret
+            ul.dropdown-menu
+              li
+                a(href='#') View Full Cart
+
+block custom-widget
+  include search-bar.pug                
+//-
+  doctype html
+  html(lang='en')
   head
     title 	checkedout.ca 
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    link(href='css/bootstrap.min.css', rel='stylesheet')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
     script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js')
+    link(href='css/bootstrap.min.css', rel='stylesheet')
     link(href='css/navbar.css', rel='stylesheet', type='text/css')
   body
     // NAVIGATION BAR

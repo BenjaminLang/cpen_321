@@ -1,5 +1,6 @@
 var socket = io();
 const ENTER_KEY = 13;
+
 /**
  * Ways to enter a search result
  */

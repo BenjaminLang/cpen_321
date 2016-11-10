@@ -26,6 +26,7 @@ const HOST = ip.address(); // returns local ip address
 /**************************************************************************/
 /* PORTS */
 /**************************************************************************/
+
 const WEBSERVER_PORT = 8080;
 const MAINSERVER_PORT = 6969;
 
@@ -69,11 +70,11 @@ app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('index', {'title': 'Home'});
 });
 
 app.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', {'title': 'Registration Form'});
 });
 
 app.post('/register', (req, res) => {
@@ -81,11 +82,11 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', {'title': 'Login'});
 });
 
 app.get('/logged_in_dashboard', (req, res) => {
-  res.render('logged_in_dashboard');
+  res.render('logged_in_dashboard', {'title': 'blank'});
 });
 
 app.get('/item_searched', (req, res) => {
@@ -214,7 +215,6 @@ var send_request = (socket, data, type) => {
 /**
  * Handles responses from the main server.
  */
-
 var handle_response = (response) => {
 	var message = JSON.parse(response.toString());
   var type = message.message_type;
@@ -251,7 +251,6 @@ var handle_response = (response) => {
 /**
  * Handles errors between the web server and main server. 
  */
-
 var handle_error = (error) => {
   switch(error.code){
     case 'ECONNREFUSED':
@@ -271,7 +270,6 @@ var handle_error = (error) => {
  * Converts the given string to title case.
  * E.g. 'hello world' becomes 'Hello World'
  */
-
 var to_title_case = (str) => {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
