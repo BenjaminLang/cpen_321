@@ -12,8 +12,8 @@ import java.net.Socket;
  */
 public class SmartShopClient {
     private int port = 6969;
-    //private String addr = "ec2-35-160-222-208.us-west-2.compute.amazonaws.com";
-    private String addr = "192.168.0.19";
+    private String addr = "ryangroup.westus.cloudapp.azure.com";
+    //private String addr = "192.168.0.19";
     private Socket connection;
     private BufferedWriter outputStream;
     private BufferedReader inputStream;
@@ -33,7 +33,7 @@ public class SmartShopClient {
 
     public String sendRequest(String request){
         try{
-            outputStream.write(request);
+            outputStream.write(request);//
             outputStream.flush();
             String response = inputStream.readLine();
             System.out.println(response);

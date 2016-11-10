@@ -51,6 +51,12 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         return i;
     }
 
+    public void updateProductList(List<Product> newList) {
+        products.clear();
+        products.addAll(newList);
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         View view = convertView;

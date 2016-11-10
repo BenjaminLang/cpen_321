@@ -47,12 +47,17 @@ public class ResultFragment extends ListFragment {
             jsonResp = bundle.getString(ARG_KEY);
         }
 
-        if(jsonResp.isEmpty()) {
+        if(jsonResp == null) {
             Toast.makeText(getActivity(), "The Item You Searched For Doesn't Exist :(", Toast.LENGTH_LONG).show();
         }
 
         JsonParser parser = new JsonParser();
         this.result = parser.parseJSON(jsonResp);
+
+        if(result.isEmpty()) {
+            Toast.makeText(getActivity(), "The Item You Searched For Doesn't Exist :(", Toast.LENGTH_LONG).show();
+        }
+
         ProductAdapter adapter = new ProductAdapter(this.context, R.layout.search_result, this.result);
         this.setListAdapter(adapter);
     }

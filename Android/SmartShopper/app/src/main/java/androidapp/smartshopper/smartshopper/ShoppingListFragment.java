@@ -9,15 +9,19 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +29,7 @@ import java.util.List;
  */
 public class ShoppingListFragment extends Fragment {
     private Context context;
+    private ProductAdapter adapter;
     private List<Product> cartItems;
     private double totalPrice;
 
@@ -57,22 +62,6 @@ public class ShoppingListFragment extends Fragment {
         } catch(Exception e) {
             e.printStackTrace();
         }
-        /*
-        Bundle bundle = this.getArguments();
-        if(bundle != null) {
-            jsonResp = bundle.getString(ARG_KEY);
-        }*/
-
-        /*
-        if(jsonResp.isEmpty()) {
-            Toast.makeText(getActivity(), "The Item You Searched For Doesn't Exist :(", Toast.LENGTH_LONG).show();
-        }
-
-        JsonParser parser = new JsonParser();
-        this.result = parser.parseJSON(jsonResp);
-        ProductAdapter adapter = new ProductAdapter(this.context, R.layout.search_result, this.result);
-        this.setListAdapter(adapter);
-        */
     }
 
     @Override
@@ -82,14 +71,82 @@ public class ShoppingListFragment extends Fragment {
         //LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
 
-        TextView total = (TextView) view.findViewById(R.id.cart_summary);
+        final TextView total = (TextView) view.findViewById(R.id.cart_summary);
         total.setText("Total: " + Double.toString(round(totalPrice, 2)));
 
 
-        if(!cartItems.isEmpty() || cartItems != null) {
-            ProductAdapter adapter = new ProductAdapter(this.context, R.layout.search_result, this.cartItems);
+        if(cartItems != null) {
+            adapter = new ProductAdapter(this.context, R.layout.search_result, this.cartItems);
             ListView list = (ListView) view.findViewById(R.id.cart_list);
             list.setAdapter(adapter);
+
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Product selected = cartItems.get(position);
+
+                    try {
+                        String fileName = getResources().getString(R.string.cart_file_name);
+                        FileInputStream inputStream = context.openFileInput(fileName);
+
+                        StringBuilder builder = new StringBuilder();
+                        int ch;
+                        while ((ch = inputStream.read()) != -1) {
+                            builder.append((char) ch);
+                        }
+                        inputStream.close();
+                        String cartString = builder.toString();
+
+                        JSONObject cartJSON = new JSONObject(cartString);
+                        JSONArray cartArray = cartJSON.getJSONArray("cart_list");
+
+                        boolean changed = false;
+                        for(int i = 0; i < cartArray.length(); i++) {
+                            JSONObject currObj = cartArray.getJSONObject(i);
+                            if(currObj.getString("image").equals(selected.getImg())) {
+                                double newTotal = cartJSON.getDouble("total_price");
+                                int quantity = currObj.getInt("quantity");
+                                double price = currObj.getDouble("price");
+                                newTotal -= (quantity * price);
+                                cartJSON.put("total_price", Double.toString(round(newTotal, 2)));
+
+                                cartArray.remove(i);
+
+                                String newCartString = cartJSON.toString(2);
+                                List<Product> updatedList = new JsonParser().parseCart(newCartString);
+
+                                byte[] buffer = newCartString.getBytes();
+                                //StandardCharsets.US_ASCII
+
+                                FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+                                outputStream.write(buffer);
+                                outputStream.close();
+
+                                adapter.updateProductList(updatedList);
+                                total.setText(Double.toString(round(newTotal,2)));
+                                //changed = true;
+                                break;
+                            }
+                        }
+
+                        /*
+                        if(changed) {
+                            String newCartString = cartJSON.toString(2);
+                            Toast.makeText(getActivity(), cartString, Toast.LENGTH_LONG).show();
+                            cartItems = new JsonParser().parseCart(newCartString);
+
+                            byte[] buffer = newCartString.getBytes();
+                            //StandardCharsets.US_ASCII
+
+                            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+                            outputStream.write(buffer);
+                            outputStream.close();
+                        }*/
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
 
         return view;
