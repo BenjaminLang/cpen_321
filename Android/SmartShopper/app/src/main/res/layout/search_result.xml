@@ -14,28 +14,29 @@
     <ImageView
         android:id="@+id/item_img"
         android:layout_width="40dip"
-        android:layout_height="40dip" />
+        android:layout_height="40dip"
+        android:layout_marginRight="10dip"/>
 
     <TextView
-        android:id="@+id/wrapper"
-        android:layout_width="320dp"
-        android:layout_height="40dp"
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/item_img" />
+        android:layout_toRightOf="@id/item_img" />
 
     <TextView
-        android:id="@+id/name"
-        android:layout_width="220dp"
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="210dp"
+        android:maxWidth="110dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold"
-        android:text="Test"
-        android:layout_alignLeft="@id/wrapper"
-        android:layout_alignTop="@id/wrapper"/>
+        android:text="$xx.xx"
+        android:layout_below="@id/name"
+        android:layout_toRightOf="@id/item_img"
+        android:layout_marginRight="10dip"/>
 
     <TextView
         android:id="@+id/store"
@@ -43,26 +44,16 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Some Store"
-        android:layout_alignBottom="@id/wrapper"
-        android:layout_alignRight="@id/wrapper" />
+        android:layout_below="@id/price"
+        android:layout_toRightOf="@id/item_img" />
 
     <TextView
         android:id="@+id/quantity"
-        android:layout_width="25dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text=""
-        android:layout_alignTop="@id/wrapper"
-        android:layout_alignRight="@id/wrapper"/>
-
-    <TextView
-        android:id="@+id/price"
-        android:layout_width="65dp"
-        android:layout_height="wrap_content"
-        android:maxWidth="110dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="$xx.xx"
-        android:layout_toLeftOf="@id/quantity"
-        android:layout_alignTop="@id/wrapper"/>
+        android:text=""
+        android:layout_below="@id/name"
+        android:layout_toRightOf="@id/price"/>
 
 </RelativeLayout>

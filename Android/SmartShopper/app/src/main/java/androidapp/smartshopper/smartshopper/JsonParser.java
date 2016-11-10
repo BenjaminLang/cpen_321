@@ -46,10 +46,12 @@ public class JsonParser {
                         String price = currData.getString(PRICE_TAG);
                         String store = currData.getString(STORE_TAG);
                         String img = currData.getString(URL_TAG);
-                        String htmlImg = "http:" + img;
+
+                        if(!img.substring(0, 1).equals("h"))
+                            img = "http:" + img;
                         //String htmlImg = img.substring(2, img.length());
 
-                        Product currProduct = new Product(name, price, store, htmlImg, null);
+                        Product currProduct = new Product(name, price, store, img, null);
                         parseList.add(currProduct);
                     }
                 }

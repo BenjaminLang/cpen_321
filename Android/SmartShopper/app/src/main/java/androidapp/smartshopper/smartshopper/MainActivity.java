@@ -23,20 +23,23 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("SmartShopper");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Shopping List Here", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Shopping List Here", Snackbar.LENGTH_LONG)
+                //        .setAction("Action", null).show();
 
                 ShoppingListFragment cartFrag = new ShoppingListFragment();
 
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                         .addToBackStack("search_result")
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                         .commit();
+
+                toolbar.setTitle("Shopping Cart");
             }
         });
     }
@@ -95,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                                     .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                                     .commit();
 
+                            toolbar.setTitle(s);
                             (myMenu.findItem(R.id.search)).collapseActionView();
                         } catch(Exception e){
                             e.printStackTrace();

@@ -100,7 +100,6 @@ public class ShoppingListFragment extends Fragment {
                         JSONObject cartJSON = new JSONObject(cartString);
                         JSONArray cartArray = cartJSON.getJSONArray("cart_list");
 
-                        boolean changed = false;
                         for(int i = 0; i < cartArray.length(); i++) {
                             JSONObject currObj = cartArray.getJSONObject(i);
                             if(currObj.getString("image").equals(selected.getImg())) {
@@ -123,8 +122,7 @@ public class ShoppingListFragment extends Fragment {
                                 outputStream.close();
 
                                 adapter.updateProductList(updatedList);
-                                total.setText(Double.toString(round(newTotal,2)));
-                                //changed = true;
+                                total.setText("Total: " + Double.toString(round(newTotal,2)));
                                 break;
                             }
                         }

@@ -82,7 +82,7 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         Product currProduct = products.get(position);
         holder.name.setText(currProduct.getName());
         holder.price.setText(currProduct.getPrice());
-        holder.store.setText(currProduct.getStore());
+        holder.store.setText("From: " + currProduct.getStore());
         Picasso.with(context).load(currProduct.getImg()).into(holder.img);
 
         if(currProduct.getQuantity() != null)
