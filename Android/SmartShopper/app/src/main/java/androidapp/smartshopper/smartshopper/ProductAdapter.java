@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import org.apache.commons.lang.WordUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -80,13 +81,13 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         }
 
         Product currProduct = products.get(position);
-        holder.name.setText(currProduct.getName());
+        holder.name.setText(WordUtils.capitalizeFully(currProduct.getName()));
         holder.price.setText(currProduct.getPrice());
         holder.store.setText("From: " + currProduct.getStore());
         Picasso.with(context).load(currProduct.getImg()).into(holder.img);
 
         if(currProduct.getQuantity() != null)
-            holder.quantity.setText("X" + currProduct.getQuantity());
+            holder.quantity.setText("x" + currProduct.getQuantity());
 
         return view;
     }

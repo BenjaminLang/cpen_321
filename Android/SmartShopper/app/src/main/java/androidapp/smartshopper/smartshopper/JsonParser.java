@@ -12,7 +12,7 @@ import java.util.List;
  * Created by JohnS on 2016-10-23.
  */
 
-public class JsonParser {
+public class JSONParser {
     private String ITEMS_TAG = "items";
     private String COLUMN_TAG = "col_name_1";
     private String NAME_TAG = "name";
@@ -23,7 +23,7 @@ public class JsonParser {
     private String CART_TAG = "cart_list";
     private String QUANTITY_TAG = "quantity";
 
-    public JsonParser() {}
+    public JSONParser() {}
 
     public List<Product> parseJSON(String json) {
         if(json != null) {

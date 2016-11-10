@@ -51,7 +51,11 @@ public class ResultFragment extends ListFragment {
             Toast.makeText(getActivity(), "The Item You Searched For Doesn't Exist :(", Toast.LENGTH_LONG).show();
         }
 
-        JsonParser parser = new JsonParser();
+        if(jsonResp.equals("Connection Not Established")) {
+            Toast.makeText(getActivity(), jsonResp, Toast.LENGTH_LONG).show();
+        }
+
+        JSONParser parser = new JSONParser();
         this.result = parser.parseJSON(jsonResp);
 
         if(result.isEmpty()) {
@@ -103,7 +107,7 @@ public class ResultFragment extends ListFragment {
                 String cartString = builder.toString();
 
                 boolean alreadyAdded = false;
-                List<Product> currCart = new JsonParser().parseCart(cartString);
+                List<Product> currCart = new JSONParser().parseCart(cartString);
 
                 for(int i = 0; i < currCart.size(); i++) {
                     /*

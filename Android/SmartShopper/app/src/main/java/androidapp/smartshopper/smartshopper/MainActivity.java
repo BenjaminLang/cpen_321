@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onQueryTextSubmit(String s) {
                         String[] dummyArray = {" ", " "};
-                        SearchOptions dummyOptions = new SearchOptions(" ", " ", " ", " ", " ", dummyArray);
+                        SearchOptions dummyOptions = new SearchOptions(" ", " ", " ", " ", " ", dummyArray, "min");
 
                         RequestBuilder rb = new RequestBuilder();
                         String dbRequest = rb.buildReadReq(s, dummyOptions, " ");
@@ -133,7 +133,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... request) {
             SmartShopClient client = new SmartShopClient();
-            return client.sendRequest(request[0]);
+            if(client.getStatus())
+                return client.sendRequest(request[0]);
+            else
+                return "Connection Not Established";
         }
 
         @Override

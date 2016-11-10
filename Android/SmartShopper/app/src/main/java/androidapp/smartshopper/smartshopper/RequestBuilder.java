@@ -28,6 +28,7 @@ public class RequestBuilder {
             for(String currStore : options.getStores())
                 stores.put(currStore);
             opt.put("stores", stores);
+            opt.put("price", options.getPrice());
 
             request.put("options", opt);
 

@@ -57,7 +57,7 @@ public class ShoppingListFragment extends Fragment {
 
             JSONObject cartJSON = new JSONObject(cartString);
 
-            cartItems = new JsonParser().parseCart(cartString);
+            cartItems = new JSONParser().parseCart(cartString);
             totalPrice = cartJSON.getDouble("total_price");
         } catch(Exception e) {
             e.printStackTrace();
@@ -112,7 +112,7 @@ public class ShoppingListFragment extends Fragment {
                                 cartArray.remove(i);
 
                                 String newCartString = cartJSON.toString(2);
-                                List<Product> updatedList = new JsonParser().parseCart(newCartString);
+                                List<Product> updatedList = new JSONParser().parseCart(newCartString);
 
                                 byte[] buffer = newCartString.getBytes();
                                 //StandardCharsets.US_ASCII
@@ -126,20 +126,6 @@ public class ShoppingListFragment extends Fragment {
                                 break;
                             }
                         }
-
-                        /*
-                        if(changed) {
-                            String newCartString = cartJSON.toString(2);
-                            Toast.makeText(getActivity(), cartString, Toast.LENGTH_LONG).show();
-                            cartItems = new JsonParser().parseCart(newCartString);
-
-                            byte[] buffer = newCartString.getBytes();
-                            //StandardCharsets.US_ASCII
-
-                            FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-                            outputStream.write(buffer);
-                            outputStream.close();
-                        }*/
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

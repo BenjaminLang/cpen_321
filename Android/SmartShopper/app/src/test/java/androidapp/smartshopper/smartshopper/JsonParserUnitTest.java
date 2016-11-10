@@ -40,7 +40,7 @@ public class JsonParserUnitTest {
             }
 
             String testJson = sb.toString();
-            JsonParser testParser = new JsonParser();
+            JSONParser testParser = new JSONParser();
             ArrayList<Product> result = (ArrayList<Product>) testParser.parseJSON(testJson);
 
             /*

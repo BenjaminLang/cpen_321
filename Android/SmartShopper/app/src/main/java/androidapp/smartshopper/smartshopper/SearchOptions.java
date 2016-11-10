@@ -10,15 +10,17 @@ public class SearchOptions {
     private String locationY;
     private String radius;
     private String[] stores;
+    private String price;
 
     public SearchOptions(String optionType, String option, String locationX,
-                         String locationY, String radius, String[] stores){
+                         String locationY, String radius, String[] stores, String price){
         this.option = option;
         this.optionType = optionType;
         this.locationX = locationX;
         this.locationY = locationY;
         this.radius = radius;
         this.stores = stores;
+        this.price = price;
     }
 
     public String getOption() {
@@ -43,5 +45,9 @@ public class SearchOptions {
 
     public String[] getStores() {
         return stores;
+    }
+
+    public String getPrice() {
+        return price;
     }
 }

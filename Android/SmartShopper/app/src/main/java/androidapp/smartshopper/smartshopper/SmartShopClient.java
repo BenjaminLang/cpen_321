@@ -17,6 +17,7 @@ public class SmartShopClient {
     private Socket connection;
     private BufferedWriter outputStream;
     private BufferedReader inputStream;
+    private boolean connected;
 
     public SmartShopClient() {
         try {
@@ -25,8 +26,10 @@ public class SmartShopClient {
                     new OutputStreamWriter(connection.getOutputStream()));
             inputStream = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
+            connected = true;
         } catch (Exception e){
             e.printStackTrace();
+            connected = false;
             return;
         }
     }
@@ -44,5 +47,7 @@ public class SmartShopClient {
         }
     }
 
-
+    public boolean getStatus() {
+        return connected;
+    }
 }
