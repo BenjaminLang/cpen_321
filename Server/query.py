@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from RequestHandler import RequestHandler
+from src.RequestHandler import RequestHandler
 import json
 
 
@@ -12,5 +12,5 @@ class DataHandler:
         client = MongoClient()
         db = client.test
 
-        service = RequestHandler(db)
+        service = RequestHandler(db, None)
         service.handle_request(msg_type, input_data)

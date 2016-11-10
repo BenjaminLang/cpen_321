@@ -12,8 +12,13 @@ class query:
         self.message = {}
 
     def start_query(self):
-        self.message['message_type'] = 'read'
-        self.message['items'] = ['Syrup']
+        data = {}
+        self.message['message_type'] = 'write'
+        self.message['collection'] = 'syrup'
+        data['name'] = 'syrup'
+        data['store'] = 'costco'
+        data['price'] = '69.69'
+        self.message['data'] = data
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
 
@@ -22,8 +27,29 @@ class query:
         self.sock.close()
 
     def start_query_2(self):
-        self.message['message_type'] = 'read'
-        self.message['items'] = ['Chocolate']
+        data = {}
+        self.message['message_type'] = 'write'
+        self.message['collection'] = 'syrup'
+        data['name'] = 'syrup'
+        data['store'] = 'costco'
+        data['price'] = '69.69'
+        self.message['data'] = data
+        json_formatted_data = json.dumps(self.message)
+        # print(json_formatted_data)
+
+        self.sock.connect((self.host, self.port))
+        self.sock.send(json_formatted_data.encode())
+        self.sock.close()
+
+
+    def start_query_3(self):
+        data = {}
+        self.message['message_type'] = 'write'
+        self.message['collection'] = 'syrup'
+        data['name'] = 'syrup'
+        data['store'] = 'walmart'
+        data['price'] = '69.69'
+        self.message['data'] = data
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
 
@@ -34,6 +60,10 @@ class query:
 if __name__ == "__main__":
     x = query()
     y = query()
+    z = query()
+    u = query()
 
     x.start_query()
-    # y.start_query_2()
+    y.start_query_2()
+    z.start_query_3()
+    u.start_query_3()

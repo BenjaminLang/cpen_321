@@ -1,5 +1,4 @@
 from server import DatabaseServer
-from query import DataHandler
 import threading
 
 
