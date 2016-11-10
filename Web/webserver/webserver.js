@@ -200,7 +200,7 @@ var send_request = (socket, data, type) => {
 	switch(type) {
 		case SEARCH_REQ:  
 			json_request.message_type = 'read';
-      //json_request.options = {'price' : 'min'};
+      json_request.options = {'price' : 'none', 'num' : '10'};
 			json_request.items = [data];
       // json_request.userID 
       // json_request.options
