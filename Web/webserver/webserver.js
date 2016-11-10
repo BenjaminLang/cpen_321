@@ -13,15 +13,16 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var net = require('net');
 var ip = require('ip');
+//require('epipebomb')();
 
 
 /**************************************************************************/
 /* HOSTS */
 /**************************************************************************/
 
-const HOST = ip.address(); // returns local ip address
+//const HOST = ip.address(); // returns local ip address
 //const HOST = 'ec2-35-160-222-208.us-west-2.compute.amazonaws.com';
-//const HOST = 'ryangroup.westus.cloudapp.azure.com';
+const HOST = 'ryangroup.westus.cloudapp.azure.com';
 
 /**************************************************************************/
 /* PORTS */
@@ -90,8 +91,19 @@ app.get('/logged_in_dashboard', (req, res) => {
 });
 
 app.get('/item_searched', (req, res) => {
-  // res.render('item_searched', {'list_items': list_items_response});
-  res.render('item_searched', {'list_items': list_items_response.shift()});
+
+  client.on('data', (response) => {
+    handle_response(response);
+    // ---------------- not doing this most likely
+    // Upon receiving search response data from main server, inform the browser client and
+    // send it to the browser
+    // io.emit('search response', response.toString());
+    //
+    res.render('item_searched', {'title': 'Search Results', 'list_items': list_items_response.shift()});
+  });
+
+  
+  //res.render('item_searched', {'list_items': list_items_response});
 });
 
 /*
@@ -138,14 +150,8 @@ io.on('connection', (socket) => {
 /**
  * Listener for responses from the main server
  */
-client.on('data', (response) => {
-  handle_response(response);
-  // ---------------- not doing this most likely
-  // Upon receiving search response data from main server, inform the browser client and
-  // send it to the browser
-  // io.emit('search response', response.toString());
-  // 
-});
+
+
 
 /**
  * Listener for error events between web server and main server
@@ -153,7 +159,13 @@ client.on('data', (response) => {
 client.on('error',(error) => {
   handle_error(error);
 });
-
+/*
+process.stdout.on('error', function( err ) {
+    if (err.code == "EPIPE") {
+        process.exit(0);
+    }
+});
+*/
 /**
  * Terminate web server when connection between web server and main server closes
  * (can change this later)
@@ -189,6 +201,7 @@ var send_request = (socket, data, type) => {
 	switch(type) {
 		case SEARCH_REQ:  
 			json_request.message_type = 'read';
+      json_request.options = {'price' : 'min'};
 			json_request.items = [data];
       // json_request.userID 
       // json_request.options
@@ -216,14 +229,14 @@ var send_request = (socket, data, type) => {
  * Handles responses from the main server.
  */
 var handle_response = (response) => {
+  //console.log("hello");
 	var message = JSON.parse(response.toString());
+  //console.log("world");
   var type = message.message_type;
-
   switch(type) {
     // need to extract array of items from response and pass it to the render call
     // only feasible way is to store this in a global variable
   	case READ_RSP:
-      // console.log(message.items);
       // Convert item names and stores to title case
       for (var i = 0; i < message.items.length; i++) {
         for (var j = 0; j < message.items[i].length; j++) {
@@ -234,7 +247,6 @@ var handle_response = (response) => {
       
       //list_items_response = message.items.slice();
       list_items_response.push(message.items);
-      //console.log(list_items_response);
       break;
     
     // check if acc_created is true or false

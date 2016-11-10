@@ -32,7 +32,7 @@ server.on('connection', (socket) => {
         'items' : [[]]
       };
 
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < 500; i++) {
         json_response.items[0].push(sample_item);
       }
       
