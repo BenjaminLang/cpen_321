@@ -22,7 +22,18 @@ $('#search-input').keyup((event) => {
 });
 
 /*
+$('#register-btn').click(() => {
+	var acc_info = {
+		'userID' : 
+	};
+	socket.emit('create_account_request', acc_info);
+});
+*/
+/*
 $('#login-btn').click(() => {
+	var acc_info = {
+	
+	};
 	socket.emit('login_request', );
 });
 */

@@ -23,7 +23,6 @@ const HOST = ip.address(); // returns local ip address
 //const HOST = 'ec2-35-160-222-208.us-west-2.compute.amazonaws.com';
 //const HOST = 'ryangroup.westus.cloudapp.azure.com';
 
-
 /**************************************************************************/
 /* PORTS */
 /**************************************************************************/
@@ -52,7 +51,7 @@ const LOGIN_RSP = 'acc_login_response';
 /* GLOBAL VARIABLES FOR COMMUNICATION WITH BROWSER */
 /**************************************************************************/
 
-// var list_items_response = [[]];
+//var list_items_response = [[]];
 // Queue for responses from main server
 var list_items_response = [];
 
@@ -75,6 +74,10 @@ app.get('/', (req, res) => {
 
 app.get('/register', (req, res) => {
   res.render('register');
+});
+
+app.post('/register', (req, res) => {
+  console.log(req);
 });
 
 app.get('/login', (req, res) => {
@@ -220,10 +223,8 @@ var handle_response = (response) => {
     // need to extract array of items from response and pass it to the render call
     // only feasible way is to store this in a global variable
   	case READ_RSP:
-      
       // console.log(message.items);
       // Convert item names and stores to title case
-      
       for (var i = 0; i < message.items.length; i++) {
         for (var j = 0; j < message.items[i].length; j++) {
           message.items[i][j].data.name = to_title_case(message.items[i][j].data.name);
@@ -231,8 +232,9 @@ var handle_response = (response) => {
         }
       }
       
-      // list_items_response = message.items.slice();
+      //list_items_response = message.items.slice();
       list_items_response.push(message.items);
+      //console.log(list_items_response);
       break;
     
     // check if acc_created is true or false

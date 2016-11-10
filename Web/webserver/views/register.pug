@@ -47,10 +47,11 @@ html(lang='en')
       form(method='post')
         // action="#" URL OF WHERE TO SEND THE DATA
         h5  Welcome to Checkedout! 
-        input(type='text', required='', placeholder='Name', autocomplete='off')
-        input#email(type='text', required='', placeholder='Email', autocomplete='off')
-        input#password(type='password', name='password', required='', placeholder='Password', autocomplete='off')
+        input(id='input-user', type='text', required='', placeholder='Name', autocomplete='off')
+        input#email(id='input-email', type='text', required='', placeholder='Email', autocomplete='off')
+        input#password(id='input-password', type='password', name='password', required='', placeholder='Password', autocomplete='off')
         input(type='submit', value='Register', title='Register')
+
     script(src='js/jquery-3.1.1.min.js', type='text/javascript')
     //script(src='http://localhost:8080/socket.io/socket.io.js')
     script(src="/socket.io/socket.io.js", type='text/javascript')
