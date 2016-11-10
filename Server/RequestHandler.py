@@ -61,6 +61,10 @@ class RequestHandler:
             response['message_type'] = 'read_response'
             items = json_data['items']
             results = []
+            price = json_data['options']['price']
+            num = json_data['options']['num']
+            
+            print(price)
 
             for item in items:
                 item_words = item.split()
@@ -72,9 +76,20 @@ class RequestHandler:
 
                 query = {'$and': query_array}
                 for searchable_item in item_words:
-                    result = list(self.__items_db[searchable_item].find(query))
+                    if(price == 'min'):
+                        res_data = list(self.__items_db[searchable_item].find(query).sort('data.price',1))
+                        for n in range(0, num):
+                            result = [res_data[0]]
+                    else:
+                        res_data = list(self.__items_db[searchable_item].find(query))
+                        for n in range(0, num):
+                            result = [res_data[n]]
                     if result is not None:
-                        results.append(result)
+                        for res in result:
+                            del res['_id']
+                            del res['data']['url']
+                            del res['words']
+                    results.append(result)
                         break
             response['items'] = results
             
@@ -82,9 +97,6 @@ class RequestHandler:
             traceback.print_exc()
             print(Exception)
 
-        del response['_id']
-        del response['url']
-        del response['words']    
         return response
 
 
