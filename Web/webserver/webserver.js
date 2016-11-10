@@ -92,8 +92,13 @@ app.get('/logged_in_dashboard', (req, res) => {
 
 app.get('/item_searched', (req, res) => {
 
-  client.on('data', (response) => {
-    handle_response(response);
+  var data = '';
+  client.on('data', function(chunk) {
+    data += chunk;
+  });
+
+  client.on('end', () => {
+    handle_response(data);
     // ---------------- not doing this most likely
     // Upon receiving search response data from main server, inform the browser client and
     // send it to the browser
@@ -159,13 +164,7 @@ io.on('connection', (socket) => {
 client.on('error',(error) => {
   handle_error(error);
 });
-/*
-process.stdout.on('error', function( err ) {
-    if (err.code == "EPIPE") {
-        process.exit(0);
-    }
-});
-*/
+
 /**
  * Terminate web server when connection between web server and main server closes
  * (can change this later)
@@ -201,7 +200,7 @@ var send_request = (socket, data, type) => {
 	switch(type) {
 		case SEARCH_REQ:  
 			json_request.message_type = 'read';
-      json_request.options = {'price' : 'min'};
+      //json_request.options = {'price' : 'min'};
 			json_request.items = [data];
       // json_request.userID 
       // json_request.options
