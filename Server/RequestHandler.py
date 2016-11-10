@@ -26,7 +26,6 @@ class RequestHandler:
             print (json_data)
             # msg = json.loads(json_data)
             msg = json_data
-            collection = msg['collection']
             item_name = msg['data']['name']
             words = item_name.split()
             url = msg['data']['url']
