@@ -56,28 +56,32 @@ class RequestHandler:
         return response
 
     def __handle_read(self, json_data):
-        # set up appropriate indexing information, json_data is a dict
-        response = {}
-        response['message_type'] = 'read_response'
-        items = json_data['items']
-        results = []
+        try:
+            # set up appropriate indexing information, json_data is a dict
+            response = {}
+            response['message_type'] = 'read_response'
+            items = json_data['items']
+            results = []
 
-        for item in items:
-            item_words = item.split()
-            query_array = []
+            for item in items:
+                item_words = item.split()
+                query_array = []
 
-            # For each word in request
-            for searchable_item in item_words:
-                query_array.append({'words': {'$elemMatch': {'$eq': searchable_item}}})
+                # For each word in request
+                for searchable_item in item_words:
+                    query_array.append({'words': {'$elemMatch': {'$eq': searchable_item}}})
 
-            query = {'$and': query_array}
-            for searchable_item in item_words:
-                result = list(self.__items_db[searchable_item].find(query))
-                if result is not None:
-                    results.append(result)
-                    break
-
-        response['items'] = results
+                query = {'$and': query_array}
+                for searchable_item in item_words:
+                    result = list(self.__items_db[searchable_item].find(query))
+                    if result is not None:
+                        results.append(result)
+                        break
+            response['items'] = results
+            
+        except Exception:
+            traceback.print_exc()
+            print(Exception)    
         return response
 
 
