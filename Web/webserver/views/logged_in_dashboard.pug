@@ -1,7 +1,7 @@
 doctype html
 html(lang='en')
   head
-    title 	SmartShop.ca 
+    title 	checkedout.ca 
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(href='css/bootstrap.min.css', rel='stylesheet')
@@ -13,7 +13,7 @@ html(lang='en')
     #custom-bootstrap-menu.navbar.navbar-default(role='navigation')
       .container-fluid
         .navbar-header
-          a.navbar-brand(href='index.html') SmartShop
+          a.navbar-brand(href='/index') Checkedout
           button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-menubuilder')
             span.sr-only Toggle navigation
             span.icon-bar
@@ -28,9 +28,9 @@ html(lang='en')
                 span.caret
               ul.dropdown-menu
                 li
-                  a(href='previous_lists.html') Previous Lists
+                  a(href='/previous_lists') Previous Lists
                 li
-                  a(href='logout.html') Logout
+                  a(href='/logout') Logout
             li.dropdown
               a.dropdown-toggle(href='#', data-toggle='dropdown')
                 | Lists
