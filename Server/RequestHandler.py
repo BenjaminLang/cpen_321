@@ -81,7 +81,11 @@ class RequestHandler:
             
         except Exception:
             traceback.print_exc()
-            print(Exception)    
+            print(Exception)
+
+        del response['_id']
+        del response['url']
+        del response['words']    
         return response
 
 
