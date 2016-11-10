@@ -23,6 +23,7 @@ const HOST = ip.address(); // returns local ip address
 //const HOST = 'ec2-35-160-222-208.us-west-2.compute.amazonaws.com';
 //const HOST = 'ryangroup.westus.cloudapp.azure.com';
 
+
 /**************************************************************************/
 /* PORTS */
 /**************************************************************************/
@@ -220,13 +221,15 @@ var handle_response = (response) => {
     // only feasible way is to store this in a global variable
   	case READ_RSP:
       
+      // console.log(message.items);
       // Convert item names and stores to title case
+      
       for (var i = 0; i < message.items.length; i++) {
         for (var j = 0; j < message.items[i].length; j++) {
           message.items[i][j].data.name = to_title_case(message.items[i][j].data.name);
           message.items[i][j].data.store = to_title_case(message.items[i][j].data.store);
         }
-      } 
+      }
       
       // list_items_response = message.items.slice();
       list_items_response.push(message.items);
