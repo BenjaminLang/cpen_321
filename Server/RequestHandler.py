@@ -63,8 +63,6 @@ class RequestHandler:
             results = []
             price = json_data['options']['price']
             num = json_data['options']['num']
-            
-            print(price)
 
             for item in items:
                 item_words = item.split()
