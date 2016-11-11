@@ -36,8 +36,8 @@ block custom-widget
     form(method='post')
       // action="#" URL OF WHERE TO SEND THE DATA
       h5  Welcome to Checkedout! 
-      input(type='text', required='', placeholder='Name', autocomplete='off')
-      input#email(type='text', required='', placeholder='Email', autocomplete='off')
+      input(type='text', name='userID', required='', placeholder='Name', autocomplete='off')
+      input#email(type='text', name='email', required='', placeholder='Email', autocomplete='off')
       input#password(type='password', name='password', required='', placeholder='Password', autocomplete='off')
       input(type='submit', value='Register', title='Register')                    
 //-

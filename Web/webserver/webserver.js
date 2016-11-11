@@ -14,12 +14,15 @@ var io = require('socket.io')(http);
 var net = require('net');
 var ip = require('ip');
 
+var utility = require(path.join(__dirname, 'functions/utility.js'));
+var routes = require(path.join(__dirname, 'functions/routes.js'));
+
 /**************************************************************************/
 /* HOSTS */
 /**************************************************************************/
 
-const HOST = ip.address(); // returns local ip address
-//const HOST = 'ryangroup.westus.cloudapp.azure.com';
+//const HOST = ip.address(); // returns local ip address
+const HOST = 'ryangroup.westus.cloudapp.azure.com';
 
 /**************************************************************************/
 /* PORTS */
@@ -50,7 +53,6 @@ const LOGIN_RSP = 'acc_login_response';
 /* GLOBAL VARIABLES FOR COMMUNICATION WITH BROWSER */
 /**************************************************************************/
 
-//var list_items_response = [[]];
 // Queue for responses from main server
 var list_items_response = [];
 
@@ -58,7 +60,10 @@ var list_items_response = [];
 /* ROUTING AND MIDDLEWARE */
 /**************************************************************************/
 
+// Want to look in './views' for the application's views
 app.set('views', './views');
+
+// Want to use 'pug' for our view engine
 app.set('view engine', 'pug');
 
 /**
@@ -67,25 +72,10 @@ app.set('view engine', 'pug');
  */
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-  res.render('index', {'title': 'Home'});
-});
+app.get('/', routes.home);
+app.get('/register', routes.register);
+app.get('/login', routes.login);
 
-app.get('/register', (req, res) => {
-  res.render('register', {'title': 'Registration Form'});
-});
-
-app.post('/register', (req, res) => {
-  console.log(req);
-});
-
-app.get('/login', (req, res) => {
-  res.render('login', {'title': 'Login'});
-});
-
-app.get('/logged_in_dashboard', (req, res) => {
-  res.render('logged_in_dashboard', {'title': 'blank'});
-});
 
 app.get('/item_searched', (req, res) => {
   var data = '';
@@ -93,27 +83,23 @@ app.get('/item_searched', (req, res) => {
     data += chunk;
   });
 
-  client.on('end', () => {
+  client.on('end', function() {
     handle_response(data);
     res.render('item_searched', {'title': 'Search Results', 'list_items': list_items_response.shift()});
   });
   
   //res.render('item_searched', {'title': 'Search Results', 'list_items': list_items_response.shift()});
-  //res.render('item_searched', {'list_items': list_items_response});
 });
 
-/*
-app.post('/register', function(req, res) {
-  // when user submits their account info on this page, need to send it to the 
-  // main server, and then transfer user to a new page
-});
-*/
+
+app.post('/register', routes.register_post);
+
 
 /**************************************************************************/
 /* LISTENERS */
 /**************************************************************************/
 
-var client = net.connect({port: MAINSERVER_PORT, host : HOST}, () => {
+var client = net.connect({port: MAINSERVER_PORT, host : HOST}, function() {
   console.log('Connected to main server!');
 });
 
@@ -161,16 +147,15 @@ client.on('data', (response) => {
 /**
  * Listener for error events between web server and main server
  */
-/*
 client.on('error',(error) => {
   handle_error(error);
 });
-*/
+
 /**
  * Terminate web server when connection between web server and main server closes
  * (can change this later)
  */
-client.on('close', () => {
+client.on('close', function() {
   http.close();
   // Should we attempt to reconnect?
   /*
@@ -183,13 +168,11 @@ client.on('close', () => {
 /**
  * Binds and listens for connections on the webserver port.
  */
-http.listen(WEBSERVER_PORT , () => {
+http.listen(WEBSERVER_PORT , function() {
   console.log('Web server listening on port ' + WEBSERVER_PORT + '...');
 });
 
-/**************************************************************************/
-/* HELPER FUNCTIONS */
-/**************************************************************************/
+
 
 /**
  * Sends a request to the main server.
@@ -239,8 +222,8 @@ var handle_response = (response) => {
       // Convert item names and stores to title case
       for (var i = 0; i < message.items.length; i++) {
         for (var j = 0; j < message.items[i].length; j++) {
-          message.items[i][j].data.name = to_title_case(message.items[i][j].data.name);
-          message.items[i][j].data.store = to_title_case(message.items[i][j].data.store);
+          message.items[i][j].data.name = utility.to_title_case(message.items[i][j].data.name);
+          message.items[i][j].data.store = utility.to_title_case(message.items[i][j].data.store);
         }
       }
       
@@ -275,12 +258,4 @@ var handle_error = (error) => {
     default:
       console.log("Error: " + error.code); 
   }
-};
-
-/**
- * Converts the given string to title case.
- * E.g. 'hello world' becomes 'Hello World'
- */
-var to_title_case = (str) => {
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
