@@ -3,13 +3,7 @@ extends layout.pug
 block navigation-bar
   #custom-bootstrap-menu.navbar.navbar-default(role='navigation')
     .container-fluid
-      .navbar-header
-        a.navbar-brand(href='/index') CheckedOut
-        button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-menubuilder')
-          span.sr-only Toggle navigation
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
+      include navbar-header.pug
       .collapse.navbar-collapse.navbar-menubuilder
         ul.nav.navbar-nav.navbar-right
           // DROP DOWN MENU

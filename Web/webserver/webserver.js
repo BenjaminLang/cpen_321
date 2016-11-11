@@ -1,5 +1,5 @@
 /**
- * The web server for smart_shopper
+ * The web server for Checkedout
  */
 
 /**************************************************************************/
@@ -13,16 +13,13 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var net = require('net');
 var ip = require('ip');
-//require('epipebomb')();
-
 
 /**************************************************************************/
 /* HOSTS */
 /**************************************************************************/
 
-//const HOST = ip.address(); // returns local ip address
-//const HOST = 'ec2-35-160-222-208.us-west-2.compute.amazonaws.com';
-const HOST = 'ryangroup.westus.cloudapp.azure.com';
+const HOST = ip.address(); // returns local ip address
+//const HOST = 'ryangroup.westus.cloudapp.azure.com';
 
 /**************************************************************************/
 /* PORTS */
@@ -91,7 +88,6 @@ app.get('/logged_in_dashboard', (req, res) => {
 });
 
 app.get('/item_searched', (req, res) => {
-
   var data = '';
   client.on('data', function(chunk) {
     data += chunk;
@@ -99,15 +95,10 @@ app.get('/item_searched', (req, res) => {
 
   client.on('end', () => {
     handle_response(data);
-    // ---------------- not doing this most likely
-    // Upon receiving search response data from main server, inform the browser client and
-    // send it to the browser
-    // io.emit('search response', response.toString());
-    //
     res.render('item_searched', {'title': 'Search Results', 'list_items': list_items_response.shift()});
   });
-
   
+  //res.render('item_searched', {'title': 'Search Results', 'list_items': list_items_response.shift()});
   //res.render('item_searched', {'list_items': list_items_response});
 });
 
@@ -138,6 +129,7 @@ io.on('connection', (socket) => {
  
   // browser client submits a search request
   socket.on(SEARCH_REQ, (item) => {
+    console.log("Search request for " + item + " received.");
   	send_request(client, item, SEARCH_REQ);
   });
   
@@ -155,16 +147,25 @@ io.on('connection', (socket) => {
 /**
  * Listener for responses from the main server
  */
-
-
+/*
+client.on('data', (response) => {
+  handle_response(response);
+  // ---------------- not doing this most likely
+  // Upon receiving search response data from main server, inform the browser client and
+  // send it to the browser
+  // io.emit('search response', response.toString());
+  //
+});
+*/
 
 /**
  * Listener for error events between web server and main server
  */
+/*
 client.on('error',(error) => {
   handle_error(error);
 });
-
+*/
 /**
  * Terminate web server when connection between web server and main server closes
  * (can change this later)
@@ -222,15 +223,14 @@ var send_request = (socket, data, type) => {
 	}
   
   socket.write(JSON.stringify(json_request));
+  socket.end();
 };
 
 /**
  * Handles responses from the main server.
  */
 var handle_response = (response) => {
-  //console.log("hello");
 	var message = JSON.parse(response.toString());
-  //console.log("world");
   var type = message.message_type;
   switch(type) {
     // need to extract array of items from response and pass it to the render call

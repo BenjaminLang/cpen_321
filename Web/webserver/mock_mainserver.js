@@ -13,7 +13,7 @@ server.on('connection', (socket) => {
 
    socket.on('data', (request) => {
 
-      var sample_item_data = {
+      var sample_item_data_1 = {
         'name' : 'red apples',
         'price' : '1.50',
         'store' : 'save on foods',
@@ -21,6 +21,21 @@ server.on('connection', (socket) => {
         // 'image' : '//www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
         'image' : '//www.epicurious.com/images/articlesguides/seasonalcooking/farmtotable/visualguides/apples_07.jpg'
       };
+
+      var sample_item_data_2 = {
+        'name' : 'meme',
+        'price' : '4.20',
+        'store' : 'costco',
+        //'image' : 'green-apple.png'
+         'image' : '//www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
+        //'image' : '//www.epicurious.com/images/articlesguides/seasonalcooking/farmtotable/visualguides/apples_07.jpg'
+      };
+
+      var sample_item_data;
+      if (JSON.parse(request).items[0] === 'apple') {
+        sample_item_data = sample_item_data_1;
+      }
+      else sample_item_data = sample_item_data_2;
 
       var sample_item = {
         'id' : '123',
@@ -32,11 +47,13 @@ server.on('connection', (socket) => {
         'items' : [[]]
       };
 
-      for (var i = 0; i < 500; i++) {
+      for (var i = 0; i < 5; i++) {
         json_response.items[0].push(sample_item);
       }
       
-      socket.write(JSON.stringify(json_response)); 
+      console.log("sending a response...");
+      socket.write(JSON.stringify(json_response));
+      socket.end(); 
    });
 
 
