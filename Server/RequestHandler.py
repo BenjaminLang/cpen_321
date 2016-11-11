@@ -70,15 +70,15 @@ class RequestHandler:
             query = {'words': { '$all': item_words }}
 
             print(query)
-            for searchable_item in item_words:
+            if item_words is not None:
                 if(price == 'min'):
-                    res_data = list(self.__items_db[searchable_item].find(query).sort('data.price',1))
+                    res_data = list(self.__items_db[item_words[0]].find(query).sort('data.price',1))
                     if(num == -1):
                         result = res_data
                     else:
                         result = res_data[0:(num-1)]
                 else:
-                    res_data = list(self.__items_db[searchable_item].find(query))
+                    res_data = list(self.__items_db[item_words[0]].find(query))
                     
                     if(num == -1):
                         result = res_data
@@ -92,7 +92,6 @@ class RequestHandler:
                         del res['words']
                 
                 results.append(result)
-                break
             response['items'] = results
             
         except Exception:

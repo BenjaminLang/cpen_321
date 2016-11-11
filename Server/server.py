@@ -24,12 +24,15 @@ class DatabaseServer:
         request_handler = RequestHandler(categories_db, item_db)
         request_handler = RequestHandler(categories_db, item_db)
 
-
         try:
             while True:
                 connection, addr = server_socket.accept()
-                data = connection.recv(1024).decode()
-                print(data)
+                print('connected')
+                try:
+                    data = connection.recv(1024).decode()
+                except Exception :
+                    print('disconnected')
+                    continue
                 json_data = json.loads(data)
                 print(json_data)
                 type = json_data['message_type']
