@@ -34,10 +34,8 @@ public class JSONParser {
                 JSONArray items = jsonObj.getJSONArray(ITEMS_TAG);
 
                 for(int i = 0; i < items.length(); i++) {
-                    //JSONObject currColle = collections.getJSONObject(i);
                     JSONArray currColle = items.getJSONArray(i);
 
-                    //Iterator<?> colleKeys = currColle.keys();
                     for(int j = 0; j < currColle.length(); j++){
                         JSONObject currItem = currColle.getJSONObject(j);
                         JSONObject currData = currItem.getJSONObject("data");

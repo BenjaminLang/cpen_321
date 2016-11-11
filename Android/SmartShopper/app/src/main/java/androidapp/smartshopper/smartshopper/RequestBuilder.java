@@ -29,6 +29,7 @@ public class RequestBuilder {
                 stores.put(currStore);
             opt.put("stores", stores);
             opt.put("price", options.getPrice());
+            opt.put("num", options.getNum());
 
             request.put("options", opt);
 
