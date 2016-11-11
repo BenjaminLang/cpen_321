@@ -1,5 +1,5 @@
-# Take in Crawler Data and sends it to server
-# Take in User Request and sends back item
+# Takes in Crawler Data and sends it to server
+# Takes in User Request and sends back item
 import socket
 import json
 
@@ -17,7 +17,8 @@ class query:
         self.message['collection'] = 'syrup'
         data['name'] = 'syrup'
         data['store'] = 'costco'
-        data['price'] = '69.69'
+        data['price'] = '12.99'
+        data['url'] = 'Syrup - Costco'
         self.message['data'] = data
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
@@ -31,24 +32,9 @@ class query:
         self.message['message_type'] = 'write'
         self.message['collection'] = 'syrup'
         data['name'] = 'syrup'
-        data['store'] = 'costco'
-        data['price'] = '69.69'
-        self.message['data'] = data
-        json_formatted_data = json.dumps(self.message)
-        # print(json_formatted_data)
-
-        self.sock.connect((self.host, self.port))
-        self.sock.send(json_formatted_data.encode())
-        self.sock.close()
-
-
-    def start_query_3(self):
-        data = {}
-        self.message['message_type'] = 'write'
-        self.message['collection'] = 'syrup'
-        data['name'] = 'syrup'
         data['store'] = 'walmart'
-        data['price'] = '69.69'
+        data['price'] = '34.99'
+        data['url'] = 'Syrup - Walmart'
         self.message['data'] = data
         json_formatted_data = json.dumps(self.message)
         # print(json_formatted_data)
@@ -65,5 +51,5 @@ if __name__ == "__main__":
 
     x.start_query()
     y.start_query_2()
-    z.start_query_3()
-    u.start_query_3()
+    z.start_query()
+    u.start_query_2()
