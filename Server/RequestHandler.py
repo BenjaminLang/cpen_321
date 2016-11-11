@@ -61,34 +61,38 @@ class RequestHandler:
             response['message_type'] = 'read_response'
             items = json_data['items']
             results = []
+            result = []
             price = json_data['options']['price']
-            num = json_data['options']['num']
+            num = int(json_data['options']['num'])
 
-            for item in items:
-                item_words = item.split()
-                query_array = []
+            item_words = items.split()
 
-                # For each word in request
-                for searchable_item in item_words:
-                    query_array.append({'words': {'$elemMatch': {'$eq': searchable_item}}})
+            query = {'words': { '$all': item_words }}
 
-                query = {'$and': query_array}
-                for searchable_item in item_words:
-                    if(price == 'min'):
-                        res_data = list(self.__items_db[searchable_item].find(query).sort('data.price',1))
-                        for n in range(0, num):
-                            result = [res_data[0]]
+            print(query)
+            for searchable_item in item_words:
+                if(price == 'min'):
+                    res_data = list(self.__items_db[searchable_item].find(query).sort('data.price',1))
+                    if(num == -1):
+                        result = res_data
                     else:
-                        res_data = list(self.__items_db[searchable_item].find(query))
-                        for n in range(0, num):
-                            result = [res_data[n]]
-                    if result is not None:
-                        for res in result:
-                            del res['_id']
-                            del res['data']['url']
-                            del res['words']
-                    results.append(result)
-                        break
+                        result = res_data[0:(num-1)]
+                else:
+                    res_data = list(self.__items_db[searchable_item].find(query))
+                    
+                    if(num == -1):
+                        result = res_data
+                    else:
+                        result = res_data[0:(num-1)]
+
+                if result is not None:
+                    for res in result:
+                        del res['_id']
+                        del res['data']['url']
+                        del res['words']
+                
+                results.append(result)
+                break
             response['items'] = results
             
         except Exception:
