@@ -118,12 +118,12 @@ class RequestHandler:
                 message[user_cat[i]] = data[i]
                 json_formatted_data = json.dumps(message)
                 self.users_db[data[0]].insert(json_formatted_data)
-        
+            response['status'] = 'success'
+
         except Exception:
             traceback.print_exc()
             response['status'] = 'failed'
 
-        response['status'] = 'success'
         return response
 
     def __handle_delete(self, json_data):
@@ -138,12 +138,12 @@ class RequestHandler:
             
             result = self.__users_db[user].delete_many({})
         
+            if result.deleted_count != 0:
+                response['status'] = 'success'
+            else:
+                response['status'] = 'failed'
         except Exception:
             traceback.print_exc()
-            response['status'] = 'failed'
-        if (result.deleted_count != 0):
-            response['status'] = 'success'
-        else:
             response['status'] = 'failed'
         return response
 
