@@ -7,7 +7,6 @@ class RequestHandler:
         self.__categories_db = categories_db
         self.__items_db = items_db
         self.__users_db = users_db
-        self.__user = {}
 
     # delegates the requests based on request type
     def handle_request(self, req_type, json_data):
@@ -18,6 +17,10 @@ class RequestHandler:
             json_response = self.__handle_read(json_data)
         elif req_type == 'acc_create':
             json_response = self.__handle_create(json_data)
+        elif req_type == 'acc_del':
+            json_respone = self.__handle_delete(json_data)
+        elif req_type = 'log_in':
+            json_response = self.__handle_login(json_data)
         return json_response
 
     def __handle_write(self, json_data):
@@ -84,7 +87,7 @@ class RequestHandler:
                         result = res_data
                     else:
                         result = res_data[0:(num-1)]
-
+delet
                 if result is not None:
                     for res in result:
                         del res['_id']
