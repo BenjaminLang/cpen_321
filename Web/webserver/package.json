@@ -1,5 +1,5 @@
 {
-  "name": "smartshopper_webserver",
+  "name": "checkedout_webserver",
   "version": "1.0.0",
   "description": "The webserver that connects the website to the mainserver",
   "main": "webserver.js",
@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-session": "^2.0.0-alpha.2",
     "express": "^4.14.0",
     "ip": "^1.1.4",
     "nodemon": "^1.11.0",

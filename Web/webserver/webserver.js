@@ -13,6 +13,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var net = require('net');
 var ip = require('ip');
+var body_parser = require('body-parser');
+var cookie_session = require('cookie-session');
 
 var utility = require(path.join(__dirname, 'functions/utility.js'));
 var routes = require(path.join(__dirname, 'functions/routes.js'));
@@ -21,8 +23,8 @@ var routes = require(path.join(__dirname, 'functions/routes.js'));
 /* HOSTS */
 /**************************************************************************/
 
-//const HOST = ip.address(); // returns local ip address
-const HOST = 'ryangroup.westus.cloudapp.azure.com';
+const HOST = ip.address(); // returns local ip address
+//const HOST = 'ryangroup.westus.cloudapp.azure.com';
 
 /**************************************************************************/
 /* PORTS */
@@ -66,6 +68,15 @@ app.set('views', './views');
 // Want to use 'pug' for our view engine
 app.set('view engine', 'pug');
 
+app.use(body_parser.json());      // for parsing application/json
+app.use(body_parser.urlencoded({  // for parsing application/x-www-form-urlencoded
+ extended: true 
+})); 
+app.use(cookie_session({
+  name: 'session',
+  keys: ['key1', 'key2']
+}));
+
 /**
  * Serve static files (HTML, CSS, JS) from the public directory.
  * The express object now looks in the public directory for website files.
@@ -76,6 +87,9 @@ app.get('/', routes.home);
 app.get('/register', routes.register);
 app.get('/login', routes.login);
 
+app.get('/logged_in_dashboard', function(req,res) {
+  res.render('logged_in_dashboard');
+});
 
 app.get('/item_searched', (req, res) => {
   var data = '';
@@ -88,11 +102,10 @@ app.get('/item_searched', (req, res) => {
     res.render('item_searched', {'title': 'Search Results', 'list_items': list_items_response.shift()});
   });
   
-  //res.render('item_searched', {'title': 'Search Results', 'list_items': list_items_response.shift()});
 });
 
-
 app.post('/register', routes.register_post);
+app.post('/login', routes.login_post);
 
 
 /**************************************************************************/
