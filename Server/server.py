@@ -19,9 +19,9 @@ class DatabaseServer:
         client = MongoClient()
         categories_db = client.categories
         item_db = client.items
+        users_db = client.users
 
-        request_handler = RequestHandler(categories_db, item_db)
-        request_handler = RequestHandler(categories_db, item_db)
+        request_handler = RequestHandler(categories_db, item_db, users_db)        
 
         try:
             while True:

@@ -3,9 +3,11 @@ import traceback
 
 
 class RequestHandler:
-    def __init__(self, categories_db, items_db):
+    def __init__(self, categories_db, items_db, users_db):
         self.__categories_db = categories_db
         self.__items_db = items_db
+        self.__users_db = users_db
+        self.__user = {}
 
     # delegates the requests based on request type
     def handle_request(self, req_type, json_data):
@@ -14,6 +16,8 @@ class RequestHandler:
             json_response = self.__handle_write(json_data)
         elif req_type == 'read':
             json_response = self.__handle_read(json_data)
+        elif req_type == 'acc_create':
+            json_response = self.__handle_create(json_data)
         return json_response
 
     def __handle_write(self, json_data):
@@ -47,14 +51,14 @@ class RequestHandler:
             traceback.print_exc()
             response['status'] = 'failed'
 
-        response['status'] = 'completed'
+        response['status'] = 'success'
         return response
 
     def __handle_read(self, json_data):
+        response = {}
+        response['message_type'] = 'read_response'    
         try:
             # set up appropriate indexing information, json_data is a dict
-            response = {}
-            response['message_type'] = 'read_response'
             items = json_data['items']
             results = []
             result = []
@@ -93,3 +97,77 @@ class RequestHandler:
             traceback.print_exc()
 
         return response
+
+    def __handle_create(self, json_data):
+        response = {}
+        response['message_type'] = 'acc_create_response'
+        try:            
+            msg = json.loads(json_data)
+            
+            data = []
+            data.append(msg['username'])
+            data.append(msg['password'])
+            data.append(msg['location'])
+            data.append(msg['email'])
+            
+            user_cat = ['user', 'pass', 'loc', 'email']
+
+            for i in range (0, 3):
+                message = {}
+                message['category'] = user_cat[i]
+                message[user_cat[i]] = data[i]
+                json_formatted_data = json.dumps(message)
+                self.users_db[data[0]].insert(json_formatted_data)
+        
+        except Exception:
+            traceback.print_exc()
+            response['status'] = 'failed'
+
+        response['status'] = 'success'
+        return response
+
+    def __handle_delete(self, json_data):
+        response = {}
+        response['message_type'] = 'acc_delete_response'
+        try:            
+            msg = json.loads(json_data)
+            user = msg['user']
+            
+            del msg['message_type']
+            del msg['user']
+            
+            result = self.__users_db[user].delete_many({})
+        
+        except Exception:
+            traceback.print_exc()
+            response['status'] = 'failed'
+        if (result.deleted_count != 0):
+            response['status'] = 'success'
+        else:
+            response['status'] = 'failed'
+        return response
+
+    def __handle_login(self, json_data):
+        response = {}
+        response['message_type'] = 'login_response'
+        try:
+            msg = json.loads(json_data)
+            user = msg['user']
+            auth = msg['pass']
+
+            del msg['message_type']
+            del msg['user']
+            
+            ''' 
+            user_data = list(self.__users_db[user].find({'category':'pass'})
+            if(user_data[0]['pass'] == auth):
+                response['status'] = 'authenticated'
+            else:
+                response['status'] = 'wrong authentication'           
+            '''
+        except Exception:
+            traceback.print_exc()
+            response['status'] = 'failed'
+
+        return response
+
