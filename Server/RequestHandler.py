@@ -2,7 +2,6 @@ import json
 import traceback
 
 class RequestHandler:
-
     def __init__(self, categories_db, items_db):
         self.__categories_db = categories_db
         self.__items_db = items_db
@@ -24,11 +23,9 @@ class RequestHandler:
         try:
             # convert JSON to dictionary type and extract indexing information
             print (json_data)
-            # msg = json.loads(json_data)
-            msg = json_data
-            item_name = msg['data']['name']
-            words = item_name.split()
+            msg = json.loads(json_data)
             url = msg['data']['url']
+            words = (msg['data']['name']).split()
             msg['words'] = words
             del msg['message_type']
             del msg['collection']
@@ -38,8 +35,7 @@ class RequestHandler:
                 data = list(self.__items_db[word].find({'data.url': {'$eq': url}}))
                 # if you get a valid ID, you know that the item exists, so update
                 if len(data) != 0:
-                    valid_ID = data[0]['_id']
-                    msg['_id'] = valid_ID
+                    msg['_id'] = data[0]['_id']
                     self.__items_db[word].save(msg)
                 # otherwise make a new item
                 else:
@@ -49,7 +45,6 @@ class RequestHandler:
         except Exception :
             traceback.print_exc()
             response['status'] = 'failed'
-            print(Exception)
 
         response['status'] = 'completed'
         return response
@@ -68,8 +63,8 @@ class RequestHandler:
             item_words = items.split()
 
             query = {'words': { '$all': item_words }}
-
             print(query)
+
             if item_words is not None:
                 if(price == 'min'):
                     res_data = list(self.__items_db[item_words[0]].find(query).sort('data.price',1))
@@ -88,7 +83,6 @@ class RequestHandler:
                 if result is not None:
                     for res in result:
                         del res['_id']
-                        del res['data']['url']
                         del res['words']
                 
                 results.append(result)
@@ -96,9 +90,5 @@ class RequestHandler:
             
         except Exception:
             traceback.print_exc()
-            print(Exception)
 
         return response
-
-
-

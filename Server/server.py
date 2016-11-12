@@ -6,7 +6,6 @@ import traceback
 
 from RequestHandler import RequestHandler
 
-
 class DatabaseServer:
     def test_server(self):
         # set up server socket
@@ -35,14 +34,13 @@ class DatabaseServer:
                     continue
                 json_data = json.loads(data)
                 print(json_data)
-                type = json_data['message_type']
-                response = request_handler.handle_request(type, json_data)
-                # response = {'message_type': 'read_response', 'items': ['maple syrup']}
+
+                response = request_handler.handle_request(json_data['message_type'], json_data)
                 print(response)
+
                 json_response = bson.json_util.dumps(response)
                 connection.send(json_response.encode())
                 connection.close()
 
         except Exception :
             traceback.print_exc()
-            print(Exception)

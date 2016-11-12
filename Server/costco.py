@@ -66,10 +66,11 @@ def parse():
     soup = get_soup(base_url)
     departments = _get_links(soup, 'li', 'category-level-1')
 
-    for department in departments:
+    deps_exclusions = {'auto', 'funeral', 'gift-cards-tickets-floral'}
 
-        #if department != 'http://www.costco.ca/food.html':
-        #   continue
+    for department in departments:
+        if strip_name(department, 'costco.ca/', '.html') in deps_exclusions:
+            continue
 
         dep_soup = get_soup(department)
         categories = _get_links(dep_soup, 'div', 'col-xs-6 col-md-3')
@@ -91,5 +92,4 @@ if __name__ == '__main__':
     parse()
 
     # todo:
-    # add category exclusion list
     # send timestamp along with json doc to server

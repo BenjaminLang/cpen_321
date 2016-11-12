@@ -1,47 +1,31 @@
 # Takes in Crawler Data and sends it to server
 # Takes in User Request and sends back item
-import socket
-import json
-
+from pymongo import MongoClient
+from crawl_lib import *
 
 class query:
     def __init__(self):
-        self.sock = socket.socket()
-        self.host = socket.gethostname()
-        self.port = 6969
-        self.message = {}
+        self.client = MongoClient()
 
     def start_query(self):
         data = {}
-        self.message['message_type'] = 'write'
-        self.message['collection'] = 'syrup'
         data['name'] = 'syrup'
         data['store'] = 'costco'
         data['price'] = '12.99'
-        data['url'] = 'Syrup - Costco'
-        self.message['data'] = data
-        json_formatted_data = json.dumps(self.message)
-        # print(json_formatted_data)
+        data['url'] = 'SyrupCostco.com'
+        data['image'] = 'SyrupCostco.jpeg'
 
-        self.sock.connect((self.host, self.port))
-        self.sock.send(json_formatted_data.encode())
-        self.sock.close()
+        send_to_db('syrups', data, self.client.categories_db, self.client.items_db)
 
     def start_query_2(self):
         data = {}
-        self.message['message_type'] = 'write'
-        self.message['collection'] = 'syrup'
         data['name'] = 'syrup'
         data['store'] = 'walmart'
         data['price'] = '34.99'
-        data['url'] = 'Syrup - Walmart'
-        self.message['data'] = data
-        json_formatted_data = json.dumps(self.message)
-        # print(json_formatted_data)
+        data['url'] = 'SyrupWalmart.com'
+        data['image'] = 'SyrupWalmart.jpeg'
 
-        self.sock.connect((self.host, self.port))
-        self.sock.send(json_formatted_data.encode())
-        self.sock.close()
+        send_to_db('syrups', data, self.client.categories_db, self.client.items_db)
 
 if __name__ == "__main__":
     x = query()

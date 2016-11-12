@@ -22,7 +22,5 @@ def send_to_db(cat_name, info_object, categories_db, items_db):
 
     item['data'] = info_object
     json_data = json.dumps(item, indent = 2)
-    # print(json_data)
     service = RequestHandler(categories_db, items_db)
     service.handle_request('write', json_data)
-    return
