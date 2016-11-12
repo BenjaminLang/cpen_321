@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onQueryTextSubmit(String s) {
                         String[] dummyArray = {" ", " "};
-                        SearchOptions dummyOptions = new SearchOptions(" ", " ", " ", " ", " ", dummyArray, "min", "2 0");
+                        SearchOptions dummyOptions = new SearchOptions(" ", " ", " ", " ", " ", dummyArray, "min", "20");
 
                         RequestBuilder rb = new RequestBuilder();
                         String dbRequest = rb.buildReadReq(s, dummyOptions, " ");
