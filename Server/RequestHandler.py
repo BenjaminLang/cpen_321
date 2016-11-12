@@ -19,7 +19,7 @@ class RequestHandler:
             json_response = self.__handle_create(json_data)
         elif req_type == 'acc_del':
             json_respone = self.__handle_delete(json_data)
-        elif req_type = 'log_in':
+        elif req_type == 'log_in':
             json_response = self.__handle_login(json_data)
         return json_response
 
@@ -87,7 +87,6 @@ class RequestHandler:
                         result = res_data
                     else:
                         result = res_data[0:(num-1)]
-delet
                 if result is not None:
                     for res in result:
                         del res['_id']
