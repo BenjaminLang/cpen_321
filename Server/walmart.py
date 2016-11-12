@@ -49,7 +49,7 @@ def parse():
 
                     data['store'] = 'Walmart'
 
-                    send_to_db(cat_name, data, categories_db, item_db. users_db)
+                    send_to_db(cat_name, data, categories_db, item_db, users_db)
     return
 
 if __name__ == '__main__':
