@@ -1,6 +1,7 @@
 import json
 import traceback
 
+
 class RequestHandler:
     def __init__(self, categories_db, items_db):
         self.__categories_db = categories_db
