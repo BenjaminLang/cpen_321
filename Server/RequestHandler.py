@@ -26,6 +26,7 @@ class RequestHandler:
     def __handle_write(self, json_data):
         # insert the data into the database
         # If item is already in, update data
+
         response = {}
         response['message_type'] = 'write_response'
         try:
@@ -33,7 +34,13 @@ class RequestHandler:
             print (json_data)
             msg = json.loads(json_data)
             url = msg['data']['url']
-            words = (msg['data']['name']).split()
+            name = msg['data']['name']
+
+            if '$' in name: # unimportant items like warranties and coupons
+                response['status'] = 'failed'
+                return response
+
+            words = name.split()
             msg['words'] = words
             del msg['message_type']
             del msg['collection']
@@ -49,12 +56,12 @@ class RequestHandler:
                 else:
                     self.__items_db[word].insert(msg)
 
+            response['status'] = 'success'
         # construct response message
         except Exception :
             traceback.print_exc()
             response['status'] = 'failed'
 
-        response['status'] = 'success'
         return response
 
     def __handle_read(self, json_data):
