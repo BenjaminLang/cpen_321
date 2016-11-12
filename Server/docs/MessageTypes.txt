@@ -73,7 +73,20 @@ FOR WRITE:
             "URL to page" : "www.link.com"
         }
     }
-    
+
+COLLECTION DATA:
+    {
+        "collections": {
+                "milk" : {
+                    "type" : ["2%", "1%", "fat-free"]
+                }
+                ...
+                ...
+                ...
+                ...
+            }
+    }
+
 FOR CREATENEWACC:
     {   "message_type" : "acc_create",
         "userID" : "id",
