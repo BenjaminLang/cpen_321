@@ -4,8 +4,6 @@
 
 // handler for homepage
 exports.home = function(req, res) {
-  console.log(req.session.userID);
-  console.log(req.session.password);
   var userID;
   if (req.session.userID) {
     userID = req.session.userID;

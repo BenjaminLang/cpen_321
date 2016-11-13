@@ -15,9 +15,11 @@ var net = require('net');
 var ip = require('ip');
 var body_parser = require('body-parser');
 var cookie_session = require('cookie-session');
+var logger = require('morgan');
 
 var utility = require(path.join(__dirname, 'functions/utility.js'));
 var routes = require(path.join(__dirname, 'functions/routes.js'));
+var handlers = require(path.join(__dirname, 'functions/handlers.js'));
 
 /**************************************************************************/
 /* HOSTS */
@@ -56,7 +58,9 @@ const LOGIN_RSP = 'acc_login_response';
 /**************************************************************************/
 
 // Queue for responses from main server
-var list_items_response = [];
+var queue = {
+  'list_items_response' : []
+};
 
 /**************************************************************************/
 /* ROUTING AND MIDDLEWARE */
@@ -76,6 +80,8 @@ app.use(cookie_session({
   name: 'session',
   keys: ['key1', 'key2']
 }));
+// for debugging purposes
+app.use(logger('dev'));
 
 /**
  * Serve static files (HTML, CSS, JS) from the public directory.
@@ -87,9 +93,6 @@ app.get('/', routes.home);
 app.get('/register', routes.register);
 app.get('/login', routes.login);
 
-app.get('/logged_in_dashboard', function(req,res) {
-  res.render('logged_in_dashboard');
-});
 
 app.get('/item_searched', (req, res) => {
   var data = '';
@@ -98,10 +101,9 @@ app.get('/item_searched', (req, res) => {
   });
 
   client.on('end', function() {
-    handle_response(data);
-    res.render('item_searched', {'title': 'Search Results', 'list_items': list_items_response.shift()});
-  });
-  
+    handlers.response(data, queue);
+    res.render('item_searched', {'title': 'Search Results', 'list_items': queue.list_items_response.shift()});
+  });  
 });
 
 app.post('/register', routes.register_post);
@@ -129,17 +131,17 @@ io.on('connection', (socket) => {
   // browser client submits a search request
   socket.on(SEARCH_REQ, (item) => {
     console.log("Search request for " + item + " received.");
-  	send_request(client, item, SEARCH_REQ);
+  	handlers.request(client, item, SEARCH_REQ);
   });
   
   // browser client submits a new account request
   socket.on(CREATE_ACC_REQ, (acc_info) => {
-  	send_request(client, acc_info, CREATE_ACC_REQ);
+  	handlers.request(client, acc_info, CREATE_ACC_REQ);
   });
 
   // browser client submits a login request
   socket.on(LOGIN_REQ, (acc_info) => {
-  	send_request(client, acc_info, LOGIN_REQ);
+  	handlers.request(client, acc_info, LOGIN_REQ);
   })
 });
 
@@ -161,7 +163,7 @@ client.on('data', (response) => {
  * Listener for error events between web server and main server
  */
 client.on('error',(error) => {
-  handle_error(error);
+  handlers.error(error);
 });
 
 /**
@@ -186,89 +188,3 @@ http.listen(WEBSERVER_PORT , function() {
 });
 
 
-
-/**
- * Sends a request to the main server.
- */
-var send_request = (socket, data, type) => {
-
-	var json_request = {};
-
-	switch(type) {
-		case SEARCH_REQ:  
-			json_request.message_type = 'read';
-      json_request.options = {'price' : 'none', 'num' : '10'};
-			json_request.items = [data];
-      // json_request.userID 
-      // json_request.options
-			break;
-										
-		case CREATE_ACC_REQ:
-			json_request.message_type = 'acc_create';
-			json_request.userID = data.userID;
-			json_request.password = data.password;
-			break;
-
-		case LOGIN_REQ:
-			json_request.message_type = 'acc_login';
-			json_request.userID = data.userID;
-			json_request.password = data.password;
-			break;
-
-    // more requests to add
-	}
-  
-  socket.write(JSON.stringify(json_request));
-  socket.end();
-};
-
-/**
- * Handles responses from the main server.
- */
-var handle_response = (response) => {
-	var message = JSON.parse(response.toString());
-  var type = message.message_type;
-  switch(type) {
-    // need to extract array of items from response and pass it to the render call
-    // only feasible way is to store this in a global variable
-  	case READ_RSP:
-      // Convert item names and stores to title case
-      for (var i = 0; i < message.items.length; i++) {
-        for (var j = 0; j < message.items[i].length; j++) {
-          message.items[i][j].data.name = utility.to_title_case(message.items[i][j].data.name);
-          message.items[i][j].data.store = utility.to_title_case(message.items[i][j].data.store);
-        }
-      }
-      
-      //list_items_response = message.items.slice();
-      list_items_response.push(message.items);
-      break;
-    
-    // check if acc_created is true or false
-    case CREATE_ACC_RSP:
-      break;
-
-    case LOGIN_RSP:
-      break;
-
-    // more responses to add
-  }
-};
-
-/**
- * Handles errors between the web server and main server. 
- */
-var handle_error = (error) => {
-  switch(error.code){
-    case 'ECONNREFUSED':
-      console.log("Error: main server is not available.");
-      break;
-
-    case 'ECONNRESET':
-      console.log("Error: connection to main server closed abruptly.");
-      break;
-
-    default:
-      console.log("Error: " + error.code); 
-  }
-};
