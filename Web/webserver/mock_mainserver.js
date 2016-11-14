@@ -19,7 +19,7 @@ server.on('connection', (socket) => {
         'store' : 'save on foods',
         //'image' : 'green-apple.png'
         // 'image' : '//www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
-        'image' : '//www.epicurious.com/images/articlesguides/seasonalcooking/farmtotable/visualguides/apples_07.jpg'
+        'image' : '//static.pexels.com/photos/39803/pexels-photo-39803.jpeg'
       };
 
       var sample_item_data_2 = {
@@ -28,7 +28,7 @@ server.on('connection', (socket) => {
         'store' : 'costco',
         //'image' : 'green-apple.png'
          'image' : '//www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
-        //'image' : '//www.epicurious.com/images/articlesguides/seasonalcooking/farmtotable/visualguides/apples_07.jpg'
+        //'image' : '//static.pexels.com/photos/39803/pexels-photo-39803.jpeg'
       };
 
       var sample_item_data;

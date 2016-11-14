@@ -15,5 +15,11 @@ ul.products li {
     margin-top: 20px;    
 }
 
+ul.products img {
+    max-width: 180px;
+    max-height: 180px;
+}
+
+
 
 
