@@ -25,8 +25,8 @@ var handlers = require(path.join(__dirname, 'functions/handlers.js'));
 /* HOSTS */
 /**************************************************************************/
 
-const HOST = ip.address(); // returns local ip address
-//const HOST = 'ryangroup.westus.cloudapp.azure.com';
+//const HOST = ip.address(); // returns local ip address
+const HOST = 'ryangroup.westus.cloudapp.azure.com';
 
 /**************************************************************************/
 /* PORTS */
@@ -57,6 +57,8 @@ const LOGIN_RSP = 'acc_login_response';
 /* GLOBAL VARIABLES FOR COMMUNICATION WITH BROWSER */
 /**************************************************************************/
 
+var data_ready = false;
+var data = '';
 // Queue for responses from main server
 var queue = {
   'list_items_response' : []
@@ -83,10 +85,9 @@ app.use(cookie_session({
 // for debugging purposes
 app.use(logger('dev'));
 
-/**
- * Serve static files (HTML, CSS, JS) from the public directory.
- * The express object now looks in the public directory for website files.
- */
+
+// Serve static files (HTML, CSS, JS) from the public directory.
+// The express object now looks in the public directory for website files.
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', routes.home);
@@ -94,16 +95,31 @@ app.get('/register', routes.register);
 app.get('/login', routes.login);
 
 
-app.get('/item_searched', (req, res) => {
-  var data = '';
-  client.on('data', function(chunk) {
+/*app.get('/item_searched', function(req, res) {
+  main_server.on('data', function(chunk) {
     data += chunk;
   });
 
-  client.on('end', function() {
+  main_server.on('end', function() {
     handlers.response(data, queue);
     res.render('item_searched', {'title': 'Search Results', 'list_items': queue.list_items_response.shift()});
+    //data_ready = true;
   });  
+});
+*/
+
+app.get('/item_searched', function(req, res, next) {
+  console.log(!data_ready);
+  while(!data_ready) {
+    setTimeout(function() {
+      console.log("Waiting for response from main server...");
+    }, 100);
+  }
+  data_ready = false;
+  console.log("Response received!");
+  next();
+}, function(req, res) {
+  res.render('item_searched', {'title': 'Search Results', 'list_items': queue.list_items_response.shift()});
 });
 
 app.post('/register', routes.register_post);
@@ -114,10 +130,11 @@ app.post('/login', routes.login_post);
 /* LISTENERS */
 /**************************************************************************/
 
-var client = net.connect({port: MAINSERVER_PORT, host : HOST}, function() {
+var main_server = net.connect({port: MAINSERVER_PORT, host : HOST}, function() {
   console.log('Connected to main server!');
 });
 
+//var main_server = open_socket();
 /**
  * Listener for socket between browser client and web server
  */
@@ -131,25 +148,35 @@ io.on('connection', (socket) => {
   // browser client submits a search request
   socket.on(SEARCH_REQ, (item) => {
     console.log("Search request for " + item + " received.");
-  	handlers.request(client, item, SEARCH_REQ);
+  	handlers.request(main_server, item, SEARCH_REQ);
   });
   
   // browser client submits a new account request
   socket.on(CREATE_ACC_REQ, (acc_info) => {
-  	handlers.request(client, acc_info, CREATE_ACC_REQ);
+  	handlers.request(main_server, acc_info, CREATE_ACC_REQ);
   });
 
   // browser client submits a login request
   socket.on(LOGIN_REQ, (acc_info) => {
-  	handlers.request(client, acc_info, LOGIN_REQ);
+  	handlers.request(main_server, acc_info, LOGIN_REQ);
   })
 });
 
 /**
  * Listener for responses from the main server
  */
+
+main_server.on('data', function(chunk) {
+  data += chunk;
+});
+
+main_server.on('end', function() {
+  handlers.response(data, queue);
+  data_ready = true;
+});
+
 /*
-client.on('data', (response) => {
+main_server.on('data', (response) => {
   handle_response(response);
   // ---------------- not doing this most likely
   // Upon receiving search response data from main server, inform the browser client and
@@ -162,7 +189,8 @@ client.on('data', (response) => {
 /**
  * Listener for error events between web server and main server
  */
-client.on('error',(error) => {
+
+main_server.on('error', function(error) {
   handlers.error(error);
 });
 
@@ -170,14 +198,8 @@ client.on('error',(error) => {
  * Terminate web server when connection between web server and main server closes
  * (can change this later)
  */
-client.on('close', function() {
+main_server.on('close', function() {
   http.close();
-  // Should we attempt to reconnect?
-  /*
-  client.connect({port: 6969},() => {
-    console.log("Attempting to reconnect");
-  });
-  */
 });
 	
 /**
@@ -187,4 +209,47 @@ http.listen(WEBSERVER_PORT , function() {
   console.log('Web server listening on port ' + WEBSERVER_PORT + '...');
 });
 
+/*
+function open_socket() {
+  var socket = net.connect({port: MAINSERVER_PORT, host : HOST});
+  socket.setKeepAlive(true);
+  socket.on('connect', on_connect.bind({}, socket));
+  socket.on('data', on_data.bind({}, socket));
+  socket.on('end', on_end.bind({}, socket));
+  socket.on('error', on_error.bind({}, socket));
+  return socket;
+}
 
+var interval;
+function on_connect(socket) {
+  console.log('Socket is open!');
+
+   interval = setInterval(function() {
+        console.log("SPAM");
+    }, 1000);
+}
+
+function on_data(socket, chunk) {
+  // console.log('got data!');
+  data += chunk;
+}
+
+function on_end(socket) {
+  handlers.response(data, queue);
+  data_ready = true;
+}
+
+function on_error(socket, error) {
+
+    console.log('Socket error!');
+    console.log(error.code);
+    // Kill socket
+    clearInterval(interval);
+    socket.destroy();
+    socket.unref();
+
+    // Re-open socket
+    setTimeout(open_socket, 1000);
+}
+
+*/
