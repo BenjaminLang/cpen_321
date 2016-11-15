@@ -49,15 +49,14 @@ def parse():
 
                     data['store'] = 'Walmart'
 
-                    send_to_db(cat_name, data, categories_db, item_db, users_db)
+                    send_to_db(cat_name, data, cat_db, item_db, None, None)
     return
 
 if __name__ == '__main__':
     api_key = 'dw25ngn8v6wa97qt757m2a97'
     client = MongoClient()
-    categories_db = client.categories
+    cat_db = client.cat
     item_db = client.items
-    users_db = client.users
     parse()
 
     # todo:
