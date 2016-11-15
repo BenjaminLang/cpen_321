@@ -16,6 +16,8 @@ const CREATE_ACC_RSP = 'acc_create_response';
 const LOGIN_RSP = 'acc_login_response';
 // more to be added
 
+
+//var net = require('net');
 var utility = require('./utility.js');
 
 /**
@@ -28,10 +30,10 @@ exports.request = function(socket, data, type) {
 	switch(type) {
 		case SEARCH_REQ:  
 			json_request.message_type = 'read';
-      		json_request.options = {'price' : 'none', 'num' : '10'};
+      json_request.options = {'price' : 'none', 'num' : '10'};
 			json_request.items = [data];
-      		// json_request.userID 
-      		// json_request.options
+      // json_request.userID 
+      // json_request.options
 			break;
 										
 		case CREATE_ACC_REQ:
@@ -50,7 +52,7 @@ exports.request = function(socket, data, type) {
 	}
   
   socket.write(JSON.stringify(json_request));
-  socket.end();
+  //socket.end();
 
 };
 
@@ -104,3 +106,9 @@ exports.error = function(error) {
       console.log("Error: " + error.code); 
   }
 };
+
+////////////////
+
+
+
+

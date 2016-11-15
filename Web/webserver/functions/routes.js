@@ -14,10 +14,6 @@ exports.home = function(req, res) {
 	res.render('index', {'title': 'Home', 'userID': userID});
 };
 
-exports.home_post = function(req, res) {
-  
-};
-
 exports.register = function(req, res) {
 	res.render('register', {'title': 'Registration Form'});
 };
@@ -27,7 +23,6 @@ exports.register = function(req, res) {
  * 
  */
 exports.register_post = function(req, res) {
-  // will eventually need to send a POST request to the main server containing the acc info
   // but for now, just save it in a variable
   // store the username as a session variable
   req.session.registered_userID = req.body.userID;
@@ -50,4 +45,8 @@ exports.login_post = function(req, res) {
   else {
     res.redirect('/');
   }
+};
+
+exports.item_searched = function(req, res) {
+
 };
