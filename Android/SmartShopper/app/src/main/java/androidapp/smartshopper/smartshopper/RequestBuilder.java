@@ -55,6 +55,44 @@ public class RequestBuilder {
         }
     }
 
+    public String buildAccountCreatReq(String id, String pw) {
+        JSONObject request = new JSONObject();
+        try{
+            request.put("message_type", "acc_create_response");
+            request.put("userID", id);
+            request.put("password", pw);
+
+            return request.toString(2);
+        } catch(JSONException e){
+            return "cannot generate message";
+        }
+    }
+
+    public String buildLoginReq(String id, String pw) {
+        JSONObject request = new JSONObject();
+        try{
+            request.put("message_type", "acc_login");
+            request.put("userID", id);
+            request.put("password", pw);
+
+            return request.toString(2);
+        } catch(JSONException e){
+            return "cannot generate message";
+        }
+    }
+
+    public String buildLogoutReq(String id) {
+        JSONObject request = new JSONObject();
+        try{
+            request.put("message_type", "acc_logout");
+            request.put("userID", id);
+
+            return request.toString(2);
+        } catch(JSONException e){
+            return "cannot generate message";
+        }
+    }
+
     private String[] getSuperString(String[] items){
         String[] collections = Collections.getInstance().getCollection();
         //this is hard

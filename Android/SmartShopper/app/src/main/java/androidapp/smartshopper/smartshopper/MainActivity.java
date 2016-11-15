@@ -38,15 +38,12 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Shopping List Here", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
-
                 ShoppingListFragment cartFrag = new ShoppingListFragment();
 
                 FragmentManager fragMan = getSupportFragmentManager();
                 fragMan.beginTransaction()
                         .replace(R.id.result_frame, cartFrag)
-                        .addToBackStack("search_result")
+                        .addToBackStack("cart_list")
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                         .commit();
 
@@ -118,6 +115,25 @@ public class MainActivity extends AppCompatActivity {
         );
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.login:
+                LoginFragment loginFrag = new LoginFragment();
+
+                FragmentManager fragMan = getSupportFragmentManager();
+                fragMan.beginTransaction()
+                        .replace(R.id.result_frame, loginFrag)
+                        .addToBackStack("login")
+                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                        .commit();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

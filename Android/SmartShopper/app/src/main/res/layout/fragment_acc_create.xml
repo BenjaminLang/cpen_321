@@ -1,0 +1,88 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="androidapp.smartshopper.smartshopper.AccCreateFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:text="Create New User Account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/new_id"
+            android:id="@+id/title"
+            android:layout_alignEnd="@+id/new_id" />
+
+        <TextView
+            android:text="Username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_id_indicator"
+            android:layout_marginTop="13dp"
+            android:layout_below="@+id/title"
+            android:layout_alignStart="@+id/title" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/new_id"
+            android:layout_below="@+id/new_id_indicator"
+            android:layout_alignStart="@+id/new_pw"
+            android:layout_alignEnd="@+id/new_pw" />
+
+        <TextView
+            android:text="Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/new_id"
+            android:layout_alignStart="@+id/new_id"
+            android:id="@+id/new_pw_indicator" />
+
+        <EditText
+            android:layout_width="250dip"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/new_pw"
+            android:selectAllOnFocus="false"
+            android:maxLines="1"
+            android:layout_below="@+id/new_pw_indicator"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:text="Confirm Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_pw_confirm_indicator"
+            android:layout_below="@+id/new_pw"
+            android:layout_alignStart="@+id/new_pw" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:layout_below="@+id/new_pw_confirm_indicator"
+            android:layout_alignStart="@+id/new_pw_confirm_indicator"
+            android:id="@+id/new_pw_confirm"
+            android:layout_alignEnd="@+id/new_pw" />
+
+        <Button
+            android:text="Create Account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/new_pw_confirm"
+            android:layout_marginTop="25dip"
+            android:id="@+id/create_button" />
+
+    </RelativeLayout>
+</FrameLayout>
