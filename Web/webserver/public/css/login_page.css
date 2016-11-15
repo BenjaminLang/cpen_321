@@ -96,7 +96,7 @@ body {
 }
 
 .navbar-header img {
-    margin-top: -65px; 
+    margin-top: -50px; 
     margin-left: 41%;
     position: fixed; 
      
@@ -109,6 +109,7 @@ body {
     border-radius: 0px;
     height: 150px; 
     background-color: #fff;
+    margin: 0;
 }
 
 
