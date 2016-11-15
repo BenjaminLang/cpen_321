@@ -59,12 +59,12 @@ exports.request = function(socket, data, type) {
 /**
  * Handles responses from the main server.
  */
-exports.response = function (response, object) {
+exports.response = function (response, object, web_req, web_res, server_res) {
+
+
   var message = JSON.parse(response.toString());
   var type = message.message_type;
   switch(type) {
-    // need to extract array of items from response and pass it to the render call
-    // only feasible way is to store this in a global variable
     case READ_RSP:
       // Convert item names and stores to title case
       for (var i = 0; i < message.items.length; i++) {
@@ -74,8 +74,10 @@ exports.response = function (response, object) {
         }
       }
       
+
       //list_items_response = message.items.slice();
       object.list_items_response.push(message.items);
+      //res.render('item_searched', {'title': 'Search Results', 'list_items': message.items});
       break;
     
     // check if acc_created is true or false

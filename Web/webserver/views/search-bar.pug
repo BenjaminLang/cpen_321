@@ -3,8 +3,9 @@
   .row.top-buffer
     .col-md-12
       #custom-search-input
-        .input-group.col-md-12
-          input#search-input.form-control.input-lg(type='text', placeholder='Search', autofocus)
-          span.input-group-btn
-            button#search-btn.btn.btn-info.btn-lg(type='button')
-              i.glyphicon.glyphicon-search                
+        form#search-bar-form(action='/item_searched', method='get')
+          .input-group.col-md-12
+            input#search-input.form-control.input-lg(type='text', placeholder='Search')
+            span.input-group-btn
+              button#search-btn.btn.btn-info.btn-lg(type='submit')
+                i.glyphicon.glyphicon-search

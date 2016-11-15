@@ -48,5 +48,5 @@ exports.login_post = function(req, res) {
 };
 
 exports.item_searched = function(req, res) {
-
+  
 };
