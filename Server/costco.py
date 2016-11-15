@@ -5,9 +5,8 @@ import unicodedata
 
 base_url = 'http://www.costco.ca'
 client = MongoClient()
-categories_db = client.categories
+cat_db = client.cat
 item_db = client.items
-users_db = client.users
 
 # take in a soup, tag_name, class_name and return all "a href" links in that soup
 def _get_links(soup, tag_name, class_name):
@@ -59,7 +58,7 @@ def _send_products(soup, cat_item):
             data['image'] = image
             data['store'] = 'Costco'
 
-            send_to_db(cat_item, data, categories_db, item_db, users_db)
+            send_to_db(cat_item, data, cat_db, item_db, None, None)
     return
 
 # Parses starting from the base_url and sends the data to the db

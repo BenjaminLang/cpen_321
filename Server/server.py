@@ -17,11 +17,12 @@ class DatabaseServer:
 
         # connect to MongoDB
         client = MongoClient()
-        categories_db = client.categories
+        cat_db = client.cat
         item_db = client.items
         users_db = client.users
+        cache_db = client.cache
 
-        request_handler = RequestHandler(categories_db, item_db, users_db)        
+        request_handler = RequestHandler(cat_db, item_db, users_db, cache_db)        
 
         try:
             while True:
