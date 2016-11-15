@@ -52,17 +52,14 @@ exports.request = function(socket, data, type) {
 	}
   
   socket.write(JSON.stringify(json_request));
-  //socket.end();
-
 };
 
 /**
  * Handles responses from the main server.
  */
-exports.response = function (response, object, web_req, web_res, server_res) {
-
-
-  var message = JSON.parse(response.toString());
+exports.response = function (web_req, web_res, server_res) {
+  
+  var message = JSON.parse(server_res.toString());
   var type = message.message_type;
   switch(type) {
     case READ_RSP:
@@ -75,9 +72,8 @@ exports.response = function (response, object, web_req, web_res, server_res) {
       }
       
 
-      //list_items_response = message.items.slice();
-      object.list_items_response.push(message.items);
-      //res.render('item_searched', {'title': 'Search Results', 'list_items': message.items});
+      //object.list_items_response.push(message.items);
+      web_res.render('item_searched', {'title': 'Search Results', 'list_items': message.items});
       break;
     
     // check if acc_created is true or false

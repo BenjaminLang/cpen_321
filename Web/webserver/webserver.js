@@ -64,7 +64,6 @@ var data = '';
 var queue = {
   'list_items_response' : []
 };
-var interval;
 /**************************************************************************/
 /* ROUTING AND MIDDLEWARE */
 /**************************************************************************/
@@ -97,36 +96,30 @@ app.get('/login', routes.login);
 
 
 app.get('/item_searched', function(req, res) {
-  main_server.on('data', function(chunk) {
+  var cb = routes.item_searched.bind({}, main_server(), req, res);
+  cb();
+  //handlers.item_searched(main_server(), req, res);
+  main_server().on('data', function(chunk) {
     data += chunk;
   });
 
-  main_server.on('end', function() {
-    handlers.response(data, queue);
-    res.render('item_searched', {'title': 'Search Results', 'list_items': queue.list_items_response.shift()});
-    //data_ready = true;
+  main_server().on('end', function() {
+    debug('handling response...');
+    handlers.response(req, res, data);
+    //res.render('item_searched', {'title': 'Search Results', 'list_items': queue.list_items_response.shift()});
   });  
 
+  //res.render('register', {'title': 'Registration Form'});
 });
 
 /*
-app.get('/item_searched', function(req, res, next) {
-  debug(!data_ready);
-  interval = setInterval(function() {
-    debug("Waiting for response from main server...");
-  }, 1000);
-  data_ready = false;
-  debug("Response received!");
-  next();
-}, function(req, res) {
-  res.render('item_searched', {'title': 'Search Results', 'list_items': queue.list_items_response.shift()});
-});
-*/
-/*
 app.get('/item_searched', function(req, res) {
-  var cb = foo.bind({}, req, res); // cb is now the function foo with two extra arguments prepended
+
+  var cb = routes.item_searched.bind({}, socket, req, res); // cb is now the function foo with two extra arguments prepended
   // call some function with cb as an argument
   cb(2);
+  // instead, I need to bind the socket to routes.item_searched and call it
+
 });
 */
 app.post('/register', routes.register_post);
@@ -142,12 +135,13 @@ function foo(req, res, arg) {
 /**************************************************************************/
 /* LISTENERS */
 /**************************************************************************/
-
+/*
 var main_server = net.connect({port: MAINSERVER_PORT, host : HOST}, function() {
   debug('Connected to main server!');
 });
-
+*/
 //var main_server = open_socket();
+var main_server = open_socket();
 /**
  * Listener for socket between browser client and web server
  */
@@ -161,37 +155,36 @@ io.on('connection', (socket) => {
   // browser client submits a search request
   socket.on(SEARCH_REQ, (item) => {
     debug("Search request for " + item + " received.");
-  	handlers.request(main_server, item, SEARCH_REQ);
+  	handlers.request(main_server(), item, SEARCH_REQ);
   });
   
   // browser client submits a new account request
   socket.on(CREATE_ACC_REQ, (acc_info) => {
-  	handlers.request(main_server, acc_info, CREATE_ACC_REQ);
+  	handlers.request(main_server(), acc_info, CREATE_ACC_REQ);
   });
 
   // browser client submits a login request
   socket.on(LOGIN_REQ, (acc_info) => {
-  	handlers.request(main_server, acc_info, LOGIN_REQ);
+  	handlers.request(main_server(), acc_info, LOGIN_REQ);
   })
 });
 
 /**
  * Listener for responses from the main server
  */
-
+/*
 main_server.on('data', function(chunk) {
   data += chunk;
 });
 
 main_server.on('end', function() {
   handlers.response(data, queue);
-  data_ready = true;
 });
-
+*/
 /**
  * Listener for error events between web server and main server
  */
-main_server.on('error', function(error) {
+main_server().on('error', function(error) {
   handlers.error(error);
 });
 
@@ -199,7 +192,7 @@ main_server.on('error', function(error) {
  * Terminate web server when connection between web server and main server closes
  * (can change this later)
  */
-main_server.on('close', function() {
+main_server().on('close', function() {
   http.close();
 });
 	
@@ -210,24 +203,20 @@ http.listen(WEBSERVER_PORT , function() {
   debug('Web server listening on port ' + WEBSERVER_PORT + '...');
 });
 
-/*
+
 function open_socket() {
   var socket = net.connect({port: MAINSERVER_PORT, host : HOST});
   socket.setKeepAlive(true);
   socket.on('connect', on_connect.bind({}, socket));
-  socket.on('data', on_data.bind({}, socket));
-  socket.on('end', on_end.bind({}, socket));
+  //socket.on('data', on_data.bind({}, socket));
+  //socket.on('end', on_end.bind({}, socket));
   socket.on('error', on_error.bind({}, socket));
-  return socket;
+  var socket_getter = get_socket.bind({}, socket);
+  return socket_getter;
 }
 
-var interval;
 function on_connect(socket) {
-  console.log('Socket is open!');
-
-   interval = setInterval(function() {
-        console.log("SPAM");
-    }, 1000);
+  debug('Socket is open!');
 }
 
 function on_data(socket, chunk) {
@@ -237,15 +226,12 @@ function on_data(socket, chunk) {
 
 function on_end(socket) {
   handlers.response(data, queue);
-  data_ready = true;
 }
 
 function on_error(socket, error) {
-
-    console.log('Socket error!');
-    console.log(error.code);
+    debug('Socket error!');
+    debug(error.code);
     // Kill socket
-    clearInterval(interval);
     socket.destroy();
     socket.unref();
 
@@ -253,4 +239,8 @@ function on_error(socket, error) {
     setTimeout(open_socket, 1000);
 }
 
-*/
+
+function get_socket(socket) {
+  return socket;
+}
+

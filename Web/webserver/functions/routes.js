@@ -2,6 +2,9 @@
 /* ROUTE HANDLERS */
 /**************************************************************************/
 
+const SEARCH_REQ = 'search_request';
+var handlers = require('./handlers.js');
+
 // handler for homepage
 exports.home = function(req, res) {
   var userID;
@@ -20,7 +23,6 @@ exports.register = function(req, res) {
 
 /**
  * Handler for post requests on the register page.
- * 
  */
 exports.register_post = function(req, res) {
   // but for now, just save it in a variable
@@ -47,6 +49,7 @@ exports.login_post = function(req, res) {
   }
 };
 
-exports.item_searched = function(req, res) {
-  
+exports.item_searched = function(socket, req, res) {
+  // extract submission data from req object, then call request handler with the socket, data, and request type
+  handlers.request(socket, req.query.item, SEARCH_REQ);
 };

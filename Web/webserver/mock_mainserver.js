@@ -1,17 +1,19 @@
 var port = 6969;
 var net = require('net');
+var debug = require('debug')('mock_mainserver');
 
 var server = net.createServer(); 
 
 server.on('connection', (socket) => {
 
-   console.log('Webserver connected');
+   debug('Webserver connected');
    
    socket.on('end', () => {
-      console.log('Webserver disconnected');
+      debug('Webserver disconnected');
    });
 
    socket.on('data', (request) => {
+      debug('request received');
 
       var sample_item_data_1 = {
         'name' : 'red apples',
@@ -47,11 +49,11 @@ server.on('connection', (socket) => {
         'items' : [[]]
       };
 
-      for (var i = 0; i < 500000; i++) {
+      for (var i = 0; i < 5; i++) {
         json_response.items[0].push(sample_item);
       }
       
-      console.log("sending a response...");
+      debug("sending a response...");
       socket.write(JSON.stringify(json_response));
       socket.end(); 
    });
@@ -69,7 +71,7 @@ server.on('connection', (socket) => {
 });
 
 server.listen(port, () => { 
-   console.log('Main server is listening...');
+   debug('Main server is listening...');
 });
 
 /*var io = require("socket.io").listen(6969);
