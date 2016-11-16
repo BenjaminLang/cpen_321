@@ -22,7 +22,7 @@ class RequestHandler:
         elif req_type == 'acc_create':
             json_response = self.__handle_create(json_data)
         elif req_type == 'acc_del':
-            json_respone = self.__handle_delete(json_data)
+            json_response = self.__handle_delete(json_data)
         elif req_type == 'log_in':
             json_response = self.__handle_login(json_data)
         return json_response
@@ -87,29 +87,13 @@ class RequestHandler:
     def __handle_create(self, json_data):
         response = {}
         response['message_type'] = 'acc_create_response'
-        try:            
-            msg = json.loads(json_data)
+        del json_data['message_type']
 
-            data = []
-            data.append(msg['username'])
-            data.append(msg['password'])
-            data.append(msg['name'])
-            data.append(msg['location'])
-            data.append(msg['email'])
-            
-            user_cat = ['user', 'pass', 'name', 'loc', 'email']
+        create_res = udo.create_acc(self.__users_db, json_data)
 
-            for i in range (0, len(data)):
-                message = {}
-                message['category'] = user_cat[i]
-                message[user_cat[i]] = data[i]
-                json_formatted_data = json.dumps(message)
-                self.__users_db[data[0]].insert(json_formatted_data)
-
+        if create_res:
             response['status'] = 'success'
-
-        except Exception:
-            traceback.print_exc()
+        else:
             response['status'] = 'failed'
 
         return response
@@ -117,45 +101,27 @@ class RequestHandler:
     def __handle_delete(self, json_data):
         response = {}
         response['message_type'] = 'acc_delete_response'
-        try:            
-            msg = json.loads(json_data)
-            user = msg['user']
-            
-            del msg['message_type']
-            del msg['user']
-            
-            result = self.__users_db[user].delete_many({})
-        
-            if result.deleted_count != 0:
-                response['status'] = 'success'
-            else:
-                response['status'] = 'failed'
+        del json_data['message_type']
 
-        except Exception:
-            traceback.print_exc()
+        del_res = udo.del_acc(self.__users_db, json_data)
+
+        if del_res:
+            response['status'] = 'success'
+        else:
             response['status'] = 'failed'
+
         return response
 
     def __handle_login(self, json_data):
         response = {}
         response['message_type'] = 'login_response'
-        try:
-            msg = json.loads(json_data)
-            user = msg['user']
-            auth = msg['pass']
+        del json_data['message_type']
 
-            del msg['message_type']
-            del msg['user']
-            
-            ''' 
-            user_data = list(self.__users_db[user].find({'category':'pass'})
-            if(user_data[0]['pass'] == auth):
-                response['status'] = 'authenticated'
-            else:
-                response['status'] = 'wrong authentication'           
-            '''
-        except Exception:
-            traceback.print_exc()
-            response['status'] = 'failed'
+        log_res = udo.log_in(self.__users_db, json_data)
+
+        if log_res:
+            response['status'] = 'Authenticated'
+        else:
+            response['status'] = 'Wrong Authentication'
 
         return response

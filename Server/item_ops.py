@@ -27,11 +27,11 @@ class ItemOps:
             else:
                 items_db[collection].insert(json_query)
 
-            return True
-
         except Exception:
             traceback.print_exc()
             return False
+
+        return True
 
     @staticmethod
     def read_items(items_db, json_query, categories):
