@@ -2,7 +2,7 @@ import json
 import traceback
 from item_ops import ItemOps as ido
 from cat_ops import CatOps as cdo
-from cache_ops import CacheOps as $do
+from cache_ops import CacheOps as mdo
 # from user_ops import UserOps as udo
 
 class RequestHandler:
@@ -55,15 +55,21 @@ class RequestHandler:
         return response
 
     def __handle_read(self, json_data):
-        response = {}
+        response = {}  
         response['message_type'] = 'read_response'
         item_name = json_data['items'][0]    
-        cache_results = $do.read_cache(self.__cache_db, item_name)        
+        cache_results = mdo.read_cache(self.__cache_db, item_name)        
         if cache_results == 'Not found':
             # get the categories to search into
-            results = ido.read_items(json_data, self.__items_db)
+            categories = list(self.__cache_db['cache'].find())
+            for cat in categories:
+                del cat['query']
+                del cat['time']
+
+            results = ido.read_items(json_data, self.__items_db, categories)
         else:
-            # read item db with given category 
+            # read item db with given category
+            results = ido.read_items(json_data, self.__items_db, cache_results)
         
         response['items'] = results
         return response

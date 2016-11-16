@@ -32,48 +32,48 @@ class ItemOps:
             traceback.print_exc()
             return False
         
-    def read_items(json_query, items_db):
+    def read_items(json_query, items_db, categories):
         try:
+            for cat in categories:
             # set up appropriate indexing information, json_data is a dict
-            items = json_data['items']
-            results = []
-            result = []
-            price = json_data['options']['price']
-            num = int(json_data['options']['num'])
+                items = json_data['items']
+                results = []
+                result = []
+                price = json_data['options']['price']
+                num = int(json_data['options']['num'])
 
-            item_words = items[0]
+                item_words = items[0]
 
-            query = {'words': { '$all': items }}
+                query = {'words': { '$all': items }}
 
-            if item_words is not None:
-                if(price == 'min'):
-                    if(num != -1):
-                        res_data = list(self.__items_db[item_words[0]].find(query).sort('data.price',1).limit(num))
+                if item_words is not None:
+                    if(price == 'min'):
+                        if(num != -1):
+                            res_data = list(self.__items_db[cat].find(query).sort('data.price',1).limit(num))
+                        else:
+                            res_data = list(self.__items_db[cat].find(query).sort('data.price',1).limit(100))
+
+                    elif(price == 'max'):
+                        if(num != -1):
+                            res_data = list(self.__items_db[cat].find(query).sort('data.price',-1).limit(num))
+                        else:
+                            res_data = list(self.__items_db[cat].find(query).sort('data.price',-1).limit(100))
+                    
                     else:
-                        res_data = list(self.__items_db[item_words[0]].find(query).sort('data.price',1).limit(100)
+                        if(num != -1):
+                            res_data = list(self.__items_db[cat].find(query).limit(num))
+                        else:
+                            res_data = list(self.__items_db[cat].find(query).limit(100))
 
-                elif(price == 'max'):
-                    if(num != -1):
-                        res_data = list(self.__items_db[item_words[0]].find(query).sort('data.price',-1).limit(num))
-                    else:
-                        res_data = list(self.__items_db[item_words[0]].find(query).sort('data.price',-1).limit(100)
+                    if res_data is not None:
+                        for res in res_data:
+                            del res['_id']
+                            del res['words']
+
+                    results.append(res_data)
+                response['items'] = results
                 
-                else:
-                    if(num != -1):
-                        res_data = list(self.__items_db[item_words[0].find(quer).limit(num))
-                    else:
-                        res_data = list(self.__items_db[item_words[0].find(query).limit(100)
-
-                if res_data is not None:
-                    for res in res_data:
-                        del res['_id']
-                        del res['words']
-
-                results.append(res_data)
-            response['items'] = results
-
         except Exception:
             traceback.print_exc()
             response['status'] = 'fail'
-            finally:
-            return response     
+        return response     

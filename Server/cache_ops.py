@@ -5,7 +5,7 @@ class CacheOps:
     def insert_cache(cache_db, query, cat):
         words = set(query.split())
         try:
-            db_res = list(cache_db['cache'].find({'query': {'$eq': words}})
+            db_res = list(cache_db['cache'].find({'query': {'$eq': words}}))
             time_res = list(cache_db['cache'].find().sort('time', 1))            
             curr = datetime.date.today()
             
@@ -19,7 +19,7 @@ class CacheOps:
                 updated_item = cache_db['cache'].find().sort('time', 1).limit(1)
                 updated_item['cat'] = cat
                 updated_item['query'] = query
-                updated_item['time'] curr
+                updated_item['time'] = curr
                 cache_db['cache'].save(updated_item)
             
         except Exception:
@@ -28,10 +28,10 @@ class CacheOps:
     def read_cache(cache_db, query):
         words = set(query.split())
         try:
-            db_res = cache_db['cache'].find_one({'query' : {'$eq' : words }})
+            db_res = list(cache_db['cache'].find({'query' : {'$eq' : words }}))
             
             if db_res is not None:
-                return db_res['cat']
+                return db_res
             else:
                 return 'Not found'
         
