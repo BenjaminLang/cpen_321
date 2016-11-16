@@ -45,13 +45,13 @@ class RequestHandler:
             #print('write success')
         elif item_result and not cat_result:
             response['status'] = 'item_insert'
-            #print('item_insert')
+            print('item_insert')
         elif not item_result and cat_result:
             response['status'] = 'cat_insert'
             print('cat insert')
         else:
             response['status'] = 'failed scrub'
-            #print('nyess')
+            print('nyess')
 
         return response
 

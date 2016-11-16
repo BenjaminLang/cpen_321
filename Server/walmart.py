@@ -11,9 +11,9 @@ def parse():
     departments = full_json['categories']
 
     for department in departments:
-        print(department['id'])
         if department['id'] in deps_exclusions:
             continue
+        print(department['id'])
         categories = department['children']
 
         for category in categories:

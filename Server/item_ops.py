@@ -34,13 +34,13 @@ class ItemOps:
     def read_items(items_db, json_query, categories):
         results = []
         cat_res = []
-        item = json_query['items'][0]
+        item = json_query['items'][0].split()
         price = json_query['options']['price']
         num = int(json_query['options']['num'])
         try:
             for cat in categories:
             # set up appropriate indexing information, json_data is a dict
-                query = {'words': { '$all': [item] }}
+                query = {'words': { '$all': item }}
 
                 if(price == 'min'):
                     if(num != -1):

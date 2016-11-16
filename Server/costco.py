@@ -69,9 +69,9 @@ def parse():
     deps_exclusions = {'auto', 'funeral', 'gift-cards-tickets-floral'}
 
     for department in departments:
-        print(strip_name(department, 'costco.ca/', '.html'))
         if strip_name(department, 'costco.ca/', '.html') in deps_exclusions:
             continue
+        print(strip_name(department, 'costco.ca/', '.html'))
 
         dep_soup = get_soup(department)
         categories = _get_links(dep_soup, 'div', 'col-xs-6 col-md-3')
