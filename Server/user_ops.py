@@ -72,5 +72,40 @@ class UserOps:
             traceback.print_exc()
             return False
 
-    # @staticmethod
-    # def update_acc(users_db, json_query):
+    @staticmethod
+    def update_acc(users_db, json_query):
+        try:
+            data = []
+            email = json_query['email']
+            collection = email.replace('@', '')
+
+            data.append(collection)
+            data.append(json_query['password'])
+            data.append(json_query['name'])
+            data.append(json_query['list'])
+
+            db_res = list(users_db[collection].find())
+
+            user_id = db_res[0]['_id']
+
+            user_cat = ['email', 'pass', 'name', 'list']
+
+            message = {}
+            message['category'] = 'email'
+            message['email'] = email
+            message['_id'] = user_id
+            users_db[data[0]].save(message)
+
+            for i in range(1, len(data)):
+                message = {}
+                message['category'] = user_cat[i]
+                message[user_cat[i]] = data[i]
+                user_id = db_res[i]['_id']
+                message['_id'] = user_id
+                users_db[data[0]].save(message)
+
+        except Exception:
+            traceback.print_exc()
+            return False
+
+        return True

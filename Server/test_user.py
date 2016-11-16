@@ -74,7 +74,7 @@ class query:
 
     def start_query_5(self):
         data = {}
-        data['email'] = 'biggusdikusmcgee@gmail.com'
+        data['email'] = 'benjaminlang@hotmail.com'
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Benjamin Lang'
         data['list'] = []
@@ -89,11 +89,27 @@ class query:
 
     def start_query_6(self):
         data = {}
-        data['email'] = 'biggusdikusmcgee@gmail.com'
+        data['email'] = 'benjaminlang@hotmail.com'
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Benjamin Lang'
         data['list'] = []
         data['message_type'] = 'acc_login'
+
+        json_data = json.dumps(data)
+
+        self.sock.connect((self.host, self.port))
+        self.sock.send(json_data.encode())
+        print(self.sock.recv(1024).decode())
+        self.sock.close()
+
+
+    def start_query_7(self):
+        data = {}
+        data['email'] = 'benjaminlang@hotmail.com'
+        data['password'] = 'New_Password'
+        data['name'] = 'Benjamin Lang'
+        data['list'] = []
+        data['message_type'] = 'update_acc'
 
         json_data = json.dumps(data)
 
@@ -110,6 +126,7 @@ if __name__ == "__main__":
     v = query()
     w = query()
     a = query()
+    b = query()
 
     # x.start_query()
     y.start_query_2()
@@ -117,4 +134,6 @@ if __name__ == "__main__":
     u.start_query_4()
     # v.start_query_5()
     # w.start_query_6()
-    a.start_query_2()
+    a.start_query_5()
+    b.start_query_7()
+
