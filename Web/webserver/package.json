@@ -16,6 +16,7 @@
     "ip": "^1.1.4",
     "morgan": "^1.7.0",
     "nodemon": "^1.11.0",
-    "pug": "^2.0.0-beta6"
+    "pug": "^2.0.0-beta6",
+    "selenium-webdriver": "^3.0.1"
   }
 }

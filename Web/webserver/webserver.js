@@ -99,7 +99,6 @@ main_server.on('connect', function() {
 });
 
 //var main_server = open_socket();
-//var main_server = open_socket();
 
 /**
  * Listener for responses from the main server
@@ -148,6 +147,10 @@ http.listen(constants.WEBSERVER_PORT , function() {
 function open_socket() {
   main_server = net.connect({port: constants.MAINSERVER_PORT, host : constants.HOST}); 
 }
+
+/**************************************************************************/
+/* EXPERIMENTAL STUFF */
+/**************************************************************************/
 
 /*
 function open_socket() {

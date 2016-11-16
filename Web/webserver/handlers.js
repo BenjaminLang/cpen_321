@@ -54,7 +54,7 @@ exports.response = function (web_req, web_res, server_res) {
         }
       }
       
-      //object.list_items_response.push(message.items);
+      debug(message.items[0][0].data.name);
       web_res.render('item_searched', {'title': 'Search Results', 'list_items': message.items});
       break;
     
