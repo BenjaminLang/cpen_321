@@ -74,7 +74,10 @@ class RequestHandler:
             for j in i:
                 ret_data.append(j)
 
-        response['items'] = ret_data
+        num = int(json_data['options']['num'])
+        if num == -1:
+            num = 100
+        response['items'] = ret_data[0:num]
 
         return response
 
