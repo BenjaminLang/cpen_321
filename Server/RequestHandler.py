@@ -3,7 +3,7 @@ import traceback
 from item_ops import ItemOps as ido
 from cat_ops import CatOps as cdo
 from cache_ops import CacheOps as mdo
-# from user_ops import UserOps as udo
+from user_ops import UserOps as udo
 
 class RequestHandler:
     def __init__(self, cat_db, items_db, users_db, cache_db):
@@ -77,6 +77,12 @@ class RequestHandler:
 
         return response
 
+    def __handle_save_list(self, json_data):
+        response = {}
+        response['message_type'] = 'message_save_response'
+
+
+    def __retrieve_lists(self, json_data):
 
     def __handle_create(self, json_data):
         response = {}
