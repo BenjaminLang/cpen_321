@@ -24,6 +24,8 @@ class RequestHandler:
             json_response = self.__handle_delete(json_data)
         elif req_type == 'log_in':
             json_response = self.__handle_login(json_data)
+        elif req_type == 'update_acc':
+            json_response = self.__handle_update(json_data)
         return json_response
 
     def __handle_write(self, json_data):
@@ -121,5 +123,19 @@ class RequestHandler:
             response['status'] = 'Authenticated'
         else:
             response['status'] = 'Wrong Authentication'
+
+        return response
+
+    def __handle_update(self, json_data):
+        response = {}
+        response['message_type'] = 'update_response'
+        del json_data['message_type']
+
+        update_res = udo.update_acc(self.__users_db, json_data)
+
+        if update_res:
+            response['status'] = 'Updated properly'
+        else:
+            response['status'] = 'Could not update'
 
         return response
