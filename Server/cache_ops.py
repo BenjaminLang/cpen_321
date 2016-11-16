@@ -1,5 +1,6 @@
 import traceback
-import datetime
+import calendar
+import time
 
 class CacheOps:
     @staticmethod
@@ -9,7 +10,7 @@ class CacheOps:
             for cat in cat_list:
                 db_res = list(cache_db['cache'].find({'query': {'$eq': words}}))
                 time_res = list(cache_db['cache'].find().sort('time', 1))
-                curr = datetime.date.today()
+                curr = calendar.timegm(time.gmtime())
 
                 data = {}
                 data['cat'] = cat

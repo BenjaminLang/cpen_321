@@ -25,6 +25,7 @@ class query:
 
         self.sock.connect((self.host, self.port))
         self.sock.send(json_data.encode())
+        print(self.sock.recv(1024).decode())
         self.sock.close()
 
     def start_query_2(self):
@@ -40,6 +41,7 @@ class query:
 
         self.sock.connect((self.host, self.port))
         self.sock.send(json_data.encode())
+        print(self.sock.recv(1024).decode())
         self.sock.close()
 
 if __name__ == "__main__":
