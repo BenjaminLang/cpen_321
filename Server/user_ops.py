@@ -16,8 +16,9 @@ class UserOps:
                 data.append(json_query['password'])
                 data.append(json_query['name'])
                 data.append(json_query['list'])
+                data.append(json_query['list_names'])
 
-                user_cat = ['email', 'pass', 'name', 'list']
+                user_cat = ['email', 'pass', 'name', 'list', 'list_names']
 
                 message = {}
                 message['category'] = 'email'
@@ -28,7 +29,8 @@ class UserOps:
                     message = {}
                     message['category'] = user_cat[i]
                     message[user_cat[i]] = data[i]
-                    users_db[data[0]].insert(message)
+                users_db[collection].insert(message)
+
             else:
                 return False
 
@@ -72,15 +74,46 @@ class UserOps:
             traceback.print_exc()
             return False
 
-    """
     @staticmethod
     def add_list(users_db, json_query):
+        try:
+            email = json_query['email']
+            list_name = json_query['list_name']
+            collection = email.replace('@', '')
+
+
+            user_data = list(users_db[collection].find())[0]
+            user_data['list'].append(json_query['list'])
+            users_db[collection].save(user_data)
+
+        except Exception :
+            return False
+        return True
 
     @staticmethod
     def retrieve_lists(users_db, json_query):
+        try:
+            email = json_query['email']
+            collection = email.replace('@', '')
+            retrievals = int(json_query['retrievals'])
+            user_data = list(users_db[collection].find())[0]
+
+            shopping_lists = user_data['list']
+            list_length = len(shopping_lists)
+            ret_lists = []
+            for i in range(0,retrievals):
+                if list_length - i < 0:
+                    break
+                ret_lists.append(shopping_lists[list_length - i])
+
+        except Exception :
+            return False
+
+        return ret_lists
 
     @staticmethod
     def delete_list(users_db, json_query):
+
     """
 
     @staticmethod
