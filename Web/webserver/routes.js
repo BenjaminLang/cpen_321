@@ -2,7 +2,7 @@
 /* ROUTE HANDLERS */
 /**************************************************************************/
 
-const SEARCH_REQ = 'search_request';
+var constants = require('./constants.js');
 var handlers = require('./handlers.js');
 
 // handler for homepage
@@ -51,5 +51,5 @@ exports.login_post = function(req, res) {
 
 exports.item_searched = function(socket, req, res) {
   // extract submission data from req object, then call request handler with the socket, data, and request type
-  handlers.request(socket, req.query.item, SEARCH_REQ);
+  handlers.request(socket, req.query.item, constants.SEARCH_REQ);
 };

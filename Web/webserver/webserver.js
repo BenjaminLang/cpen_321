@@ -6,64 +6,27 @@
 /* REQUIRED MODULES */
 /**************************************************************************/
 
-var path = require('path');
 var express = require('express'),
     app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var net = require('net');
-var ip = require('ip');
+
 var body_parser = require('body-parser');
 var cookie_session = require('cookie-session');
 var logger = require('morgan');
 var debug = require('debug')('webserver');
 
-var utility = require(path.join(__dirname, 'functions/utility.js'));
-var routes = require(path.join(__dirname, 'functions/routes.js'));
-var handlers = require(path.join(__dirname, 'functions/handlers.js'));
+var utility = require('./utility.js');
+var routes = require('./routes.js');
+var handlers = require('./handlers.js');
+var constants = require('./constants.js');
 
-/**************************************************************************/
-/* HOSTS */
-/**************************************************************************/
-
-const HOST = ip.address(); // returns local ip address
-//const HOST = 'ryangroup.westus.cloudapp.azure.com';
-
-/**************************************************************************/
-/* PORTS */
-/**************************************************************************/
-
-const WEBSERVER_PORT = 8080;
-const MAINSERVER_PORT = 6969;
-
-/**************************************************************************/
-/* REQUESTS */
-/**************************************************************************/
-
-const SEARCH_REQ = 'search_request';
-const CREATE_ACC_REQ = 'create_account_request';
-const LOGIN_REQ = 'login_request';
-// more to be added
-
-/**************************************************************************/
-/* RESPONSES */
-/**************************************************************************/
-
-const READ_RSP = 'read_response';
-const CREATE_ACC_RSP = 'acc_create_response';
-const LOGIN_RSP = 'acc_login_response';
-// more to be added
 
 /**************************************************************************/
 /* GLOBAL VARIABLES FOR COMMUNICATION WITH BROWSER */
 /**************************************************************************/
 // should be very wary about these variables; how will the webserver behave when multiple clients connect?
-var data_ready = false;
-var data = '';
-// Queue for responses from main server
-var queue = {
-  'list_items_response' : []
-};
 /**************************************************************************/
 /* ROUTING AND MIDDLEWARE */
 /**************************************************************************/
@@ -88,7 +51,7 @@ app.use(logger('dev'));
 
 // Serve static files (HTML, CSS, JS) from the public directory.
 // The express object now looks in the public directory for website files.
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('./public'));
 
 app.get('/', routes.home);
 app.get('/register', routes.register);
@@ -96,6 +59,7 @@ app.get('/login', routes.login);
 
 
 app.get('/item_searched', function(req, res) {
+  var data = '';
   var cb = routes.item_searched.bind({}, main_server(), req, res);
   cb();
   //handlers.item_searched(main_server(), req, res);
@@ -145,6 +109,7 @@ var main_server = open_socket();
 /**
  * Listener for socket between browser client and web server
  */
+/*
 io.on('connection', (socket) => {
   debug('Client connected.');
   
@@ -168,7 +133,7 @@ io.on('connection', (socket) => {
   	handlers.request(main_server(), acc_info, LOGIN_REQ);
   })
 });
-
+*/
 /**
  * Listener for responses from the main server
  */
@@ -199,13 +164,13 @@ main_server().on('close', function() {
 /**
  * Binds and listens for connections on the webserver port.
  */
-http.listen(WEBSERVER_PORT , function() {
-  debug('Web server listening on port ' + WEBSERVER_PORT + '...');
+http.listen(constants.WEBSERVER_PORT , function() {
+  debug('Web server listening on port ' + constants.WEBSERVER_PORT + '...');
 });
 
 
 function open_socket() {
-  var socket = net.connect({port: MAINSERVER_PORT, host : HOST});
+  var socket = net.connect({port: constants.MAINSERVER_PORT, host : constants.HOST});
   socket.setKeepAlive(true);
   socket.on('connect', on_connect.bind({}, socket));
   //socket.on('data', on_data.bind({}, socket));
@@ -226,6 +191,13 @@ function on_data(socket, chunk) {
 
 function on_end(socket) {
   handlers.response(data, queue);
+
+  // Kill socket
+    socket.destroy();
+    socket.unref();
+
+    // Re-open socket
+    setTimeout(open_socket, 1000);
 }
 
 function on_error(socket, error) {

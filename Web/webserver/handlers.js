@@ -1,24 +1,8 @@
-/**************************************************************************/
-/* REQUESTS */
-/**************************************************************************/
-
-const SEARCH_REQ = 'search_request';
-const CREATE_ACC_REQ = 'create_account_request';
-const LOGIN_REQ = 'login_request';
-// more to be added
-
-/**************************************************************************/
-/* RESPONSES */
-/**************************************************************************/
-
-const READ_RSP = 'read_response';
-const CREATE_ACC_RSP = 'acc_create_response';
-const LOGIN_RSP = 'acc_login_response';
-// more to be added
 
 
 //var net = require('net');
 var utility = require('./utility.js');
+var constants = require('./constants.js');
 
 /**
  * Sends a request to the main server.
@@ -26,24 +10,22 @@ var utility = require('./utility.js');
 exports.request = function(socket, data, type) {
 
 	var json_request = {};
+  json_request.message_type = type;
 
 	switch(type) {
-		case SEARCH_REQ:  
-			json_request.message_type = 'read';
+		case constants.SEARCH_REQ:  
       json_request.options = {'price' : 'none', 'num' : '10'};
 			json_request.items = [data];
       // json_request.userID 
       // json_request.options
 			break;
 										
-		case CREATE_ACC_REQ:
-			json_request.message_type = 'acc_create';
+		case constants.CREATE_ACC_REQ:
 			json_request.userID = data.userID;
 			json_request.password = data.password;
 			break;
 
-		case LOGIN_REQ:
-			json_request.message_type = 'acc_login';
+		case constants.LOGIN_REQ:
 			json_request.userID = data.userID;
 			json_request.password = data.password;
 			break;
@@ -62,7 +44,7 @@ exports.response = function (web_req, web_res, server_res) {
   var message = JSON.parse(server_res.toString());
   var type = message.message_type;
   switch(type) {
-    case READ_RSP:
+    case constants.READ_RSP:
       // Convert item names and stores to title case
       for (var i = 0; i < message.items.length; i++) {
         for (var j = 0; j < message.items[i].length; j++) {
@@ -71,16 +53,15 @@ exports.response = function (web_req, web_res, server_res) {
         }
       }
       
-
       //object.list_items_response.push(message.items);
       web_res.render('item_searched', {'title': 'Search Results', 'list_items': message.items});
       break;
     
     // check if acc_created is true or false
-    case CREATE_ACC_RSP:
+    case constants.CREATE_ACC_RSP:
       break;
 
-    case LOGIN_RSP:
+    case constants.LOGIN_RSP:
       break;
 
     // more responses to add

@@ -49,7 +49,7 @@ server.on('connection', (socket) => {
         'items' : [[]]
       };
 
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < 500; i++) {
         json_response.items[0].push(sample_item);
       }
       
@@ -73,21 +73,3 @@ server.on('connection', (socket) => {
 server.listen(port, () => { 
    debug('Main server is listening...');
 });
-
-/*var io = require("socket.io").listen(6969);
-
-io.on("connection", function(socket){
-    // Display a connected message
-    console.log("Webserver connected.");
-
-    socket.on("disconnect", function() {
-      console.log("Webserver disconnected.");
-    });
-
-    // When we receive a request...
-    socket.on("read request", function(data){
-        // We got a message... I dunno what we should do with this...
-        console.log("Request received by main server");
-        console.log("User searched for: " + data.collection);
-    });
-});*/
