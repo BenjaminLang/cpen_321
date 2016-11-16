@@ -1,79 +1,78 @@
 import traceback
 
+
 class ItemOps:
-    def insert_items(json_data, items_db): 
+    @staticmethod
+    def insert_items(items_db, json_query):
         try:
-            url = msg['data']['url']
-            name = msg['data']['name']
-            collection = msg['collection']
+            url = json_query['data']['url']
+            name = json_query['data']['name']
+            collection = json_query['collection']
 
             if '$' in name: # unimportant items like warranties and coupons
-                response['status'] = 'failed'
-                return response
+                return False
 
             words = name.split()
-            msg['words'] = words
-            del msg['message_type']
-            del msg['collection']
+            json_query['words'] = words
+            del json_query['message_type']
+            # del json_query['collection']
             
             # insert them into the database
             data = list(items_db[collection].find({'data.url': {'$eq': url}}))
             # if you get a valid ID, you know that the item exists, so update
             if len(data) != 0:
-                msg['_id'] = data[0]['_id']
-                items_db[collection].save(msg)
+                json_query['_id'] = data[0]['_id']
+                items_db[collection].save(json_query)
             # otherwise make a new item
             else:
-                items_db[collection].insert(msg)
+                items_db[collection].insert(json_query)
 
             return True
 
         except Exception:
             traceback.print_exc()
             return False
-        
-    def read_items(json_query, items_db, categories):
+
+    @staticmethod
+    def read_items(items_db, json_query, categories):
+        results = []
+        cat_res = []
+        item = json_query['items'][0]
+        price = json_query['options']['price']
+        num = int(json_query['options']['num'])
         try:
             for cat in categories:
             # set up appropriate indexing information, json_data is a dict
-                items = json_data['items']
-                results = []
-                result = []
-                price = json_data['options']['price']
-                num = int(json_data['options']['num'])
+                query = {'words': { '$all': [item] }}
 
-                item_words = items[0]
-
-                query = {'words': { '$all': items }}
-
-                if item_words is not None:
-                    if(price == 'min'):
-                        if(num != -1):
-                            res_data = list(self.__items_db[cat].find(query).sort('data.price',1).limit(num))
-                        else:
-                            res_data = list(self.__items_db[cat].find(query).sort('data.price',1).limit(100))
-
-                    elif(price == 'max'):
-                        if(num != -1):
-                            res_data = list(self.__items_db[cat].find(query).sort('data.price',-1).limit(num))
-                        else:
-                            res_data = list(self.__items_db[cat].find(query).sort('data.price',-1).limit(100))
-                    
+                if(price == 'min'):
+                    if(num != -1):
+                        res_data = list(items_db[cat].find(query).sort('data.price',1).limit(num))
                     else:
-                        if(num != -1):
-                            res_data = list(self.__items_db[cat].find(query).limit(num))
-                        else:
-                            res_data = list(self.__items_db[cat].find(query).limit(100))
+                        res_data = list(items_db[cat].find(query).sort('data.price',1).limit(100))
 
-                    if res_data is not None:
-                        for res in res_data:
-                            del res['_id']
-                            del res['words']
+                elif(price == 'max'):
+                    if(num != -1):
+                        res_data = list(items_db[cat].find(query).sort('data.price',-1).limit(num))
+                    else:
+                        res_data = list(items_db[cat].find(query).sort('data.price',-1).limit(100))
 
-                    results.append(res_data)
-                response['items'] = results
+                else:
+                    if(num != -1):
+                        res_data = list(items_db[cat].find(query).limit(num))
+                    else:
+                        res_data = list(items_db[cat].find(query).limit(100))
+
+                if res_data is not None:
+                    for res in res_data:
+                        del res['_id']
+                        del res['words']
+                        cat_res.append(res['collection'])
+
+                results.append(res_data)
                 
         except Exception:
             traceback.print_exc()
-            response['status'] = 'fail'
-        return response     
+            return None
+
+        return results, set(cat_res)

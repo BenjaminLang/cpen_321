@@ -57,21 +57,24 @@ class RequestHandler:
     def __handle_read(self, json_data):
         response = {}  
         response['message_type'] = 'read_response'
-        item_name = json_data['items'][0]    
-        cache_results = mdo.read_cache(self.__cache_db, item_name)        
+        item_name = json_data['items'][0]
+        cache_results = mdo.read_cache(self.__cache_db, item_name)
         if cache_results == 'Not found':
             # get the categories to search into
             categories = list(self.__cache_db['cache'].find())
-            for cat in categories:
-                del cat['query']
-                del cat['time']
-
-            results = ido.read_items(json_data, self.__items_db, categories)
+            results, cat_list = ido.read_items(self.__items_db, json_data, categories)
         else:
             # read item db with given category
-            results = ido.read_items(json_data, self.__items_db, cache_results)
-        
-        response['items'] = results
+            results, cat_list = ido.read_items(self.__items_db, json_data, cache_results)
+
+        mdo.insert_cache(self.__cache_db, item_name, cat_list)
+        ret_data = []
+        for i in results:
+            for j in i:
+                ret_data.append(j)
+
+        response['items'] = ret_data
+
         return response
 
 
@@ -95,7 +98,7 @@ class RequestHandler:
                 message['category'] = user_cat[i]
                 message[user_cat[i]] = data[i]
                 json_formatted_data = json.dumps(message)
-                self.users_db[data[0]].insert(json_formatted_data)
+                self.__users_db[data[0]].insert(json_formatted_data)
 
             response['status'] = 'success'
 

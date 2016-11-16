@@ -13,7 +13,7 @@ def strip_name(string, pre, post):
     return string.split(pre)[1].split(post)[0]
 
 # Sending individual categories (documents) to database
-def send_to_db(cat_name, info_object, categories_db, items_db, users_db):
+def send_to_db(cat_name, info_object, cat_db, items_db, users_db, cache_db):
     item = {}
     data = {}
     sub_data = {}
@@ -22,5 +22,5 @@ def send_to_db(cat_name, info_object, categories_db, items_db, users_db):
 
     item['data'] = info_object
     json_data = json.dumps(item, indent = 2)
-    service = RequestHandler(categories_db, items_db, users_db)
+    service = RequestHandler(cat_db, items_db, users_db, cache_db)
     service.handle_request('write', json_data)

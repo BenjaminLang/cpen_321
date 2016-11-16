@@ -1,17 +1,14 @@
 import traceback
 
 class CatOps:
+    @staticmethod
     def insert_cat(cat_db, collection):
         try:
             msg = {}
             msg['department'] = collection
             data = list(cat_db['categories'].find({'department': {'$eq': collection}}))
             # if you get a valid ID, you know that the item exists, so update
-            if len(data) != 0:
-                msg['id'] = data[0]['_id']
-                cat_db['categories'].save(msg)
-            # otherwise make a new item
-            else:
+            if len(data) == 0:
                 cat_db['categories'].insert(msg)
         
             return True
@@ -19,7 +16,8 @@ class CatOps:
         except Exception: 
             traceback.print_exc()
             return False
- 
+
+    @staticmethod
     def return_categories(cat_db):
         db_result = list(cat_db['categories'].find())
         
