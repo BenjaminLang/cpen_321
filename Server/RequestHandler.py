@@ -61,7 +61,7 @@ class RequestHandler:
         cache_results = mdo.read_cache(self.__cache_db, item_name)
         if cache_results == 'Not found':
             # get the categories to search into
-            categories = list(self.__cache_db['cache'].find())
+            categories = cdo.return_categories(self.__cat_db)
             results, cat_list = ido.read_items(self.__items_db, json_data, categories)
         else:
             # read item db with given category

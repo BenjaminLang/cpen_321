@@ -4,7 +4,7 @@ import datetime
 class CacheOps:
     @staticmethod
     def insert_cache(cache_db, query, cat_list):
-        words = set(query.split())
+        words = query.split()
         try:
             for cat in cat_list:
                 db_res = list(cache_db['cache'].find({'query': {'$eq': words}}))
@@ -29,9 +29,9 @@ class CacheOps:
 
     @staticmethod
     def read_cache(cache_db, query):
-        words = set(query.split())
+        words = query.split()
         try:
-            db_res = list(cache_db['cache'].find({'query' : {'$eq' : words }}))
+            db_res = list(cache_db['cache'].find({'query' : {'$all': words}}))
 
             if len(db_res) == 0:
                 return 'Not found'

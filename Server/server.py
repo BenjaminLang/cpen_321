@@ -17,10 +17,10 @@ class DatabaseServer:
 
         # connect to MongoDB
         client = MongoClient()
-        cat_db = client.cat
-        item_db = client.items
-        users_db = client.users
-        cache_db = client.cache
+        cat_db = client.cat_db
+        item_db = client.items_db
+        users_db = client.users_db
+        cache_db = client.cache_db
 
         request_handler = RequestHandler(cat_db, item_db, users_db, cache_db)        
 
