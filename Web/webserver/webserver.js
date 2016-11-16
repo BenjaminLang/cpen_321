@@ -9,7 +9,6 @@
 var express = require('express'),
     app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
 var net = require('net');
 
 var body_parser = require('body-parser');
@@ -22,11 +21,6 @@ var routes = require('./routes.js');
 var handlers = require('./handlers.js');
 var constants = require('./constants.js');
 
-
-/**************************************************************************/
-/* GLOBAL VARIABLES FOR COMMUNICATION WITH BROWSER */
-/**************************************************************************/
-// should be very wary about these variables; how will the webserver behave when multiple clients connect?
 /**************************************************************************/
 /* ROUTING AND MIDDLEWARE */
 /**************************************************************************/
@@ -41,12 +35,12 @@ app.use(body_parser.json());      // for parsing application/json
 app.use(body_parser.urlencoded({  // for parsing application/x-www-form-urlencoded
  extended: true 
 })); 
-app.use(cookie_session({
+app.use(cookie_session({          // for storing cookies
   name: 'session',
   keys: ['key1', 'key2']
 }));
-// for debugging purposes
-app.use(logger('dev'));
+
+app.use(logger('dev'));            // for logging http requests from browser
 
 
 // Serve static files (HTML, CSS, JS) from the public directory.
@@ -56,8 +50,6 @@ app.use(express.static('./public'));
 app.get('/', routes.home);
 app.get('/register', routes.register);
 app.get('/login', routes.login);
-
-
 app.get('/item_searched', function(req, res) {
   var data = '';
   var cb = routes.item_searched.bind({}, main_server(), req, res);
@@ -71,9 +63,13 @@ app.get('/item_searched', function(req, res) {
     debug('handling response...');
     handlers.response(req, res, data);
     //res.render('item_searched', {'title': 'Search Results', 'list_items': queue.list_items_response.shift()});
+    main_server().destroy();
+    main_server().unref();
+
+    // Re-open socket
+    setTimeout(open_socket, 1000);
   });  
 
-  //res.render('register', {'title': 'Registration Form'});
 });
 
 /*
@@ -106,34 +102,7 @@ var main_server = net.connect({port: MAINSERVER_PORT, host : HOST}, function() {
 */
 //var main_server = open_socket();
 var main_server = open_socket();
-/**
- * Listener for socket between browser client and web server
- */
-/*
-io.on('connection', (socket) => {
-  debug('Client connected.');
-  
-  socket.on('disconnect', () => {
-    debug('Client disconnected.');
-  });
- 
-  // browser client submits a search request
-  socket.on(SEARCH_REQ, (item) => {
-    debug("Search request for " + item + " received.");
-  	handlers.request(main_server(), item, SEARCH_REQ);
-  });
-  
-  // browser client submits a new account request
-  socket.on(CREATE_ACC_REQ, (acc_info) => {
-  	handlers.request(main_server(), acc_info, CREATE_ACC_REQ);
-  });
 
-  // browser client submits a login request
-  socket.on(LOGIN_REQ, (acc_info) => {
-  	handlers.request(main_server(), acc_info, LOGIN_REQ);
-  })
-});
-*/
 /**
  * Listener for responses from the main server
  */
@@ -149,17 +118,11 @@ main_server.on('end', function() {
 /**
  * Listener for error events between web server and main server
  */
+/*
 main_server().on('error', function(error) {
   handlers.error(error);
 });
-
-/**
- * Terminate web server when connection between web server and main server closes
- * (can change this later)
- */
-main_server().on('close', function() {
-  http.close();
-});
+*/
 	
 /**
  * Binds and listens for connections on the webserver port.
@@ -176,14 +139,16 @@ function open_socket() {
   //socket.on('data', on_data.bind({}, socket));
   //socket.on('end', on_end.bind({}, socket));
   socket.on('error', on_error.bind({}, socket));
+  socket.on('close', on_close.bind({}, socket));
   var socket_getter = get_socket.bind({}, socket);
   return socket_getter;
 }
 
 function on_connect(socket) {
   debug('Socket is open!');
+  debug('Local IP address: ' + socket.localAddress);
 }
-
+/*
 function on_data(socket, chunk) {
   // console.log('got data!');
   data += chunk;
@@ -197,9 +162,9 @@ function on_end(socket) {
     socket.unref();
 
     // Re-open socket
-    setTimeout(open_socket, 1000);
+    setTimeout(open_socket, 500);
 }
-
+*/
 function on_error(socket, error) {
     debug('Socket error!');
     debug(error.code);
@@ -208,7 +173,15 @@ function on_error(socket, error) {
     socket.unref();
 
     // Re-open socket
-    setTimeout(open_socket, 1000);
+    setTimeout(open_socket, 500);
+}
+
+/**
+ * Terminate web server when connection between web server and main server closes
+ * (can change this later)
+ */
+function on_close(socket) {
+  http.close();
 }
 
 

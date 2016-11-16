@@ -1,8 +1,7 @@
 
-
-//var net = require('net');
 var utility = require('./utility.js');
 var constants = require('./constants.js');
+var debug = require('debug')('handlers');
 
 /**
  * Sends a request to the main server.
@@ -33,6 +32,9 @@ exports.request = function(socket, data, type) {
     // more requests to add
 	}
   
+  debug('Request formed. Is the socket destroyed?');
+  debug(socket.destroyed);
+  debug('Writing to the socket now...');
   socket.write(JSON.stringify(json_request));
 };
 

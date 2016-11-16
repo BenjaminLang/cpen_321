@@ -7,11 +7,11 @@ var server = net.createServer();
 server.on('connection', (socket) => {
 
    debug('Webserver connected');
-   
+   /*
    socket.on('end', () => {
       debug('Webserver disconnected');
    });
-
+  */
    socket.on('data', (request) => {
       debug('request received');
 
