@@ -74,3 +74,14 @@ class UserOps:
 
     # @staticmethod
     # def update_acc(users_db, json_query):
+
+    """
+    @staticmethod
+    def add_list(users_db, json_query):
+
+    @staticmethod
+    def retrieve_lists(users_db, json_query):
+
+    @staticmethod
+    def delete_list(users_db, json_query):
+    """

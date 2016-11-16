@@ -1,5 +1,4 @@
 import json
-import traceback
 from item_ops import ItemOps as ido
 from cat_ops import CatOps as cdo
 from cache_ops import CacheOps as mdo
@@ -81,8 +80,7 @@ class RequestHandler:
         response = {}
         response['message_type'] = 'message_save_response'
 
-
-    def __retrieve_lists(self, json_data):
+    # def __retrieve_lists(self, json_data):
 
     def __handle_create(self, json_data):
         response = {}
