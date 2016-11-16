@@ -10,12 +10,12 @@ class CatOps:
             # if you get a valid ID, you know that the item exists, so update
             if len(data) == 0:
                 cat_db['categories'].insert(msg)
-        
-            return True
             
         except Exception: 
             traceback.print_exc()
             return False
+
+        return True
 
     @staticmethod
     def return_categories(cat_db):

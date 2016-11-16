@@ -46,8 +46,9 @@ class CacheOps:
 
                 # print(db_res)
                 # print(ret_cat)
-                return ret_cat
         
         except Exception:
             traceback.print_exc()
             return 'Error'
+
+        return ret_cat
