@@ -6,7 +6,11 @@ var constants = require('./constants.js');
 var handlers = require('./handlers.js');
 var debug = require('debug')('routes');
 
-// handler for homepage
+/**
+ * handler for homepage
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ */
 exports.home = function(req, res) {
   var userID;
   if (req.session.userID) {
@@ -51,6 +55,8 @@ exports.login_post = function(req, res) {
 };
 
 exports.item_searched = function(socket, req, res) {
+  // first, check if submission data exists
+
   // extract submission data from req object, then call request handler with the socket, data, and request type
   debug("Search request for " + req.query.item + " received.");
   handlers.request(socket, req.query.item, constants.SEARCH_REQ);

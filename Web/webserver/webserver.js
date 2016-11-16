@@ -40,21 +40,19 @@ app.use(cookie_session({          // for storing cookies
   keys: ['key1', 'key2']
 }));
 
-//app.use(logger('dev'));            // for logging http requests from browser
-
+app.use(logger('dev'));            // for logging http requests from browser
 
 // Serve static files (HTML, CSS, JS) from the public directory.
 // The express object now looks in the public directory for website files.
 app.use(express.static('./public'));
 
+// GET requests
 app.get('/', routes.home);
 app.get('/register', routes.register);
 app.get('/login', routes.login);
 app.get('/item_searched', function(req, res) {
   var data = '';
-  var cb = routes.item_searched.bind({}, main_server, req, res);
-  cb();
-  //handlers.item_searched(main_server, req, res);
+  routes.item_searched.bind({}, main_server, req, res)();
   main_server.on('data', function(chunk) {
     data += chunk;
   });
@@ -62,7 +60,6 @@ app.get('/item_searched', function(req, res) {
   main_server.on('end', function() {
     debug('handling response...');
     handlers.response(req, res, data);
-    //res.render('item_searched', {'title': 'Search Results', 'list_items': queue.list_items_response.shift()});
     debug('response handled; destroying socket ' + main_server.id);
     main_server.destroy();
     main_server.unref();
@@ -73,16 +70,7 @@ app.get('/item_searched', function(req, res) {
 
 });
 
-/*
-app.get('/item_searched', function(req, res) {
-
-  var cb = routes.item_searched.bind({}, socket, req, res); // cb is now the function foo with two extra arguments prepended
-  // call some function with cb as an argument
-  cb(2);
-  // instead, I need to bind the socket to routes.item_searched and call it
-
-});
-*/
+// POST requests
 app.post('/register', routes.register_post);
 app.post('/login', routes.login_post);
 
@@ -90,7 +78,7 @@ app.post('/login', routes.login_post);
 /* LISTENERS */
 /**************************************************************************/
 
-var main_server = net.connect({port: constants.MAINSERVER_PORT, host : constants.HOST}); 
+var main_server = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST}); 
 
 main_server.on('connect', function() {
   main_server.id = Math.floor(Math.random() * 1000);
@@ -98,20 +86,6 @@ main_server.on('connect', function() {
   debug('This socket\'s id is: ' + main_server.id);
 });
 
-//var main_server = open_socket();
-
-/**
- * Listener for responses from the main server
- */
-/*
-main_server.on('data', function(chunk) {
-  data += chunk;
-});
-
-main_server.on('end', function() {
-  handlers.response(data, queue);
-});
-*/
 /**
  * Listener for error events between web server and main server
  */
@@ -119,8 +93,7 @@ main_server.on('error', function(error) {
   /*
   handlers.error(error);
   */
-  debug('Socket error!');
-  debug(error.code);
+  debug('Socket error: ' + error.code);
   // Kill socket
   main_server.destroy();
   main_server.unref();
@@ -145,12 +118,14 @@ http.listen(constants.WEBSERVER_PORT , function() {
 });
 
 function open_socket() {
-  main_server = net.connect({port: constants.MAINSERVER_PORT, host : constants.HOST}); 
+  main_server = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST}); 
 }
 
 /**************************************************************************/
 /* EXPERIMENTAL STUFF */
 /**************************************************************************/
+
+//var main_server = open_socket();
 
 /*
 function open_socket() {

@@ -4,8 +4,8 @@ var ip = require('ip');
 /* HOSTS */
 /**************************************************************************/
 
-//exports.HOST = ip.address(); // returns local ip address
-exports.HOST = 'ryangroup.westus.cloudapp.azure.com'; // main server host
+exports.HOST = ip.address(); // returns local ip address
+//exports.HOST = 'ryangroup.westus.cloudapp.azure.com'; // main server host
 
 /**************************************************************************/
 /* PORTS */
@@ -31,3 +31,11 @@ exports.READ_RSP = 'read_response';
 exports.CREATE_ACC_RSP = 'acc_create_response';
 exports.LOGIN_RSP = 'acc_login_response';
 // more to be added
+
+/**************************************************************************/
+/* ERRORS */
+/**************************************************************************/
+
+exports.ADDRESS_IN_USE = 'EADDRINUSE';
+exports.CONNECTION_REFUSED = 'ECONNREFUSED';
+exports.CONNECTION_RESET = 'ECONNRESET';
