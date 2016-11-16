@@ -5,8 +5,14 @@ var debug = require('debug')('mock_mainserver');
 var server = net.createServer(); 
 
 server.on('connection', (socket) => {
+   
 
    debug('Webserver connected');
+
+   // assign a random id
+   //socket.id = Math.floor(Math.random() * 1000);
+   //debug('This socket\'s id is: ' + socket.id);
+
    /*
    socket.on('end', () => {
       debug('Webserver disconnected');

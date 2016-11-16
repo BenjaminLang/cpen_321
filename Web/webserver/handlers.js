@@ -32,9 +32,8 @@ exports.request = function(socket, data, type) {
     // more requests to add
 	}
   
-  debug('Request formed. Is the socket destroyed?');
-  debug(socket.destroyed);
-  debug('Writing to the socket now...');
+  debug('Request formed. Is socket ' + socket.id + ' destroyed? ' + socket.destroyed);
+  debug('Writing to socket ' + socket.id + ' now...');
   socket.write(JSON.stringify(json_request));
 };
 
