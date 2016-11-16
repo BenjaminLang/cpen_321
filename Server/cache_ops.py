@@ -31,6 +31,7 @@ class CacheOps:
     @staticmethod
     def read_cache(cache_db, query):
         words = query.split()
+        ret_cat = []
         try:
             db_res = list(cache_db['cache'].find({'query' : {'$all': words}}))
 
@@ -40,7 +41,12 @@ class CacheOps:
                 for res in db_res:
                     del res['query']
                     del res['time']
-                return db_res
+                    del res['_id']
+                    ret_cat.append(res['cat'])
+
+                # print(db_res)
+                # print(ret_cat)
+                return ret_cat
         
         except Exception:
             traceback.print_exc()
