@@ -22,7 +22,7 @@ class CacheOps:
                 cache_db['cache'].insert(data)
             else:
                 updated_item = cache_db['cache'].find().sort('time', 1).limit(1)
-                updated_item['cat'] = list(cat_list)
+                updated_item['cats'] = list(cat_list)
                 updated_item['query'] = words
                 updated_item['time'] = curr
                 cache_db['cache'].save(updated_item)
@@ -45,7 +45,7 @@ class CacheOps:
                     del res['query']
                     del res['time']
                     del res['_id']
-                    ret_cat.extend(res['cat'])
+                    ret_cat.extend(res['cats'])
 
         except Exception:
             traceback.print_exc()

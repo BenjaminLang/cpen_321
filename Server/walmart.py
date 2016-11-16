@@ -11,6 +11,7 @@ def parse():
     departments = full_json['categories']
 
     for department in departments:
+        print(department['id'])
         if department['id'] in deps_exclusions:
             continue
         categories = department['children']
@@ -55,8 +56,8 @@ def parse():
 if __name__ == '__main__':
     api_key = 'dw25ngn8v6wa97qt757m2a97'
     client = MongoClient()
-    cat_db = client.cat
-    item_db = client.items
+    cat_db = client.cat_db
+    item_db = client.items_db
     parse()
 
     # todo:

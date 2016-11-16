@@ -9,9 +9,6 @@ class ItemOps:
             name = json_query['data']['name']
             collection = json_query['collection']
 
-            if '$' in name: # unimportant items like warranties and coupons
-                return False
-
             words = name.split()
             json_query['words'] = words
             del json_query['message_type']
