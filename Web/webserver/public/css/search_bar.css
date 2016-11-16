@@ -1,8 +1,8 @@
 #custom-search-input{
     padding: 2px;
-    border: solid 1px #E4E4E4;
+    border: solid 1px #000;
     border-radius: 6px;
-    background-color: #fff;
+    background-color: #fff; 
 }
 
 #custom-search-input input{
@@ -29,3 +29,4 @@
 #custom-search-input .glyphicon-search{
     font-size: 23px;
 }
+
