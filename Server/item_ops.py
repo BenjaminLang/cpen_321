@@ -9,9 +9,6 @@ class ItemOps:
             name = json_query['data']['name']
             collection = json_query['collection']
 
-            if '$' in name: # unimportant items like warranties and coupons
-                return False
-
             words = name.split()
             json_query['words'] = words
             del json_query['message_type']
@@ -37,31 +34,24 @@ class ItemOps:
     def read_items(items_db, json_query, categories):
         results = []
         cat_res = []
-        item = json_query['items'][0]
+        item = json_query['items'][0].split()
         price = json_query['options']['price']
         num = int(json_query['options']['num'])
+        if num == -1:
+            num = 100
         try:
             for cat in categories:
             # set up appropriate indexing information, json_data is a dict
-                query = {'words': { '$all': [item] }}
+                query = {'words': { '$all': item }}
 
                 if(price == 'min'):
-                    if(num != -1):
-                        res_data = list(items_db[cat].find(query).sort('data.price',1).limit(num))
-                    else:
-                        res_data = list(items_db[cat].find(query).sort('data.price',1).limit(100))
+                    res_data = list(items_db[cat].find(query).sort('data.price',1).limit(num))
 
                 elif(price == 'max'):
-                    if(num != -1):
-                        res_data = list(items_db[cat].find(query).sort('data.price',-1).limit(num))
-                    else:
-                        res_data = list(items_db[cat].find(query).sort('data.price',-1).limit(100))
+                    res_data = list(items_db[cat].find(query).sort('data.price',-1).limit(num))
 
                 else:
-                    if(num != -1):
-                        res_data = list(items_db[cat].find(query).limit(num))
-                    else:
-                        res_data = list(items_db[cat].find(query).limit(100))
+                    res_data = list(items_db[cat].find(query).limit(num))
 
                 if res_data is not None:
                     for res in res_data:

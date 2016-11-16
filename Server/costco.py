@@ -5,8 +5,8 @@ import unicodedata
 
 base_url = 'http://www.costco.ca'
 client = MongoClient()
-cat_db = client.cat
-item_db = client.items
+cat_db = client.cat_db
+item_db = client.items_db
 
 # take in a soup, tag_name, class_name and return all "a href" links in that soup
 def _get_links(soup, tag_name, class_name):
@@ -71,6 +71,7 @@ def parse():
     for department in departments:
         if strip_name(department, 'costco.ca/', '.html') in deps_exclusions:
             continue
+        print(strip_name(department, 'costco.ca/', '.html'))
 
         dep_soup = get_soup(department)
         categories = _get_links(dep_soup, 'div', 'col-xs-6 col-md-3')

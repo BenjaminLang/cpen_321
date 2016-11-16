@@ -42,7 +42,7 @@ class RequestHandler:
        
         if item_result and cat_result:
             response['status'] = 'success'
-            print('write success')
+            #print('write success')
         elif item_result and not cat_result:
             response['status'] = 'item_insert'
             print('item_insert')
@@ -74,7 +74,10 @@ class RequestHandler:
             for j in i:
                 ret_data.append(j)
 
-        response['items'] = ret_data
+        num = int(json_data['options']['num'])
+        if num == -1:
+            num = 100
+        response['items'] = ret_data[0:num]
 
         return response
 
