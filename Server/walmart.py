@@ -2,6 +2,7 @@ from crawl_lib import *
 from pymongo import MongoClient
 import unicodedata
 import json
+import time
 
 # Parses starting from the base_url and sends the data to the db
 def parse():
@@ -54,6 +55,7 @@ def parse():
                     data['store'] = 'Walmart'
 
                     send_to_db(cat_name, data, cat_db, item_db, None, None)
+                    time.sleep(1)
     return
 
 if __name__ == '__main__':

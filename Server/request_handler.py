@@ -21,9 +21,9 @@ class RequestHandler:
             json_response = self.__handle_create(json_data)
         elif req_type == 'acc_del':
             json_response = self.__handle_delete(json_data)
-        elif req_type == 'log_in':
+        elif req_type == 'acc_login':
             json_response = self.__handle_login(json_data)
-        elif req_type == 'update_acc':
+        elif req_type == 'acc_update':
             json_response = self.__handle_update(json_data)
         elif req_type == 'add_list':
             json_response = self.__handle_save_list(json_data)
@@ -91,10 +91,8 @@ class RequestHandler:
         response = {}
         response['message_type'] = 'save_list_response'
         list_save_status = udo.add_list(self.__users_db, json_data)
-        if list_save_status:
-            response['status'] = 'success'
-        else:
-            response['status'] = 'failed'
+
+        response['status'] = list_save_status
 
         return response
 
@@ -115,10 +113,8 @@ class RequestHandler:
         response['message_type'] = 'delete_list_response'
         deletion_status = udo.delete_list(self.__users_db, json_data)
 
-        if deletion_status:
-            response['status'] = 'success'
-        else:
-            response['status'] = 'failed'
+        response['status'] = deletion_status
+
         return response
 
     def __handle_create(self, json_data):
@@ -128,10 +124,7 @@ class RequestHandler:
 
         create_res = udo.create_acc(self.__users_db, json_data)
 
-        if create_res:
-            response['status'] = 'success'
-        else:
-            response['status'] = 'failed'
+        response['status'] = create_res
 
         return response
 
@@ -142,10 +135,7 @@ class RequestHandler:
 
         del_res = udo.del_acc(self.__users_db, json_data)
 
-        if del_res:
-            response['status'] = 'success'
-        else:
-            response['status'] = 'failed'
+        response['status'] = del_res
 
         return response
 
@@ -156,10 +146,7 @@ class RequestHandler:
 
         log_res = udo.log_in(self.__users_db, json_data)
 
-        if log_res:
-            response['status'] = 'Authenticated'
-        else:
-            response['status'] = 'Wrong Authentication'
+        response['status'] = log_res # DNE, success, or failed
 
         return response
 
@@ -170,9 +157,6 @@ class RequestHandler:
 
         update_res = udo.update_acc(self.__users_db, json_data)
 
-        if update_res:
-            response['status'] = 'Updated properly'
-        else:
-            response['status'] = 'Could not update'
+        response['status'] = update_res
 
         return response
