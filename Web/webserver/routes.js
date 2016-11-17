@@ -7,9 +7,7 @@ var handlers = require('./handlers.js');
 var debug = require('debug')('routes');
 
 /**
- * handler for homepage
- * @param  {[type]} req [description]
- * @param  {[type]} res [description]
+ * Handler for homepage
  */
 exports.home = function(req, res) {
   var userID;
@@ -26,20 +24,25 @@ exports.register = function(req, res) {
 	res.render('register', {'title': 'Registration Form'});
 };
 
-/**
- * Handler for post requests on the register page.
- */
-exports.register_post = function(req, res) {
-  // but for now, just save it in a variable
-  // store the username as a session variable
-  req.session.registered_userID = req.body.userID;
-  req.session.registered_password = req.body.password;
-  // redirect the user to homepage
-  res.redirect('/login');
-};
+
 
 exports.login = function(req, res) {
   res.render('login', {'title': 'Login'});
+};
+
+exports.logout = function(req, res) {
+  // delete the session variable
+  delete req.session.userID;
+  // redirect user to homepage
+  res.redirect('/');
+}
+
+exports.item_searched = function(socket, req, res) {
+  // first, check if submission data exists
+
+  // extract submission data from req object, then call request handler with the socket, data, and request type
+  debug('Search request for ' + req.query.item + ' received.');
+  handlers.request(socket, req.query.item, constants.SEARCH_REQ);
 };
 
 exports.login_post = function(req, res) {
@@ -52,12 +55,24 @@ exports.login_post = function(req, res) {
   else {
     res.redirect('/');
   }
+  debug('Login request for ' + acc_info + ' received.');
+  handlers.request(socket, acc_info, constants.LOGIN_REQ);
 };
 
-exports.item_searched = function(socket, req, res) {
-  // first, check if submission data exists
+/**
+ * Handler for post requests on the register page.
+ */
+exports.register_post = function(socket, req, res) {
+  // if successful, redirect to home page. otherwise, redirect to register page with 
 
-  // extract submission data from req object, then call request handler with the socket, data, and request type
-  debug("Search request for " + req.query.item + " received.");
-  handlers.request(socket, req.query.item, constants.SEARCH_REQ);
+  // store the username as a session variable
+  req.session.registered_userID = req.body.userID;
+  req.session.registered_password = req.body.password;
+  // redirect the user to homepage
+  res.redirect('/');
+
+  var acc_info = {};
+
+  debug('Create account request for ' + acc_info + ' received.');
+  handlers.request(socket, acc_info, constants.CREATE_ACC_REQ);
 };

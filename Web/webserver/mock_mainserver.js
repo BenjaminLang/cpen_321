@@ -9,15 +9,11 @@ server.on('connection', (socket) => {
 
    debug('Webserver connected');
 
-   // assign a random id
-   //socket.id = Math.floor(Math.random() * 1000);
-   //debug('This socket\'s id is: ' + socket.id);
-
-   /*
+   
    socket.on('end', () => {
-      debug('Webserver disconnected');
+      debug('Closing the socket...');
    });
-  */
+  
    socket.on('data', (request) => {
       debug('request received');
 
@@ -52,11 +48,11 @@ server.on('connection', (socket) => {
 
       var json_response = {
         'message_type' : 'read_response',
-        'items' : [[]]
+        'items' : []
       };
 
       for (var i = 0; i < 500; i++) {
-        json_response.items[0].push(sample_item);
+        json_response.items.push(sample_item);
       }
       
       debug("sending a response...");

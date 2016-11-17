@@ -8,6 +8,7 @@
 
 var express = require('express'),
     app = express();
+
 var http = require('http').Server(app);
 var net = require('net');
 
@@ -15,6 +16,7 @@ var body_parser = require('body-parser');
 var cookie_session = require('cookie-session');
 var logger = require('morgan');
 var debug = require('debug')('webserver');
+var favicon = require('serve-favicon');
 
 var utility = require('./utility.js');
 var routes = require('./routes.js');
@@ -31,9 +33,10 @@ app.set('views', './views');
 // Want to use 'pug' for our view engine
 app.set('view engine', 'pug');
 
+
 app.use(body_parser.json());      // for parsing application/json
 app.use(body_parser.urlencoded({  // for parsing application/x-www-form-urlencoded
- extended: true 
+  extended: true 
 })); 
 app.use(cookie_session({          // for storing cookies
   name: 'session',
@@ -45,21 +48,27 @@ app.use(logger('dev'));            // for logging http requests from browser
 // Serve static files (HTML, CSS, JS) from the public directory.
 // The express object now looks in the public directory for website files.
 app.use(express.static('./public'));
+// icon that displays in the browser tab (Doesn't work for some reason)
+app.use(favicon('./public/favicon.ico'));
 
 // GET requests
 app.get('/', routes.home);
 app.get('/register', routes.register);
 app.get('/login', routes.login);
+app.get('/logout', routes.logout);
 app.get('/item_searched', function(req, res) {
+  
   var data = '';
-  routes.item_searched.bind({}, main_server, req, res)();
+  // routes.item_searched.bind({}, main_server, req, res)();
+  routes.item_searched(main_server, req, res);
+
   main_server.on('data', function(chunk) {
     data += chunk;
   });
 
   main_server.on('end', function() {
     debug('handling response...');
-    handlers.response(req, res, data);
+    handlers.response(data, req, res);
     debug('response handled; destroying socket ' + main_server.id);
     main_server.destroy();
     main_server.unref();

@@ -33,14 +33,13 @@ block custom-widget
 block content
   // SEARCH RESULTS
   ul.products
-    for items in list_items
-      for item in items
-        li
-          a(href='javascript:void(0);')
-            img(src=('http:' + item.data.image))
-            h4 #{item.data.name}
-          p Price: #{item.data.price}
-          p Store: #{item.data.store}           
+    for item in list_items
+      li
+        a(href='javascript:void(0);')
+          img(src=('http:' + item.data.image))
+          h4 #{item.data.name}
+        p Price: #{item.data.price}
+        p Store: #{item.data.store}           
 //-
   doctype html
   html(lang='en')

@@ -40,29 +40,30 @@ exports.request = function(socket, data, type) {
 /**
  * Handles responses from the main server.
  */
-exports.response = function (web_req, web_res, server_res) {
+exports.response = function (server_res, web_req, web_res) {
   
   var message = JSON.parse(server_res.toString());
   var type = message.message_type;
+  debug(message.items);
   switch(type) {
     case constants.READ_RSP:
       // Convert item names and stores to title case
       for (var i = 0; i < message.items.length; i++) {
-        for (var j = 0; j < message.items[i].length; j++) {
-          message.items[i][j].data.name = utility.to_title_case(message.items[i][j].data.name);
-          message.items[i][j].data.store = utility.to_title_case(message.items[i][j].data.store);
-        }
+          message.items[i].data.name = utility.to_title_case(message.items[i].data.name);
+          message.items[i].data.store = utility.to_title_case(message.items[i].data.store);
       }
       
-      debug(message.items[0][0].data.name);
+      //debug(message.items[0][0].data.name);
       web_res.render('item_searched', {'title': 'Search Results', 'list_items': message.items});
       break;
     
     // check if acc_created is true or false
     case constants.CREATE_ACC_RSP:
+      
       break;
 
     case constants.LOGIN_RSP:
+      // check if either acc_exists is false or correct_password is false;
       break;
 
     // more responses to add
@@ -72,6 +73,7 @@ exports.response = function (web_req, web_res, server_res) {
 /**
  * Handles errors between the web server and main server. 
  */
+/*
 exports.error = function(error) {
   switch(error.code){
     case 'ECONNREFUSED':
@@ -86,7 +88,7 @@ exports.error = function(error) {
       console.log("Error: " + error.code); 
   }
 };
-
+*/
 ////////////////
 
 

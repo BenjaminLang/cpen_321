@@ -17,6 +17,7 @@
     "morgan": "^1.7.0",
     "nodemon": "^1.11.0",
     "pug": "^2.0.0-beta6",
-    "selenium-webdriver": "^3.0.1"
+    "selenium-webdriver": "^3.0.1",
+    "serve-favicon": "^2.3.0"
   }
 }

@@ -4,8 +4,8 @@ var ip = require('ip');
 /* HOSTS */
 /**************************************************************************/
 
-exports.HOST = ip.address(); // returns local ip address
-//exports.HOST = 'ryangroup.westus.cloudapp.azure.com'; // main server host
+//exports.HOST = ip.address(); // returns local ip address
+exports.HOST = 'ryangroup.westus.cloudapp.azure.com'; // main server host
 
 /**************************************************************************/
 /* PORTS */
