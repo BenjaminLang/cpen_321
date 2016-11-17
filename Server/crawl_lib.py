@@ -22,5 +22,5 @@ def send_to_db(cat_name, info_object, cat_db, items_db, users_db, cache_db):
 
     item['data'] = info_object
     json_data = json.dumps(item, indent = 2)
-    service = RequestHandler(cat_db, items_db, users_db, cache_db)
-    service.handle_request('write', json_data)
+    service = RequestHandler()
+    service.handle_crawler(json_data)

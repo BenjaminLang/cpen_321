@@ -1,38 +1,65 @@
 import json
+import bson.json_util
+import socket
+import queue
+from pymongo import MongoClient
 from item_ops import ItemOps as ido
 from cat_ops import CatOps as cdo
 from cache_ops import CacheOps as mdo
 from user_ops import UserOps as udo
 
 class RequestHandler:
-    def __init__(self, cat_db, items_db, users_db, cache_db):
-        self.__cat_db = cat_db
-        self.__items_db = items_db
-        self.__users_db = users_db
-        self.__cache_db = cache_db
+    def __init__(self, queue=None):
+        self.__queue = queue
+        client = MongoClient()
+        self.__cat_db = client.cat_db
+        self.__items_db = client.items_db
+        self.__users_db = client.users_db
+        self.__cache_db = client.cache_db
 
-    def handle_request(self, req_type, json_data):
+    def handle_crawler(self, json_query):
+        json_data = json.loads(json_query)
+        req_type = json_data['message_type']
         json_response = {}
         if req_type == 'write':
             json_response = self.__handle_write(json_data)
-        elif req_type == 'read':
-            json_response = self.__handle_read(json_data)
-        elif req_type == 'acc_create':
-            json_response = self.__handle_create(json_data)
-        elif req_type == 'acc_del':
-            json_response = self.__handle_delete(json_data)
-        elif req_type == 'log_in':
-            json_response = self.__handle_login(json_data)
-        elif req_type == 'update_acc':
-            json_response = self.__handle_update(json_data)
-        elif req_type == 'add_list':
-            json_response = self.__handle_save_list(json_data)
-        elif req_type == 'retrieve_list':
-            json_response = self.__handle_retrieve_list(json_data)
-        elif req_type == 'delete_list':
-            json_response = self.__handle_delete_list(json_data)
-
         return json_response
+
+    def handle_request(self):
+        while True:
+            try:
+                (connection, json_data) = self.__queue.get(block=True, timeout=10)
+            except queue.Empty:
+                continue
+
+            req_type = json_data['message_type']
+            json_response = {}
+            if req_type == 'write':
+                json_response = self.__handle_write(json_data)
+            elif req_type == 'read':
+                json_response = self.__handle_read(json_data)
+            elif req_type == 'acc_create':
+                json_response = self.__handle_create(json_data)
+            elif req_type == 'acc_del':
+                json_response = self.__handle_delete(json_data)
+            elif req_type == 'log_in':
+                json_response = self.__handle_login(json_data)
+            elif req_type == 'update_acc':
+                json_response = self.__handle_update(json_data)
+            elif req_type == 'add_list':
+                json_response = self.__handle_save_list(json_data)
+            elif req_type == 'retrieve_list':
+                json_response = self.__handle_retrieve_list(json_data)
+            elif req_type == 'delete_list':
+                json_response = self.__handle_delete_list(json_data)
+
+            print(json_response)
+
+            json_response = bson.json_util.dumps(json_response)
+            connection.send(json_response.encode())
+            connection.close()
+
+        return
 
     def __handle_write(self, json_data):
         # insert the data into the database
@@ -40,10 +67,9 @@ class RequestHandler:
 
         response = {}
         response['message_type'] = 'write_response'
-        insert_query = json.loads(json_data)
-        collection = insert_query['collection']
+        collection = json_data['collection']
 
-        item_result = ido.insert_items(self.__items_db, insert_query)
+        item_result = ido.insert_items(self.__items_db, json_data)
         cat_result = cdo.insert_cat(self.__cat_db, collection)
        
         if item_result and cat_result:

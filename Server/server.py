@@ -1,47 +1,37 @@
 import socket
 import json
-from pymongo import MongoClient
-import bson.json_util
+import queue
 import traceback
 
-from RequestHandler import RequestHandler
-
 class DatabaseServer:
-    def test_server(self):
+    def __init__(self, queue):
+        self.__queue = queue
         # set up server socket
-        server_socket = socket.socket()
+        self.__server_socket = socket.socket()
         host = socket.gethostbyname(socket.gethostname())
         port = 6969
-        server_socket.bind((host, port))
-        server_socket.listen(10)
+        self.__server_socket.bind((host, port))
 
-        # connect to MongoDB
-        client = MongoClient()
-        cat_db = client.cat_db
-        item_db = client.items_db
-        users_db = client.users_db
-        cache_db = client.cache_db
-
-        request_handler = RequestHandler(cat_db, item_db, users_db, cache_db)        
-
+    def test_server(self):
+        self.__server_socket.listen(5)
         try:
             while True:
-                connection, addr = server_socket.accept()
+                connection, addr = self.__server_socket.accept()
                 print('connected')
                 try:
                     data = connection.recv(1024).decode()
                 except Exception :
                     print('disconnected')
                     continue
+
                 json_data = json.loads(data)
                 print(json_data)
+                try:
+                    self.__queue.put(item=(connection, json_data), block=True, timeout=10)
 
-                response = request_handler.handle_request(json_data['message_type'], json_data)
-                print(response)
-
-                json_response = bson.json_util.dumps(response)
-                connection.send(json_response.encode())
-                connection.close()
+                except queue.Full:
+                    print('queue full')
+                    continue
 
         except Exception :
             traceback.print_exc()
