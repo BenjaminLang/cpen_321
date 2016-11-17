@@ -27,9 +27,9 @@ class UserOps:
         try:
             email = json_query['email']
 
-            result = users_db[email].delete_many({})
+            result = users_db[email].drop()
 
-            if result.deleted_count != 0:
+            if result:
                 return 'success'
             else:
                 return 'failed'
