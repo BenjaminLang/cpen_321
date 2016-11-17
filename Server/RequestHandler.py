@@ -26,11 +26,11 @@ class RequestHandler:
         elif req_type == 'update_acc':
             json_response = self.__handle_update(json_data)
         elif req_type == 'add_list':
-            json_response = self.__handle_update(json_data)
+            json_response = self.__handle_save_list(json_data)
         elif req_type == 'retrieve_list':
-            json_response = self.__handle_update(json_data)
+            json_response = self.__handle_retrieve_list(json_data)
         elif req_type == 'delete_list':
-            json_response = self.__handle_update(json_data)
+            json_response = self.__handle_delete_list(json_data)
 
         return json_response
 
@@ -98,7 +98,7 @@ class RequestHandler:
 
         return response
 
-    def __retrieve_list(self, json_data):
+    def __handle_retrieve_list(self, json_data):
         response = {}
         response['message_type'] = 'retrieve_list_response'
         retrieved_list = udo.retrieve_lists(self.__users_db, json_data)

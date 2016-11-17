@@ -2,7 +2,7 @@
 # Takes in User Request and sends back item
 import socket
 from pymongo import MongoClient
-from crawl_lib import *
+import json
 
 class query:
     def __init__(self):
@@ -18,6 +18,7 @@ class query:
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Ryan Liu'
         data['list'] = []
+        data['list_names'] = []
         data['message_type'] = 'acc_create'
 
         json_data = json.dumps(data)
@@ -33,6 +34,7 @@ class query:
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Leo Belanger'
         data['list'] = []
+        data['list_names'] = []
         data['message_type'] = 'acc_create'
 
         json_data = json.dumps(data)
@@ -48,6 +50,7 @@ class query:
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Ryan Liu'
         data['list'] = []
+        data['list_names'] = []
         data['message_type'] = 'acc_delete'
 
         json_data = json.dumps(data)
@@ -63,6 +66,7 @@ class query:
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Leo Belanger'
         data['list'] = []
+        data['list_names'] = []
         data['message_type'] = 'log_in'
 
         json_data = json.dumps(data)
@@ -78,6 +82,7 @@ class query:
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Benjamin Lang'
         data['list'] = []
+        data['list_names'] = []
         data['message_type'] = 'acc_create'
 
         json_data = json.dumps(data)
@@ -93,6 +98,7 @@ class query:
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Benjamin Lang'
         data['list'] = []
+        data['list_names'] = []
         data['message_type'] = 'acc_login'
 
         json_data = json.dumps(data)
@@ -109,6 +115,7 @@ class query:
         data['password'] = 'New_Password'
         data['name'] = 'Benjamin Lang'
         data['list'] = []
+        data['list_names'] = []
         data['message_type'] = 'update_acc'
 
         json_data = json.dumps(data)
@@ -128,12 +135,12 @@ if __name__ == "__main__":
     a = query()
     b = query()
 
-    # x.start_query()
+    x.start_query()
     y.start_query_2()
-    # z.start_query_3()
+    z.start_query_3()
     u.start_query_4()
-    # v.start_query_5()
-    # w.start_query_6()
+    v.start_query_5()
+    w.start_query_6()
     a.start_query_5()
-    b.start_query_7()
+    # b.start_query_7()
 
