@@ -11,13 +11,17 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "cookie-session": "^2.0.0-alpha.2",
-    "debug": "^2.3.2",
     "express": "^4.14.0",
     "ip": "^1.1.4",
-    "morgan": "^1.7.0",
-    "nodemon": "^1.11.0",
+    "nightwatch": "^0.9.9",
     "pug": "^2.0.0-beta6",
-    "selenium-webdriver": "^3.0.1",
     "serve-favicon": "^2.3.0"
+  },
+  "devDependencies": {
+    "debug": "^2.3.2",
+    "morgan": "^1.7.0",
+    "nightwatch": "^0.9.9",
+    "nodemon": "^1.11.0",
+    "selenium-download": "^2.0.7"
   }
 }

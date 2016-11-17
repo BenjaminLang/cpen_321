@@ -30,7 +30,8 @@ block navigation-bar
 
 block custom-widget
   .Register
-    form(onsubmit='return checkForm(this);')
+    //form(onsubmit='return checkForm(this);')
+    form(method='post')
       h5  Welcome to CheckedOut! 
       input(type='text', name='name', required='', placeholder='Name', autocomplete='off')
       input(type='text', name='email', required='', placeholder='Enter Email', autocomplete='off')

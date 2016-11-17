@@ -15,18 +15,18 @@ exports.request = function(socket, data, type) {
 		case constants.SEARCH_REQ:  
       json_request.options = {'price' : 'none', 'num' : '-1'};
 			json_request.items = [data];
-      // json_request.userID 
+      // json_request.name 
       // json_request.options
 			break;
 										
 		case constants.CREATE_ACC_REQ:
-			json_request.userID = data.userID;
-			json_request.password = data.password;
+			json_request = data;
+      json_request.message_type = type;
 			break;
 
 		case constants.LOGIN_REQ:
-			json_request.userID = data.userID;
-			json_request.password = data.password;
+      json_request = data;
+      json_request.message_type = type;
 			break;
 
     // more requests to add
@@ -61,11 +61,15 @@ exports.response = function (server_res, web_req, web_res) {
     
     // check if acc_created is true or false
     case constants.CREATE_ACC_RSP:
-
+      // assume account creation is successful; then redirect to home page
+      web_req.session.name = web_req.body.name;
+      web_res.redirect('/');
       break;
 
     case constants.LOGIN_RSP:
       // check if either acc_exists is false or correct_password is false;
+      web_req.session.name = web_req.body.name;
+      web_res.redirect('/');
       break;
 
     // more responses to add

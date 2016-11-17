@@ -10,14 +10,14 @@ var debug = require('debug')('routes');
  * Handler for homepage
  */
 exports.home = function(req, res) {
-  var userID;
-  if (req.session.userID) {
-    userID = req.session.userID;
+  var name;
+  if (req.session.name) {
+    name = req.session.name;
   }
   else {
-    userID = 'Anonymous';
+    name = 'Anonymous';
   }
-	res.render('index', {'title': 'Home', 'userID': userID});
+	res.render('index', {'title': 'Home', 'name': name});
 };
 
 exports.register = function(req, res) {
@@ -30,7 +30,7 @@ exports.login = function(req, res) {
 
 exports.logout = function(req, res) {
   // delete the session variable
-  delete req.session.userID;
+  delete req.session.name;
   // redirect user to homepage
   res.redirect('/');
 }
@@ -43,16 +43,12 @@ exports.item_searched = function(socket, req, res) {
   handlers.request(socket, req.query.item, constants.SEARCH_REQ);
 };
 
-exports.login_post = function(req, res) {
-  // check if userID and password match up with something already registered
-  if (req.body.userID == req.session.registered_userID && req.body.password == req.session.registered_password) {
-    req.session.userID = req.body.userID;
-    req.session.password = req.body.password;
-    res.render('index', {'title':'Home', 'userID': req.session.userID});
-  }
-  else {
-    res.redirect('/');
-  }
+exports.login_post = function(socket, req, res) {
+  // check if name and password match up with something already registered
+  var acc_info = {};
+
+  acc_info.password = req.body.password;
+  acc_info.email = req.body.email;
   debug('Login request for ' + acc_info + ' received.');
   handlers.request(socket, acc_info, constants.LOGIN_REQ);
 };
@@ -62,14 +58,17 @@ exports.login_post = function(req, res) {
  */
 exports.register_post = function(socket, req, res) {
   // if successful, redirect to home page. otherwise, redirect to register page with 
-
+  // password, email, 
   // store the username as a session variable
-  req.session.registered_userID = req.body.userID;
-  req.session.registered_password = req.body.password;
-  // redirect the user to homepage
-  res.redirect('/');
-
   var acc_info = {};
+
+  acc_info.name = req.body.name;
+  acc_info.password = req.body.pwd1;
+  acc_info.email = req.body.email;
+  //req.session.registered_name = req.body.name;
+  //req.session.registered_password = req.body.password;
+  // redirect the user to homepage
+  
 
   debug('Create account request for ' + acc_info + ' received.');
   handlers.request(socket, acc_info, constants.CREATE_ACC_REQ);

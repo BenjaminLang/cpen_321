@@ -80,8 +80,45 @@ app.get('/item_searched', function(req, res) {
 });
 
 // POST requests
-app.post('/register', routes.register_post);
-app.post('/login', routes.login_post);
+app.post('/register', function(req, res) {
+
+  var data = '';
+  routes.register_post(main_server, req, res);
+
+  main_server.on('data', function(chunk) {
+    data += chunk;
+  });
+
+  main_server.on('end', function() {
+    handlers.response(data, req, res);
+
+    main_server.destroy();
+    main_server.unref();
+
+    // Re-open socket
+    setTimeout(open_socket, 1000);
+  });
+});
+//}routes.register_post);
+app.post('/login', function(req, res) {
+
+  var data = '';
+  routes.login_post(main_server, req, res);
+
+  main_server.on('data', function(chunk) {
+    data += chunk;
+  });
+
+  main_server.on('end', function() {
+    handlers.response(data, req, res);
+
+    main_server.destroy();
+    main_server.unref();
+
+    // Re-open socket
+    setTimeout(open_socket, 1000);
+  });
+});
 
 /**************************************************************************/
 /* LISTENERS */
