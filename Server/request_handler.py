@@ -23,6 +23,7 @@ class RequestHandler:
         json_response = {}
         if req_type == 'write':
             json_response = self.__handle_write(json_data)
+
         return json_response
 
     def handle_request(self):
@@ -71,7 +72,7 @@ class RequestHandler:
 
         item_result = ido.insert_items(self.__items_db, json_data)
         cat_result = cdo.insert_cat(self.__cat_db, collection)
-       
+
         if item_result and cat_result:
             response['status'] = 'success'
             #print('write success')
@@ -90,7 +91,7 @@ class RequestHandler:
     def __handle_read(self, json_data):
         response = {}  
         response['message_type'] = 'read_response'
-        item_name = json_data['items'][0]
+        item_name = json_data['items'][0].lower()
         cache_results = mdo.read_cache(self.__cache_db, item_name)
         if cache_results == 'Not found':
             # get the categories to search into
@@ -117,10 +118,8 @@ class RequestHandler:
         response = {}
         response['message_type'] = 'save_list_response'
         list_save_status = udo.add_list(self.__users_db, json_data)
-        if list_save_status:
-            response['status'] = 'success'
-        else:
-            response['status'] = 'failed'
+
+        response['status'] = list_save_status
 
         return response
 
@@ -141,10 +140,8 @@ class RequestHandler:
         response['message_type'] = 'delete_list_response'
         deletion_status = udo.delete_list(self.__users_db, json_data)
 
-        if deletion_status:
-            response['status'] = 'success'
-        else:
-            response['status'] = 'failed'
+        response['status'] = deletion_status
+
         return response
 
     def __handle_create(self, json_data):
@@ -154,10 +151,7 @@ class RequestHandler:
 
         create_res = udo.create_acc(self.__users_db, json_data)
 
-        if create_res:
-            response['status'] = 'success'
-        else:
-            response['status'] = 'failed'
+        response['status'] = create_res
 
         return response
 
@@ -168,10 +162,7 @@ class RequestHandler:
 
         del_res = udo.del_acc(self.__users_db, json_data)
 
-        if del_res:
-            response['status'] = 'success'
-        else:
-            response['status'] = 'failed'
+        response['status'] = del_res
 
         return response
 
@@ -182,10 +173,7 @@ class RequestHandler:
 
         log_res = udo.log_in(self.__users_db, json_data)
 
-        if log_res:
-            response['status'] = 'Authenticated'
-        else:
-            response['status'] = 'Wrong Authentication'
+        response['status'] = log_res # DNE, success, or failed
 
         return response
 
@@ -196,9 +184,6 @@ class RequestHandler:
 
         update_res = udo.update_acc(self.__users_db, json_data)
 
-        if update_res:
-            response['status'] = 'Updated properly'
-        else:
-            response['status'] = 'Could not update'
+        response['status'] = update_res
 
         return response

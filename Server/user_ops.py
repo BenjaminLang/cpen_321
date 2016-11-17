@@ -13,14 +13,14 @@ class UserOps:
 
             if len(db_res) == 0:
                 users_db[collection].insert(json_query)
+                return 'success'
             else:
-                return False
+                return 'failed'
 
         except Exception:
             traceback.print_exc()
-            return False
+            return 'exception'
 
-        return True
 
     @staticmethod
     def del_acc(users_db, json_query):
@@ -30,13 +30,13 @@ class UserOps:
             result = users_db[email].delete_many({})
 
             if result.deleted_count != 0:
-                return True
+                return 'success'
             else:
-                return False
+                return 'failed'
 
         except Exception:
             traceback.print_exc()
-            return False
+            return 'exception'
 
     @staticmethod
     def log_in(users_db, json_query):
@@ -47,53 +47,42 @@ class UserOps:
 
             user_data = list(users_db[collection].find())
 
-            if user_data[0]['password'] == auth:
-                return True
+            if not user_data:
+                return 'DNE'
+            elif user_data[0]['password'] == auth:
+                return 'success'
             else:
-                return False
+                return 'failed'
 
         except Exception:
             traceback.print_exc()
-            return False
-    """
+            return 'exception'
+
     @staticmethod
     def update_acc(users_db, json_query):
         try:
             data = []
             email = json_query['email']
+            auth = json_query['old_password']
             collection = email.replace('@', '')
-
-            data.append(collection)
-            data.append(json_query['password'])
-            data.append(json_query['name'])
-            data.append(json_query['list'])
 
             db_res = list(users_db[collection].find())
 
-            user_id = db_res[0]['_id']
-
-            user_cat = ['email', 'pass', 'name', 'list']
-
-            message = {}
-            message['category'] = 'email'
-            message['email'] = email
-            message['_id'] = user_id
-            users_db[data[0]].save(message)
-
-            for i in range(1, len(data)):
-                message = {}
-                message['category'] = user_cat[i]
-                message[user_cat[i]] = data[i]
-                user_id = db_res[i]['_id']
-                message['_id'] = user_id
-                users_db[data[0]].save(message)
+            if db_res:
+                if db_res[0]['password'] == auth:
+                    del json_query['old_password']
+                    user_id = db_res[0]['_id']
+                    json_query['_id'] = user_id
+                    users_db[collection].save(json_query)
+                    return 'success'
+                else:
+                    return 'failed'
+            else:
+                return 'DNE'
 
         except Exception:
             traceback.print_exc()
-            return False
-
-        return True
-    """
+            return 'exception'
 
     @staticmethod
     def add_list(users_db, json_query):
@@ -106,11 +95,11 @@ class UserOps:
             user_data['list_names'].append(list_name)
             user_data['list'].append(json_query['list'])
             users_db[collection].save(user_data)
+            return 'success'
 
         except Exception :
             traceback.print_exc()
-            return False
-        return True
+            return 'exception'
 
     @staticmethod
     def retrieve_lists(users_db, json_query):
@@ -126,11 +115,11 @@ class UserOps:
             list_index = names_list.index(list_name)
 
             ret_list = shopping_lists[list_index]
+            return ret_list
 
         except Exception :
             traceback.print_exc()
             return []
-        return ret_list
 
     @staticmethod
     def delete_list(users_db, json_query):
@@ -149,9 +138,9 @@ class UserOps:
             user_data['list'] = updated_list
             user_data['list_names'] = updated_names
             users_db[collection].save(user_data)
+            return 'success'
 
         except Exception :
             traceback.print_exc()
-            return False
-        return True
+            return 'exception'
 

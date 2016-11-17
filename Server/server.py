@@ -3,6 +3,8 @@ import json
 import queue
 import traceback
 
+from request_handler import RequestHandler
+
 class DatabaseServer:
     def __init__(self, queue):
         self.__queue = queue

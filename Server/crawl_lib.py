@@ -1,6 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from RequestHandler import RequestHandler
+from request_handler import RequestHandler
 import json
 
 # Takes in a url and returns a soup
@@ -18,7 +18,7 @@ def send_to_db(cat_name, info_object, cat_db, items_db, users_db, cache_db):
     data = {}
     sub_data = {}
     item['message_type'] = 'write'
-    item['collection'] = cat_name.replace('$', '')
+    item['collection'] = cat_name.replace('$', '').replace('-', '').replace('.', '').replace(' ', '').lower()
 
     item['data'] = info_object
     json_data = json.dumps(item, indent = 2)

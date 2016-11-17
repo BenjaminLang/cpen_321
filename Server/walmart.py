@@ -2,6 +2,7 @@ from crawl_lib import *
 from pymongo import MongoClient
 import unicodedata
 import json
+import time
 
 # Parses starting from the base_url and sends the data to the db
 def parse():
@@ -17,6 +18,12 @@ def parse():
         categories = department['children']
 
         for category in categories:
+            if 'name' in category:
+                cat_name = category['name']
+            else:
+                print('there is no name for this category! skipping it for now: ' + category)
+                continue
+
             if 'children' in category:
                 subcats = category['children']
             else:
@@ -24,7 +31,6 @@ def parse():
 
             for subcat in subcats:
                 cat_id = subcat['id']
-                cat_name = subcat['name']
 
                 cat_json = json.loads(urlopen('http://api.walmartlabs.com/v1/paginated/items?format=json&category=' + cat_id + '&apiKey=' + api_key).read().decode('utf8'))
                 items = cat_json['items']
@@ -32,9 +38,7 @@ def parse():
                 for item in items:
                     data = {}
 
-                    name = item['name']
-                    name.encode('ascii', 'ignore')
-                    data['name'] = name.replace('.', '-').lower()
+                    data['name'] = item['name']
 
                     if 'salePrice' in item:
                         data['price'] = item['salePrice']
@@ -51,6 +55,7 @@ def parse():
                     data['store'] = 'Walmart'
 
                     send_to_db(cat_name, data, cat_db, item_db, None, None)
+                    time.sleep(0.1)
     return
 
 if __name__ == '__main__':

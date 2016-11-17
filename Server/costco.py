@@ -17,7 +17,7 @@ def _get_links(soup, tag_name, class_name):
     return links
 
 # Takes a soup and sends all products to the db (including price, url, name, image)
-def _send_products(soup, cat_item):
+def _send_products(soup, cat_name):
     for prod in soup.find_all('div', 'col-xs-6 col-md-4 col-xl-3 product'):
         list_a = prod.find_all('a')
         if list_a:
@@ -29,9 +29,9 @@ def _send_products(soup, cat_item):
             if list_img:
                 img = list_img[0]
                 if img.has_attr('src'):
-                    image = img['src']
+                    image = 'http:' + img['src']
                 elif img.has_attr('data-src'):
-                    image = img['data-src']
+                    image = 'http:' + img['data-src']
 
             list_caption = thumbnail.find_all('div', 'caption')
             if list_caption:
@@ -51,14 +51,13 @@ def _send_products(soup, cat_item):
                 continue  # no info for this item
 
             data = {}
-            name.encode('ascii', 'ignore')
-            data['name'] = name.replace('.', '-').lower()
+            data['name'] = name
             data['price'] = price
             data['url'] = url
             data['image'] = image
             data['store'] = 'Costco'
 
-            send_to_db(cat_item, data, cat_db, item_db, None, None)
+            send_to_db(cat_name, data, cat_db, item_db, None, None)
     return
 
 # Parses starting from the base_url and sends the data to the db
@@ -84,9 +83,8 @@ def parse():
                 _send_products(cat_soup, cat_name)
             else:
                 for subcat in sub_cats:
-                    subcat_name = strip_name(subcat, 'www.costco.ca/', '.html')
                     product_soup = get_soup(subcat)
-                    _send_products(product_soup, subcat_name)
+                    _send_products(product_soup, cat_name)
     return
 
 if __name__ == '__main__':
