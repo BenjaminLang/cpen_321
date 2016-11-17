@@ -55,7 +55,7 @@ def parse():
                     data['store'] = 'Walmart'
 
                     send_to_db(cat_name, data, cat_db, item_db, None, None)
-                    time.sleep(1)
+                    time.sleep(0.1)
     return
 
 if __name__ == '__main__':
