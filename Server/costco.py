@@ -29,9 +29,9 @@ def _send_products(soup, cat_name):
             if list_img:
                 img = list_img[0]
                 if img.has_attr('src'):
-                    image = 'https:' + img['src']
+                    image = 'http:' + img['src']
                 elif img.has_attr('data-src'):
-                    image = 'https:' + img['data-src']
+                    image = 'http:' + img['data-src']
 
             list_caption = thumbnail.find_all('div', 'caption')
             if list_caption:
