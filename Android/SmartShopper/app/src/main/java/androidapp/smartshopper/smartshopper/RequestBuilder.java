@@ -58,8 +58,8 @@ public class RequestBuilder {
     public String buildAccountCreatReq(String id, String pw) {
         JSONObject request = new JSONObject();
         try{
-            request.put("message_type", "acc_create_response");
-            request.put("userID", id);
+            request.put("message_type", "acc_create");
+            request.put("email", id);
             request.put("password", pw);
 
             return request.toString(2);
@@ -72,7 +72,7 @@ public class RequestBuilder {
         JSONObject request = new JSONObject();
         try{
             request.put("message_type", "acc_login");
-            request.put("userID", id);
+            request.put("email", id);
             request.put("password", pw);
 
             return request.toString(2);
@@ -85,7 +85,20 @@ public class RequestBuilder {
         JSONObject request = new JSONObject();
         try{
             request.put("message_type", "acc_logout");
-            request.put("userID", id);
+            request.put("email", id);
+
+            return request.toString(2);
+        } catch(JSONException e){
+            return "cannot generate message";
+        }
+    }
+
+    public String modAccReq(String id, String newPass) {
+        JSONObject request = new JSONObject();
+        try{
+            request.put("message_type", "acc_update");
+            request.put("email", id);
+            request.put("password", newPass);
 
             return request.toString(2);
         } catch(JSONException e){

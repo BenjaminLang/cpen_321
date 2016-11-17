@@ -19,6 +19,7 @@ public class JSONParser {
     private String PRICE_TAG = "price";
     private String STORE_TAG = "store";
     private String URL_TAG = "image";
+    private String DATA_TAG = "data";
 
     private String CART_TAG = "cart_list";
     private String QUANTITY_TAG = "quantity";
@@ -34,24 +35,20 @@ public class JSONParser {
                 JSONArray items = jsonObj.getJSONArray(ITEMS_TAG);
 
                 for(int i = 0; i < items.length(); i++) {
-                    JSONArray currColle = items.getJSONArray(i);
+                    JSONObject currItem = items.getJSONObject(i);
+                    JSONObject currData = currItem.getJSONObject(DATA_TAG);
 
-                    for(int j = 0; j < currColle.length(); j++){
-                        JSONObject currItem = currColle.getJSONObject(j);
-                        JSONObject currData = currItem.getJSONObject("data");
+                    String name = currData.getString(NAME_TAG);
+                    String price = currData.getString(PRICE_TAG);
+                    String store = currData.getString(STORE_TAG);
+                    String img = currData.getString(URL_TAG);
 
-                        String name = currData.getString(NAME_TAG);
-                        String price = currData.getString(PRICE_TAG);
-                        String store = currData.getString(STORE_TAG);
-                        String img = currData.getString(URL_TAG);
-
-                        if(!img.substring(0, 1).equals("h"))
-                            img = "http:" + img;
+                    if(!img.substring(0, 1).equals("h"))
+                        img = "http:" + img;
                         //String htmlImg = img.substring(2, img.length());
 
-                        Product currProduct = new Product(name, price, store, img, null);
-                        parseList.add(currProduct);
-                    }
+                    Product currProduct = new Product(name, price, store, img, null);
+                    parseList.add(currProduct);
                 }
             }catch (JSONException e) {
                 e.printStackTrace();

@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
                         try {
                             String jsonResponse;
-                            jsonResponse = new SendSearchRequest().execute(dbRequest).get();
+                            jsonResponse = new SendRequest().execute(dbRequest).get();
 
                             Bundle bundle = new Bundle();
                             bundle.putString("json_response", jsonResponse);
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
     }
 
-    private class SendSearchRequest extends AsyncTask<String, Void, String> {
+    private class SendRequest extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... request) {
             SmartShopClient client = new SmartShopClient();
