@@ -1,7 +1,15 @@
+body {
+	background-image: url('../Searched_.jpg');
+    background-size: 1920px 1000px; 
+}
+
+
+
 ul.products {
     margin: 0 auto;
     max-width: 1200px;
     margin-top: 40px;  
+	
 }
 
 ul.products li {
@@ -22,6 +30,12 @@ ul.products img {
 	min-width: 180px; 
 }
 
+
+.row {
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: 60px;
+}
 
 
 

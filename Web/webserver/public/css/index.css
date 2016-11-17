@@ -6,6 +6,7 @@ body {
 
 
 
+
 #custom-bootstrap-menu.navbar-default {
     font-size: 14px;
     border-width: 0px;
@@ -72,7 +73,7 @@ body {
 .row {
     margin-right: -15px;
     margin-left: -15px;
-    margin-top: 200px;
+    margin-top: 300px;
 }
 
 

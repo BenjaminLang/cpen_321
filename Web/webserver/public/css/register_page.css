@@ -112,19 +112,6 @@ input {
 
 
 
-#custom-bootstrap-menu.navbar-default {
-    font-size: 14px;
-    border-width: 0px;
-    border-radius: 0px;
-    height: 150px; 
-    background-color: #fff;
-    margin: 0;
-}
-
-
-#custom-bootstrap-menu.navbar-default .navbar-nav>li>a {
-    background-color: #fff;
-}
 
 @media (min-width: 768px)
 .navbar-nav {
@@ -144,33 +131,3 @@ input {
     margin-top: 100px; 
 }
 
-
-#custom-bootstrap-menu.navbar-default .navbar-nav>li>a {
-    color: #979aa0;
-    background: 0px;
-}
-
-#login-page a, a:visited {
-    text-decoration: none;
-    color: #7f8c8d;
-    font-weight: 400;
-    text-shadow: none;
-    -webkit-transition: all .3s ease-in-out;
-    -moz-transition: all .3s ease-in-out;
-    transition: all .3s ease-in-out;
-}
-
-
-.nav>li {
-    position: relative;
-    display: block;
-    margin-top: 100px;
-}
-
-
-
-#custom-bootstrap-menu.navbar-default .navbar-nav>li>a:hover, #custom-bootstrap-menu.navbar-default .navbar-nav>li>a:focus {
-    color: rgba(255, 255, 255, 1);
-    background-color: #dee1e5;
-    border-radius: 7px;
-}
