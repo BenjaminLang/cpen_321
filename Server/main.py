@@ -1,7 +1,7 @@
 import queue
 from server import DatabaseServer
 import threading
-from RequestHandler import RequestHandler
+from request_handler import RequestHandler
 
 class MyThread(threading.Thread):
     def __init__(self, name, q):
