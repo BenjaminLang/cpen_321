@@ -18,8 +18,11 @@ def _get_links(soup, tag_name, class_name):
 
 # Takes a soup and sends all products to the db (including price, url, name, image)
 def _send_products(soup, cat_item):
+    print soup
+    return
     for prod in soup.find_all('div', 'product-cell quickview-button'):
-        print 'found an item with product-cell quickview-button'
+        print prod
+        return
         #TODO: add rest of item and send to db
         if prod_info:
             info = prod_info[0]
@@ -66,19 +69,28 @@ def _send_products(soup, cat_item):
 
 # Parses starting from the base_url and sends the data to the db
 def parse():
-    food_soup = get_soup(base_url)
+    soup = get_soup(base_url)
+    #food_soup = get_soup(base_url + '/food')
     #home_soup = get_soup(base_url + '/homenLifestyle')
 
-    for cat in food_soup.find_all('div', 'aisle', limit=12):
-        for cat_link in cat.find_all('a'):
-            cat_soup = get_soup(base_url + cat_link['href'])
-            for subcat in cat_soup.find_all('li'):
-                if "data-level" in subcat.attrs and subcat['data-level'] == '3':
-                    for subcat_link in subcat.find_all('a'):
-                        subcat_soup = get_soup(base_url + subcat_link['href'])
-                        _send_products(subcat_soup, '')
-            break
-        break
+    set_links = set()
+    for cat in soup.find_all('li'):
+        if "data-level" in cat.attrs and cat['data-level'] in ['2', '3']:
+            for cat_link in cat.find_all('a', limit=1):
+                set_links.add(base_url + cat_link['href'])
+
+    for link in set_links:
+        cat_soup = get_soup(link)
+        #print link
+        #print cat_soup
+        for prod in cat_soup.find_all('div', 'product-image '):
+            print prod
+            print('\n\n\nyoyo\n\n\n')
+            print strip_name(link, 'superstore.ca', '/plp')
+            return
+            _send_product(prod, split_name(link, 'superstore.ca', '/plp'))
+            
+
     return
 
 if __name__ == '__main__':
