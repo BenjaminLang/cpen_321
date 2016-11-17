@@ -13,7 +13,7 @@ exports.request = function(socket, data, type) {
 
 	switch(type) {
 		case constants.SEARCH_REQ:  
-      json_request.options = {'price' : 'none', 'num' : '10'};
+      json_request.options = {'price' : 'none', 'num' : '-1'};
 			json_request.items = [data];
       // json_request.userID 
       // json_request.options
@@ -44,13 +44,15 @@ exports.response = function (server_res, web_req, web_res) {
   
   var message = JSON.parse(server_res.toString());
   var type = message.message_type;
-  debug(message.items);
+  // debug(message.items);
   switch(type) {
     case constants.READ_RSP:
       // Convert item names and stores to title case
       for (var i = 0; i < message.items.length; i++) {
-          message.items[i].data.name = utility.to_title_case(message.items[i].data.name);
-          message.items[i].data.store = utility.to_title_case(message.items[i].data.store);
+          //debug(message.items[i].data.image);
+          message.items[i].data.name = message.items[i].data.name.replace('&amp;', '&');
+          //message.items[i].data.name = utility.to_title_case(message.items[i].data.name);
+          //message.items[i].data.store = utility.to_title_case(message.items[i].data.store);
       }
       
       //debug(message.items[0][0].data.name);
@@ -59,7 +61,7 @@ exports.response = function (server_res, web_req, web_res) {
     
     // check if acc_created is true or false
     case constants.CREATE_ACC_RSP:
-      
+
       break;
 
     case constants.LOGIN_RSP:

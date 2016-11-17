@@ -108,7 +108,8 @@ main_server.on('error', function(error) {
   main_server.unref();
 
     // Re-open socket
-  setTimeout(open_socket, 1000);
+  if (error.code != constants.CONNECTION_REFUSED)
+    setTimeout(open_socket, 1000);
 });
 
 /**
@@ -116,6 +117,7 @@ main_server.on('error', function(error) {
  * (can change this later)
  */
 main_server.on('close', function() {
+  debug('Connection closed. Terminating webserver...');
   http.close();
 });
 

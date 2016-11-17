@@ -24,8 +24,6 @@ exports.register = function(req, res) {
 	res.render('register', {'title': 'Registration Form'});
 };
 
-
-
 exports.login = function(req, res) {
   res.render('login', {'title': 'Login'});
 };
@@ -39,7 +37,7 @@ exports.logout = function(req, res) {
 
 exports.item_searched = function(socket, req, res) {
   // first, check if submission data exists
-
+  // need to also check for search options
   // extract submission data from req object, then call request handler with the socket, data, and request type
   debug('Search request for ' + req.query.item + ' received.');
   handlers.request(socket, req.query.item, constants.SEARCH_REQ);
