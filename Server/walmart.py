@@ -18,7 +18,7 @@ def parse():
 
         for category in categories:
             if 'name' in category:
-                cat_name = category['name']
+                cat_name = category['name'].replace('.', '-').replace(' ', '-').lower()
             else:
                 print('there is no name for this category! skipping it for now!')
                 print(category)
