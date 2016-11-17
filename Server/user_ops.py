@@ -63,21 +63,22 @@ class UserOps:
         try:
             data = []
             email = json_query['email']
-            auth = json_query['password']
+            auth = json_query['old_password']
             collection = email.replace('@', '')
 
             db_res = list(users_db[collection].find())
 
             if db_res:
                 if db_res[0]['password'] == auth:
+                    del json_query['old_password']
                     user_id = db_res[0]['_id']
                     json_query['_id'] = user_id
                     users_db[collection].save(json_query)
                     return 'success'
                 else:
-                return 'failed'
+                    return 'failed'
             else:
-                return 'failed'
+                return 'DNE'
 
         except Exception:
             traceback.print_exc()
