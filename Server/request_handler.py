@@ -43,7 +43,7 @@ class RequestHandler:
                 json_response = self.__handle_create(json_data)
             elif req_type == 'acc_del':
                 json_response = self.__handle_delete(json_data)
-            elif req_type == 'log_in':
+            elif req_type == 'acc_login':
                 json_response = self.__handle_login(json_data)
             elif req_type == 'update_acc':
                 json_response = self.__handle_update(json_data)
