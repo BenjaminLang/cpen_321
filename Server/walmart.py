@@ -17,6 +17,13 @@ def parse():
         categories = department['children']
 
         for category in categories:
+            if 'name' in category:
+                cat_name = category['name']
+            else:
+                print('there is no name for this category! skipping it for now!')
+                print(category)
+                continue
+
             if 'children' in category:
                 subcats = category['children']
             else:
@@ -24,7 +31,6 @@ def parse():
 
             for subcat in subcats:
                 cat_id = subcat['id']
-                cat_name = subcat['name']
 
                 cat_json = json.loads(urlopen('http://api.walmartlabs.com/v1/paginated/items?format=json&category=' + cat_id + '&apiKey=' + api_key).read().decode('utf8'))
                 items = cat_json['items']
