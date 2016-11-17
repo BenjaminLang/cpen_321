@@ -49,7 +49,7 @@ app.use(logger('dev'));            // for logging http requests from browser
 // The express object now looks in the public directory for website files.
 app.use(express.static('./public'));
 // icon that displays in the browser tab (Doesn't work for some reason)
-app.use(favicon('./public/favicon.ico'));
+// app.use(favicon('./public/favicon.ico'));
 
 // GET requests
 app.get('/', routes.home);
