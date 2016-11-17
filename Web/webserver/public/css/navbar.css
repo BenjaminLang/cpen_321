@@ -37,3 +37,9 @@
 #custom-bootstrap-menu.navbar-default .navbar-toggle:focus .icon-bar {
     background-color: #004c8f;
 }
+
+.navbar-header img {
+    margin-top: 25px;
+    margin-left: 780px;
+    position: relative;
+}
