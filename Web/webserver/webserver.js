@@ -153,11 +153,13 @@ main_server.on('error', function(error) {
  * Terminate web server when connection between web server and main server closes
  * (can change this later)
  */
-main_server.on('close', function() {
+ /*
+main_server.on('close', function(had_error) {
+  if (had_error) debug('Transmission error.');
   debug('Connection closed. Terminating webserver...');
   http.close();
 });
-
+*/
 /**
  * Binds and listens for connections on the webserver port.
  */

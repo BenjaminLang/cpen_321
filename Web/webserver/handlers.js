@@ -1,5 +1,5 @@
 
-var utility = require('./utility.js');
+//var utility = require('./utility.js');
 var constants = require('./constants.js');
 var debug = require('debug')('handlers');
 
@@ -32,8 +32,8 @@ exports.request = function(socket, data, type) {
     // more requests to add
 	}
   
-  debug('Request formed. Is socket ' + socket.id + ' destroyed? ' + socket.destroyed);
-  debug('Writing to socket ' + socket.id + ' now...');
+  debug('Request formed. Is socket destroyed? ' + socket.destroyed);
+  debug('Writing to socket now...');
   socket.write(JSON.stringify(json_request));
 };
 
@@ -55,21 +55,33 @@ exports.response = function (server_res, web_req, web_res) {
           //message.items[i].data.store = utility.to_title_case(message.items[i].data.store);
       }
       
-      //debug(message.items[0][0].data.name);
       web_res.render('item_searched', {'title': 'Search Results', 'list_items': message.items});
       break;
     
     // check if acc_created is true or false
     case constants.CREATE_ACC_RSP:
-      // assume account creation is successful; then redirect to home page
-      web_req.session.name = web_req.body.name;
-      web_res.redirect('/');
+      // if account creation is successful; then redirect to home page
+      // 
+      if (message.status == constants.SUCCESS) {
+        web_req.session.name = web_req.body.name;
+        web_res.redirect('/');
+      }
+      
+      // otherwise,
       break;
 
     case constants.LOGIN_RSP:
       // check if either acc_exists is false or correct_password is false;
-      web_req.session.name = web_req.body.name;
-      web_res.redirect('/');
+      if (message.status == constants.SUCCESS) {
+        web_req.session.name = web_req.body.name;
+        web_res.redirect('/');
+      } 
+      else if (message.status == constants.FAILURE) {
+        // password is incorrect
+      }
+      else if (message.status == constants.DOES_NOT_EXIST) {
+        // email does not exist
+      }
       break;
 
     // more responses to add
