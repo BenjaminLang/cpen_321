@@ -45,7 +45,7 @@ class RequestHandler:
 
         item_result = ido.insert_items(self.__items_db, insert_query)
         cat_result = cdo.insert_cat(self.__cat_db, collection)
-       
+
         if item_result and cat_result:
             response['status'] = 'success'
             #print('write success')
@@ -64,7 +64,7 @@ class RequestHandler:
     def __handle_read(self, json_data):
         response = {}  
         response['message_type'] = 'read_response'
-        item_name = json_data['items'][0]
+        item_name = json_data['items'][0].lower()
         cache_results = mdo.read_cache(self.__cache_db, item_name)
         if cache_results == 'Not found':
             # get the categories to search into

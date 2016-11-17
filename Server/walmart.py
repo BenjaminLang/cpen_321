@@ -18,10 +18,9 @@ def parse():
 
         for category in categories:
             if 'name' in category:
-                cat_name = category['name'].replace('.', '-').replace(' ', '-').lower()
+                cat_name = category['name']
             else:
-                print('there is no name for this category! skipping it for now!')
-                print(category)
+                print('there is no name for this category! skipping it for now: ' + category)
                 continue
 
             if 'children' in category:
@@ -38,9 +37,7 @@ def parse():
                 for item in items:
                     data = {}
 
-                    name = item['name']
-                    name.encode('ascii', 'ignore')
-                    data['name'] = name.replace('.', '-').lower()
+                    data['name'] = item['name']
 
                     if 'salePrice' in item:
                         data['price'] = item['salePrice']

@@ -9,11 +9,11 @@ class ItemOps:
             name = json_query['data']['name']
             collection = json_query['collection']
 
-            words = name.split()
+            words = [x.lower() for x in name.split()]
             json_query['words'] = words
             del json_query['message_type']
             # del json_query['collection']
-            
+
             # insert them into the database
             data = list(items_db[collection].find({'data.url': {'$eq': url}}))
             # if you get a valid ID, you know that the item exists, so update
@@ -34,7 +34,7 @@ class ItemOps:
     def read_items(items_db, json_query, categories):
         results = []
         cat_res = []
-        item = json_query['items'][0].split()
+        item = [x.lower() for x in json_query['items'][0].split()]
         price = json_query['options']['price']
         num = int(json_query['options']['num'])
         if num == -1:

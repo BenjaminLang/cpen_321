@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import bson.json_util
 import traceback
 
-from RequestHandler import RequestHandler
+from request_handler import RequestHandler
 
 class DatabaseServer:
     def test_server(self):
