@@ -81,8 +81,8 @@ class UserOps:
             list_name = json_query['list_name']
             collection = email.replace('@', '')
 
-
             user_data = list(users_db[collection].find())[0]
+            user_data['list_names'].append(list_name)
             user_data['list'].append(json_query['list'])
             users_db[collection].save(user_data)
 
@@ -93,28 +93,43 @@ class UserOps:
     @staticmethod
     def retrieve_lists(users_db, json_query):
         try:
+            ret_list = []
             email = json_query['email']
             collection = email.replace('@', '')
-            retrievals = int(json_query['retrievals'])
-            user_data = list(users_db[collection].find())[0]
+            list_name = json_query['list_name']
 
+            user_data = list(users_db[collection].find())[0]
             shopping_lists = user_data['list']
-            list_length = len(shopping_lists)
-            ret_lists = []
-            for i in range(0,retrievals):
-                if list_length - i < 0:
-                    break
-                ret_lists.append(shopping_lists[list_length - i])
+            names_list = user_data['list_names']
+            list_index = names_list.index(list_name)
+
+            ret_list = shopping_lists[list_index]
 
         except Exception :
-            return False
-
-        return ret_lists
+            return []
+        return ret_list
 
     @staticmethod
     def delete_list(users_db, json_query):
+        try:
+            email = json_query['email']
+            collection = email.replace('@', '')
+            list_name = json_query['list_name']
 
-    """
+            user_data = list(users_db[collection].find())[0]
+            updated_list = user_data['list']
+            updated_names = user_data['list_names']
+            list_index = updated_names.index(list_name)
+            del updated_names[list_index]
+            del updated_list[list_index]
+
+            user_data['list'] = updated_list
+            user_data['list_names'] = updated_names
+            users_db[collection].save(user_data)
+
+        except Exception :
+            return False
+        return True
 
     @staticmethod
     def update_acc(users_db, json_query):

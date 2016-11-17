@@ -11,7 +11,6 @@ class RequestHandler:
         self.__users_db = users_db
         self.__cache_db = cache_db
 
-    # delegates the requests based on request type
     def handle_request(self, req_type, json_data):
         json_response = {}
         if req_type == 'write':
@@ -26,6 +25,13 @@ class RequestHandler:
             json_response = self.__handle_login(json_data)
         elif req_type == 'update_acc':
             json_response = self.__handle_update(json_data)
+        elif req_type == 'add_list':
+            json_response = self.__handle_update(json_data)
+        elif req_type == 'retrieve_list':
+            json_response = self.__handle_update(json_data)
+        elif req_type == 'delete_list':
+            json_response = self.__handle_update(json_data)
+
         return json_response
 
     def __handle_write(self, json_data):
@@ -83,9 +89,37 @@ class RequestHandler:
 
     def __handle_save_list(self, json_data):
         response = {}
-        response['message_type'] = 'message_save_response'
+        response['message_type'] = 'save_list_response'
+        list_save_status = udo.add_list(self.__users_db, json_data)
+        if list_save_status:
+            response['status'] = 'success'
+        else:
+            response['status'] = 'failed'
 
-    # def __retrieve_lists(self, json_data):
+        return response
+
+    def __retrieve_list(self, json_data):
+        response = {}
+        response['message_type'] = 'retrieve_list_response'
+        retrieved_list = udo.retrieve_lists(self.__users_db, json_data)
+
+        if len(retrieved_list) != 0:
+            response['list'] = retrieved_list
+            response['status'] = 'success'
+        else:
+            response['status'] = 'failed'
+        return response
+
+    def __handle_delete_list(self, json_data):
+        response = {}
+        response['message_type'] = 'delete_list_response'
+        deletion_status = udo.delete_list(self.__users_db, json_data)
+
+        if deletion_status:
+            response['status'] = 'success'
+        else:
+            response['status'] = 'failed'
+        return response
 
     def __handle_create(self, json_data):
         response = {}
