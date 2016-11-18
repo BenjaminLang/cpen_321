@@ -4,7 +4,8 @@
   "description": "The webserver that connects the website to the mainserver",
   "main": "webserver.js",
   "scripts": {
-    "tests": "node_modules/.bin/nightwatch"
+    "tests": "node_modules/.bin/nightwatch",
+    "postinstall": "node nightwatch.conf.js"
   },
   "author": "",
   "license": "ISC",

@@ -56,6 +56,7 @@ app.get('/', routes.home);
 app.get('/register', routes.register);
 app.get('/login', routes.login);
 app.get('/logout', routes.logout);
+/*
 app.get('/item_searched', function(req, res) {
   
   var data = '';
@@ -78,8 +79,12 @@ app.get('/item_searched', function(req, res) {
   });  
 
 });
+*/
+app.get('/item_searched', routes.item_searched);
+
 
 // POST requests
+/*
 app.post('/register', function(req, res) {
 
   var data = '';
@@ -99,7 +104,9 @@ app.post('/register', function(req, res) {
     setTimeout(open_socket, 1000);
   });
 });
-//}routes.register_post);
+*/
+app.post('/register', routes.register_post);
+/*
 app.post('/login', function(req, res) {
 
   var data = '';
@@ -119,11 +126,14 @@ app.post('/login', function(req, res) {
     setTimeout(open_socket, 1000);
   });
 });
+*/
+app.post('/login', routes.login_post);
 
 /**************************************************************************/
 /* LISTENERS */
 /**************************************************************************/
 
+/*
 var main_server = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST}); 
 
 main_server.on('connect', function() {
@@ -131,14 +141,12 @@ main_server.on('connect', function() {
   debug('Connected to main server!');
   debug('This socket\'s id is: ' + main_server.id);
 });
-
+*/
 /**
  * Listener for error events between web server and main server
  */
+/*
 main_server.on('error', function(error) {
-  /*
-  handlers.error(error);
-  */
   debug('Socket error: ' + error.code);
   // Kill socket
   main_server.destroy();
@@ -148,7 +156,7 @@ main_server.on('error', function(error) {
   if (error.code != constants.CONNECTION_REFUSED)
     setTimeout(open_socket, 1000);
 });
-
+*/
 /**
  * Terminate web server when connection between web server and main server closes
  * (can change this later)
@@ -166,11 +174,11 @@ main_server.on('close', function(had_error) {
 http.listen(constants.WEBSERVER_PORT , function() {
   debug('Web server listening on port ' + constants.WEBSERVER_PORT + '...');
 });
-
+/*
 function open_socket() {
   main_server = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST}); 
 }
-
+*/
 /**************************************************************************/
 /* EXPERIMENTAL STUFF */
 /**************************************************************************/
