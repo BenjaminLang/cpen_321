@@ -50,7 +50,7 @@ exports.item_searched = function(req, res) {
   handlers.request(constants.SEARCH_REQ, req, res);
 };
 
-exports.login_post = function(socket, req, res) {
+exports.login_post = function(req, res) {
   // check if name and password match up with something already registered
   /*var acc_info = {};
 
@@ -65,7 +65,7 @@ exports.login_post = function(socket, req, res) {
 /**
  * Handler for post requests on the register page.
  */
-exports.register_post = function(socket, req, res) {
+exports.register_post = function(req, res) {
   // if successful, redirect to home page. otherwise, redirect to register page with 
   // password, email, 
   // store the username as a session variable

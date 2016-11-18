@@ -1,10 +1,9 @@
 module.exports = {
-  'Title Test': function(browser) {
+  'Enter Item': function(browser) {
     browser
       .url('localhost:8080')
-      .waitForElementVisible('body')
-      .assert.title('Home')
-      // .saveScreenshot('ginea-pig-test.png')
-      .end();
+      .waitForElementVisible('body', 1000)
+      .setValue('input[type=text]', 'apple')
+      .end()
   }
 };
