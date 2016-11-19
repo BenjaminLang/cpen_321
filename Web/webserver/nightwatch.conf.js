@@ -15,7 +15,7 @@ module.exports = {
   "test_settings": {
     "default": {
       "screenshots": {
-        "enabled": true, // if you want to keep screenshots
+        "enabled": false, // if you want to keep screenshots
         "path": './screenshots' // save screenshots here
       },
       "globals": {
