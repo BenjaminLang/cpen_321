@@ -3,9 +3,12 @@ var debug = require('debug')('handlers');
 
 var constants = require('./constants.js');
 
-
 /**
  * Sends a request to the main server.
+ * @param  type the kind of request that we're sending
+ * @param  req  the HTTP request from the browser
+ * @param  res  the HTTP response to the browser
+ * @return nothing
  */
 exports.request = function(type, req, res) {
 
@@ -39,6 +42,10 @@ exports.request = function(type, req, res) {
 
 /**
  * Handles responses from the main server.
+ * @param  res_from_server the response from the server
+ * @param  req the HTTP request from the browser
+ * @param  res the HTTP response to the browser
+ * @return nothing
  */
 response = function (res_from_server, req, res) {
   
@@ -72,8 +79,9 @@ response = function (res_from_server, req, res) {
     case constants.LOGIN_RSP:
       // check if either acc_exists is false or correct_password is false;
       if (message.status == constants.SUCCESS) {
-        // 
-        req.session.name = req.body.name;
+        // login successful
+        // need to get name from message
+        // req.session.name = message.name;
         res.redirect('/');
       } 
       else if (message.status == constants.FAILURE) {
@@ -90,6 +98,15 @@ response = function (res_from_server, req, res) {
   }
 };
 
+/**
+ * Initiates a connection to the main server via TCP socket and sends the given request.
+ * The function then waits for a response from the server. Upon receiving it, appropiate actions
+ * are taken based on the response and then the connection is closed.
+ * @param  req_to_server the request to be sent to the server
+ * @param  req the HTTP request from the browser
+ * @param  res the HTTP response to the browser
+ * @return nothing
+ */
 socket = function(req_to_server, req, res) {
   // connect to the main server
   var connection = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST});
@@ -101,10 +118,12 @@ socket = function(req_to_server, req, res) {
     connection.write(JSON.stringify(req_to_server));
   });
 
+  // need to accumulate packets until all data has been received
   connection.on('data', function(packet) {
     data += packet;
   });
 
+  // signal that all data has been received, so take action
   connection.on('end', function() {
     debug('handling response...');
     response(data, req, res);
@@ -125,9 +144,3 @@ socket = function(req_to_server, req, res) {
   });
 
 };
-
-////////////////
-
-
-
-
