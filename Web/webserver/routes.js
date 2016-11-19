@@ -35,30 +35,18 @@ exports.logout = function(req, res) {
   res.redirect('/');
 }
 
-/*
-exports.item_searched = function(socket, req, res) {
-  // first, check if submission data exists
-  // need to also check for search options
-  // extract submission data from req object, then call request handler with the socket, data, and request type
-  debug('Search request for ' + req.query.item + ' received.');
-  handlers.request(socket, req.query.item, constants.SEARCH_REQ);
-};
-*/
 exports.item_searched = function(req, res) {
-  debug('Search request for ' + req.query.item + ' received.');
-  // handlers.request(req.query.item, constants.SEARCH_REQ, req, res);
-  handlers.request(constants.SEARCH_REQ, req, res);
+  // if input is not empty or a bunch of spaces, then send a request
+  if (req.query.item.replace(/\s/g, '').length > 0) {
+    debug('Search request for ' + req.query.item + ' received.');
+    handlers.request(constants.SEARCH_REQ, req, res);
+  }
+  // otherwise, just go back to the home page
+  else res.redirect('/');
 };
 
 exports.login_post = function(req, res) {
-  // check if name and password match up with something already registered
-  /*var acc_info = {};
-
-  acc_info.password = req.body.password;
-  acc_info.email = req.body.email;
-  debug('Login request for ' + acc_info + ' received.'); */
   debug('Login request received');
-  // handlers.request(acc_info, constants.LOGIN_REQ);
   handlers.request(constants.LOGIN_REQ, req, res);
 };
 
@@ -68,20 +56,6 @@ exports.login_post = function(req, res) {
 exports.register_post = function(req, res) {
   // if successful, redirect to home page. otherwise, redirect to register page with 
   // password, email, 
-  // store the username as a session variable
-  /*
-  var acc_info = {};
-
-  acc_info.name = req.body.name;
-  acc_info.password = req.body.pwd1;
-  acc_info.email = req.body.email;
-  */
-  //req.session.registered_name = req.body.name;
-  //req.session.registered_password = req.body.password;
-  // redirect the user to homepage
-  
-
   debug('Account create request received.');
-  // handlers.request(socket, acc_info, constants.CREATE_ACC_REQ);
   handlers.request(constants.CREATE_ACC_REQ, req, res);
 };

@@ -1,44 +1,12 @@
 var net = require('net');
-
-//var utility = require('./utility.js');
-var constants = require('./constants.js');
 var debug = require('debug')('handlers');
+
+var constants = require('./constants.js');
+
 
 /**
  * Sends a request to the main server.
  */
- /*
-exports.request = function(socket, data, type) {
-
-	var json_request = {};
-  json_request.message_type = type;
-
-	switch(type) {
-		case constants.SEARCH_REQ:  
-      json_request.options = {'price' : 'none', 'num' : '-1'};
-			json_request.items = [data];
-      // json_request.name 
-      // json_request.options
-			break;
-										
-		case constants.CREATE_ACC_REQ:
-			json_request = data;
-      json_request.message_type = type;
-			break;
-
-		case constants.LOGIN_REQ:
-      json_request = data;
-      json_request.message_type = type;
-			break;
-
-    // more requests to add
-	}
-  
-  debug('Request formed. Is socket destroyed? ' + socket.destroyed);
-  debug('Writing to socket now...');
-  socket.write(JSON.stringify(json_request));
-};
-*/
 exports.request = function(type, req, res) {
 
   var json_request = {};
@@ -63,7 +31,7 @@ exports.request = function(type, req, res) {
       json_request.password = req.body.password;
       break;
 
-    // more requests to add
+    // more requests to add?
   }
 
   socket(json_request, req, res);
@@ -81,8 +49,6 @@ response = function (res_from_server, req, res) {
       for (var i = 0; i < message.items.length; i++) {
         // replace all instances of '&amp;' in item names with '&'
         message.items[i].data.name = message.items[i].data.name.replace('&amp;', '&');
-        //message.items[i].data.name = utility.to_title_case(message.items[i].data.name);
-        //message.items[i].data.store = utility.to_title_case(message.items[i].data.store);
       }
       
       res.render('item_searched', {'title': 'Search Results', 'list_items': message.items});
@@ -96,47 +62,33 @@ response = function (res_from_server, req, res) {
         req.session.name = req.body.name;
         res.redirect('/');
       }
-      
+      else {
+
+        // res.render('register', )
+      }
       // otherwise,
       break;
 
     case constants.LOGIN_RSP:
       // check if either acc_exists is false or correct_password is false;
       if (message.status == constants.SUCCESS) {
+        // 
         req.session.name = req.body.name;
         res.redirect('/');
       } 
       else if (message.status == constants.FAILURE) {
         // password is incorrect
+        
       }
       else if (message.status == constants.DOES_NOT_EXIST) {
         // email does not exist
+        
       }
       break;
 
     // more responses to add
   }
 };
-
-/**
- * Handles errors between the web server and main server. 
- */
-/*
-exports.error = function(error) {
-  switch(error.code){
-    case 'ECONNREFUSED':
-      console.log("Error: main server is not available.");
-      break;
-
-    case 'ECONNRESET':
-      console.log("Error: connection to main server closed abruptly.");
-      break;
-
-    default:
-      console.log("Error: " + error.code); 
-  }
-};
-*/
 
 socket = function(req_to_server, req, res) {
   // connect to the main server
@@ -163,6 +115,8 @@ socket = function(req_to_server, req, res) {
 
   connection.on('error', function(error) {
     debug('Socket error: ' + error.code);
+    connection.destroy();
+    connection.unref();
   });
 
   connection.on('close', function(had_error) {
