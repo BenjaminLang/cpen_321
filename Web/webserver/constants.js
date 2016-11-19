@@ -11,7 +11,7 @@ exports.HOST = 'ryangroup.westus.cloudapp.azure.com'; // main server host
 /* PORTS */
 /**************************************************************************/
 
- exports.WEBSERVER_PORT = 8080;
+ exports.WEBSERVER_PORT = 3000;
  exports.MAINSERVER_PORT = 6969;
 
 /**************************************************************************/
