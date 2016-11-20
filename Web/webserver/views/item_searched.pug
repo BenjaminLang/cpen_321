@@ -3,6 +3,134 @@ extends layout.pug
 block append head-content
   link(href='css/item_searched.css', rel='stylesheet', type='text/css')
 
+  script(type='text/javascript').
+    var htmlString;
+
+    function render(){
+      $('.modal-body').html(htmlString);
+    }
+    
+    function resetLocalStorage() {
+        localStorage.cart = JSON.stringify([]);
+        render();
+        location.reload();
+    }
+    
+    //showCart Functions
+     function showCart() {
+            var modalBody = $('.modal-body');
+            htmlString = '';
+            var cartItems = getAllItems();
+            //console.log(cartItems);
+            cartItems.forEach(function(item){
+              console.log(item);
+              htmlString += '<div class="media">' + 
+              '<a href="#">' + 
+                '<img class="media-object" src="' + item.Image + '" alt="...">' +
+              '</a>' +
+              '</div>' +
+              '<div class="media-body">' +
+                '<h4 class="media-heading">' + item.Name + '</h4>' + 
+                item.Price + '<br>' + 
+                item.Store +
+              '</div>' + 
+              '</div>';
+              render();
+             
+             
+            });
+            
+    } 
+        
+    function showCartButtonClicked(){
+      
+        console.log("44444");
+        showCart();
+    }
+    
+    //addToCart Functions
+    function addToLocalStorage (obj){
+       // console.log(obj);
+      //  console.log("3");
+        var data = JSON.parse(localStorage.cart);
+        
+      //  console.log("4");
+        data.push(obj);
+       // console.log("5");
+        localStorage.cart = JSON.stringify(data);
+       // console.log("6");
+      // console.log(localStorage.cart);
+    }
+    
+    function getAllItems() {
+            return JSON.parse(localStorage.cart);
+        }
+        
+    function createObjectForItem(item) {
+       // console.log("2");
+        var itemName = item.siblings("h3").text();
+        var itemImageURL =  item.parent().siblings("img").attr("src");
+        var itemPrice =  item.siblings("p:eq(0)").text();
+        var itemStore =  item.siblings("p:eq(1)").text();
+        var itemQuantity =  1;
+        
+        var itemObject = {};
+        itemObject = {
+                Name: itemName,
+                Image: itemImageURL,
+                Price: itemPrice,
+                Store: itemStore,
+                Quantity : itemQuantity
+            };
+        return itemObject;
+    }
+    
+    function addToCartButtonClicked(element){
+       // console.log("addClicked");
+        addToLocalStorage(createObjectForItem(element));
+    }
+    
+    /* function itemAlreadyInCart(itemObj){
+      allItems = getAllItems();
+      var i = 0;
+      for (itemObjj in allItems){
+        if(itemOjj.Name==itemObj.Name){
+           return i;
+        } i++;
+    } */
+    
+    $(document).click(function (e){
+      
+      //e.PreventDefault();
+      e.stopPropagation();
+      //console.log("something clicked");
+      var tag  = $(event.target);
+      //console.log(tag);
+      if(tag.hasClass('addToCartButton')){ 
+      /* //enter if clicked HTML element is Add To Cart Button
+        var newItemObject = createObjectForItem(tag); //create an Cartobject for that item
+        console.log(newItemObject);
+        var index = itemAlreadyInCart(newItemObject.Name); //use that CartObject for comparison with localStorage.cart(array) object items
+        console.log(index);
+        
+        if(index != -1){
+          //item does already exist
+          localStorage.cart[index].Quantity += 1;
+        }
+        else{ */
+          addToCartButtonClicked(tag);
+          /* } */
+      }
+      if(tag.hasClass('showCartButton')){
+        showCartButtonClicked();
+      }
+      var cart = getAllItems();
+      //console.log(cart);
+    });
+  
+  
+  
+  
 block navigation-bar
   #custom-bootstrap-menu.navbar.navbar-default(role='navigation')
     .container-fluid
@@ -26,19 +154,48 @@ block navigation-bar
             ul.dropdown-menu
               li
                 a(href='#') View Full Cart
-
+                
 block custom-widget
   include search-bar.pug
-
-block content
+  
+  // Button trigger modal
+  button.btn.btn-primary.btn-lg.showCartButton(type='button', data-toggle='modal', data-target='#myModal')
+    | Show Cart
+  button.btn.btn-primary.btn-lg(type='button', onClick='resetLocalStorage()')
+    | Empty Cart
+  
+  
+  block content
   // SEARCH RESULTS
   ul.products
-    for item in list_items
-      li
-        a(href='javascript:void(0);')
+    .row
+      .col-sm-6.col-md-4
+      for item in list_items
+        .thumbnail
           img(src=(item.data.image))
-          h4 #{item.data.name}
-        p Price: #{item.data.price}
-        p Store: #{item.data.store} 
-  
+          .caption
+            h3 #{item.data.name}
+            p Price: #{item.data.price}
+            p Store: #{item.data.store}
+            a.btn.btn-primary.addToCartButton(href='#', role='button') Add To Cart
+            a.btn.btn-default(href='#', role='button') Visit Website
+		
+  // Modal
+  #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+          h4#myModalLabel.modal-title Shopping Cart
+        .modal-body
+          | ...
+        .modal-footer
+          button.btn.btn-default(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary(type='button') Save changes
+      
+        
 
+        
+        
+        
