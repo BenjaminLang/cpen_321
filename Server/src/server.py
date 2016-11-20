@@ -1,9 +1,8 @@
-import socket
 import json
 import queue
+import socket
 import traceback
 
-from request_handler import RequestHandler
 
 class DatabaseServer:
     def __init__(self, queue):

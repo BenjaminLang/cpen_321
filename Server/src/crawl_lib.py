@@ -1,7 +1,10 @@
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-from request_handler import RequestHandler
 import json
+from urllib.request import urlopen
+
+from bs4 import BeautifulSoup
+
+from src.request_handler import RequestHandler
+
 
 # Takes in a url and returns a soup
 def get_soup(url):

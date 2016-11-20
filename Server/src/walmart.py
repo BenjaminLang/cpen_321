@@ -1,8 +1,10 @@
-from crawl_lib import *
-from pymongo import MongoClient
-import unicodedata
 import json
 import time
+
+from pymongo import MongoClient
+
+from src.crawl_lib import *
+
 
 # Parses starting from the base_url and sends the data to the db
 def parse():

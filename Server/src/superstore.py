@@ -1,6 +1,6 @@
-from crawl_lib import *
 from pymongo import MongoClient
-import unicodedata
+
+from src.crawl_lib import *
 
 base_url = 'https://www.realcanadiansuperstore.ca'
 client = MongoClient()
