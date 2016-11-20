@@ -55,13 +55,7 @@ app.get('/item_searched', routes.item_searched);
 app.post('/register', routes.register_post);
 app.post('/login', routes.login_post);
 
-/**************************************************************************/
-/* LISTENERS */
-/**************************************************************************/
-
-/**
- * Binds and listens for connections on the webserver port.
- */
+//Binds and listens for connections on the webserver port. 
 http.listen(constants.WEBSERVER_PORT , function() {
   debug('Web server listening on port ' + constants.WEBSERVER_PORT + '...');
 });

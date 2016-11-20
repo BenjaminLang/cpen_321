@@ -13,6 +13,13 @@ module.exports = {
    	   .assert.visible('ul.products')
        .pause(500)
        .assert.elementPresent('#item0')
-   	   .end();
+   },
+
+   'Add Item to List': function(browser) {
+     browser
+       .click('#item0')
+       .pause(1000)
+       // need to check if the item was actually added to the list
+       .end()
    }
 };
