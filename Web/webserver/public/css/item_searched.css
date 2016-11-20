@@ -41,6 +41,8 @@ ul.products {
 
 .thumbnail img{
     margin-left: 0px; 
+    max-height: 100px;
+    max-width: 100px; 
 }
 
 .thumbnail .caption {
