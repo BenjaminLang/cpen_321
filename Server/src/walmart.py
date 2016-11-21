@@ -44,9 +44,8 @@ def parse():
                     data['name'] = item['name']
 
                     if 'salePrice' in item:
-                        price = item['salePrice']
-                        format(price, '.2f')
-                        data['price'] = price
+                        price = '%.2f' % item['salePrice']
+                        data['price'] = float(price)
                     else:
                         continue # no price for this item
 

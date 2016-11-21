@@ -35,8 +35,8 @@ def _send_products(soup, cat_name):
                 list_price = caption.find_all('div', 'price')
                 if list_price:
                     price = str(list_price[0]).split('$')[1].split('</')[0]
-                    price = float(price.replace(',', ''))
-                    format(price, '.2f')
+                    price = '%.2f' % (price.replace(',', ''))
+                    price = float(price)
                 else:
                     continue  # no price for this item
 
