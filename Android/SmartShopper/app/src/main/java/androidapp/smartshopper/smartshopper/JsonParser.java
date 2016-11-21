@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +19,8 @@ public class JSONParser {
     private String NAME_TAG = "name";
     private String PRICE_TAG = "price";
     private String STORE_TAG = "store";
-    private String URL_TAG = "image";
+    private String IMG_TAG = "image";
+    private String URL_TAG = "url";
     private String DATA_TAG = "data";
 
     private String CART_TAG = "cart_list";
@@ -41,13 +43,14 @@ public class JSONParser {
                     String name = currData.getString(NAME_TAG);
                     String price = currData.getString(PRICE_TAG);
                     String store = currData.getString(STORE_TAG);
-                    String img = currData.getString(URL_TAG);
+                    String img = currData.getString(IMG_TAG);
+                    String url = currData.getString(URL_TAG);
 
                     if(!img.substring(0, 1).equals("h"))
                         img = "http:" + img;
                         //String htmlImg = img.substring(2, img.length());
 
-                    Product currProduct = new Product(name, price, store, img, null);
+                    Product currProduct = new Product(name, price, store, img, url, null);
                     parseList.add(currProduct);
                 }
             }catch (JSONException e) {
@@ -76,9 +79,10 @@ public class JSONParser {
                     String price = currItem.getString(PRICE_TAG);
                     String store = currItem.getString(STORE_TAG);
                     String img = currItem.getString(URL_TAG);
+                    String url = "";
                     String quantity = currItem.getString(QUANTITY_TAG);
 
-                    Product currProduct = new Product(name, price, store, img, quantity);
+                    Product currProduct = new Product(name, price, store, img, url, quantity);
                     parseList.add(currProduct);
                 }
 

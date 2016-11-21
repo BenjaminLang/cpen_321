@@ -4,6 +4,7 @@ package androidapp.smartshopper.smartshopper;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,6 +78,20 @@ public class ResultFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id){
         //ProductAdapter adapter = (ProductAdapter) l.getAdapter();
         Product selected = this.result.get(position);
+        String productJSON = selected.toJSON();
+
+        /*
+        Bundle bundle = new Bundle();
+        bundle.putString("product_json", productJSON);
+        DetailFragment newDetailFrag = new DetailFragment();
+        newDetailFrag.setArguments(bundle);
+
+        FragmentManager fragMan = getFragmentManager();
+        fragMan.beginTransaction()
+                .replace(R.id.result_frame, newDetailFrag)
+                .addToBackStack("product_detail")
+                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                .commit();*/
 
         if(addToCart(selected))
             Toast.makeText(getActivity(), "Added to cart!", Toast.LENGTH_SHORT).show();
@@ -91,6 +106,7 @@ public class ResultFragment extends ListFragment {
             jsonAppend.put("price", toAdd.getPrice());
             jsonAppend.put("store", toAdd.getStore());
             jsonAppend.put("image", toAdd.getImg());
+            jsonAppend.put("url", toAdd.getURL());
 
             String fileName = getResources().getString(R.string.cart_file_name);
             File file = this.context.getFileStreamPath(fileName);
