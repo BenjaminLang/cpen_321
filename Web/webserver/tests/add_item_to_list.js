@@ -1,7 +1,7 @@
 module.exports = {
   'Enter Item': function(browser) {
     browser
-      .url('localhost:3000')
+      .url('http://checkedout.ca/')
       .waitForElementVisible('body', 1000)
       .setValue('#search-input.form-control.input-lg', 'apple')
    },
