@@ -4,7 +4,7 @@ import time
 
 from pymongo import MongoClient
 
-from src.crawl_lib import *
+from crawl_lib import *
 
 
 # Parses starting from the base_url and sends the data to the db
@@ -44,7 +44,9 @@ def parse():
                     data['name'] = item['name']
 
                     if 'salePrice' in item:
-                        data['price'] = item['salePrice']
+                        price = item['salePrice']
+                        format(price, '.2f')
+                        data['price'] = price
                     else:
                         continue # no price for this item
 
@@ -56,6 +58,8 @@ def parse():
                         data['image'] = ''
 
                     data['store'] = 'Walmart'
+                    print(data)
+                    exit()
 
                     send_to_db(cat_name, data)
                     time.sleep(0.1)
