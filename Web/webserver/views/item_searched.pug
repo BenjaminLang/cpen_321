@@ -50,7 +50,7 @@ block custom-widget
           .caption
             h3 #{item.data.name}
             //- Print the price with two decimal places
-            p $#{parseInt(item.data.price).toFixed(2)}
+            p $#{(item.data.price).toFixed(2)}
             p #{item.data.store}
             a.btn.btn-primary.addToCartButton(href='#', role='button', id='item' + item_id) Add To Cart
             a.btn.btn-default(href='#', role='button') Visit Website
