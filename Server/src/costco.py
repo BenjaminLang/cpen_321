@@ -1,11 +1,8 @@
-from pymongo import MongoClient
+import unicodedata
 
 from src.crawl_lib import *
 
 base_url = 'http://www.costco.ca'
-client = MongoClient()
-cat_db = client.cat_db
-item_db = client.items_db
 
 # take in a soup, tag_name, class_name and return all "a href" links in that soup
 def _get_links(soup, tag_name, class_name):
@@ -56,7 +53,7 @@ def _send_products(soup, cat_name):
             data['image'] = image
             data['store'] = 'Costco'
 
-            send_to_db(cat_name, data, cat_db, item_db, None, None)
+            send_to_db(cat_name, data)
     return
 
 # Parses starting from the base_url and sends the data to the db
