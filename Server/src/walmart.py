@@ -58,8 +58,6 @@ def parse():
                         data['image'] = ''
 
                     data['store'] = 'Walmart'
-                    print(data)
-                    exit()
 
                     send_to_db(cat_name, data)
                     time.sleep(0.1)
