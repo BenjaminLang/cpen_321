@@ -80,7 +80,6 @@ public class ResultFragment extends ListFragment {
         Product selected = this.result.get(position);
         String productJSON = selected.toJSON();
 
-        /*
         Bundle bundle = new Bundle();
         bundle.putString("product_json", productJSON);
         DetailFragment newDetailFrag = new DetailFragment();
@@ -91,12 +90,7 @@ public class ResultFragment extends ListFragment {
                 .replace(R.id.result_frame, newDetailFrag)
                 .addToBackStack("product_detail")
                 .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                .commit();*/
-
-        if(addToCart(selected))
-            Toast.makeText(getActivity(), "Added to cart!", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(getActivity(), "Adding failed!", Toast.LENGTH_SHORT).show();
+                .commit();
     }
 
     private boolean addToCart(Product toAdd) {
@@ -121,19 +115,18 @@ public class ResultFragment extends ListFragment {
                 }
                 inputStream.close();
                 String cartString = builder.toString();
+                //Toast.makeText(getActivity(), cartString, Toast.LENGTH_SHORT).show();
 
                 boolean alreadyAdded = false;
                 List<Product> currCart = new JSONParser().parseCart(cartString);
 
                 for(int i = 0; i < currCart.size(); i++) {
-                    /*
-                    if(currProduct.getName().getBytes(StandardCharsets.US_ASCII).equals(toAdd.getName().getBytes(StandardCharsets.US_ASCII)) &&
-                            currProduct.getPrice().equals(toAdd.getPrice()) &&
-                            currProduct.getStore().equals(toAdd.getStore()) &&
-                            currProduct.getImg().equals(toAdd.getImg()))*/
                     Product currProduct = currCart.get(i);
-                    if(currProduct.getImg().equals(toAdd.getImg()))
+                    System.out.println("image1:" + currProduct.getImg());
+                    System.out.println("image2:" + toAdd.getImg());
+                    if(currProduct.getImg().equals(toAdd.getImg())) {
                         alreadyAdded = true;
+                    }
                 }
 
                 JSONObject cartJSON = new JSONObject(cartString);

@@ -2,21 +2,15 @@ package androidapp.smartshopper.smartshopper;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import org.apache.commons.lang.WordUtils;
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,7 +65,7 @@ public class ProductAdapter extends ArrayAdapter<Product>{
             holder.name = (TextView) view.findViewById(R.id.name);
             holder.price = (TextView) view.findViewById(R.id.price);
             holder.store = (TextView) view.findViewById(R.id.store);
-            holder.quantity = (TextView) view.findViewById(R.id.quantity);
+            holder.quantity = (TextView) view.findViewById(R.id.quantity_to_add);
             holder.img = (ImageView) view.findViewById(R.id.item_img);
 
             view.setTag(holder);
@@ -81,7 +75,7 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         }
 
         Product currProduct = products.get(position);
-        holder.name.setText(WordUtils.capitalizeFully(currProduct.getName()));
+        holder.name.setText(currProduct.getName());
         holder.price.setText(currProduct.getPrice());
         holder.store.setText("From: " + currProduct.getStore());
         Picasso.with(context).load(currProduct.getImg()).into(holder.img);
