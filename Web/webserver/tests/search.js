@@ -6,13 +6,13 @@ module.exports = {
       .setValue('#search-input.form-control.input-lg', 'apple')
    },
 
-   'Search' : function(browser) {
-   	 browser
-   	   .click('#search-btn.btn.btn-info.btn-lg')
-   	   .pause(1000)
-   	   .assert.visible('ul.products')
-       .pause(500)
-       .assert.elementPresent('#item0')
-   	   .end();
+  'Search' : function(browser) {
+   	browser
+   	  .click('#search-btn.btn.btn-info.btn-lg')
+   	  .pause(1000)
+   	  .assert.visible('ul.products')
+      .pause(500)
+      .assert.elementPresent('#item0')
+   	  .end();
    }
 };
