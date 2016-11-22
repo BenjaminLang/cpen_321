@@ -1,9 +1,9 @@
 import queue
 import threading
 
-from src.request_handler import RequestHandler
+from request_handler import RequestHandler
 
-from src.server import DatabaseServer
+from server import DatabaseServer
 
 
 class MyThread(threading.Thread):

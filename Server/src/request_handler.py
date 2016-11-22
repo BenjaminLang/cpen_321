@@ -47,7 +47,7 @@ class RequestHandler:
                 json_response = self.__handle_delete(json_data)
             elif req_type == 'acc_login':
                 json_response = self.__handle_login(json_data)
-            elif req_type == 'update_acc':
+            elif req_type == 'acc_update':
                 json_response = self.__handle_update(json_data)
             elif req_type == 'add_list':
                 json_response = self.__handle_save_list(json_data)
