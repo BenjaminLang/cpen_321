@@ -174,9 +174,8 @@ class RequestHandler:
 
         log_res = udo.log_in(self.__users_db, json_data)
         if log_res is 'success':
-            lists = udo.retrieve_lists(self.__users_db, json_data)
+            response['list_names'] = udo.retrieve_lists(self.__users_db, json_data)
         response['status'] = log_res # DNE, success, or failed
-        response['list_names'] = lists
         return response
 
     def __handle_update(self, json_data):
