@@ -19,14 +19,6 @@ class userTest(unittest.TestCase):
         sock.close()
         return response
 
-    def test_0(self):
-        data = {}
-        data['message_type'] = 'drop_db'
-        data['db'] = 'users_db'
-
-        response = self.__send(data)
-        self.assertEqual('success', response['status'])
-
     def test_1(self):
         data = {}
         data['email'] = 'mablibsking@hotmail.com'
@@ -79,6 +71,16 @@ class userTest(unittest.TestCase):
 
         response = self.__send(data)
         self.assertEqual('success', response['status'])
+        
+        data['message_type'] = 'acc_del'
+
+        response = self.__send(data)
+        self.assertEqual('success', response['status'])
+
+        data['message_type'] = 'acc_login'
+
+        response = self.__send(data)
+        self.assertEqual('DNE', response['status'])
 
     def test_4(self):
         data = {}
@@ -126,7 +128,17 @@ class userTest(unittest.TestCase):
         data['old_password'] = 'Not_the_right_password'
         response = self.__send(data)
         self.assertNotEquals('success', response['status'])
+        
+        data['message_type'] = 'acc_del'
 
+        response = self.__send(data)
+        self.assertEqual('success', response['status'])
+
+        data['message_type'] = 'acc_login'
+
+        response = self.__send(data)
+        self.assertEqual('DNE', response['status'])
+        
 if __name__ == "__main__":
     unittest.main()
 
