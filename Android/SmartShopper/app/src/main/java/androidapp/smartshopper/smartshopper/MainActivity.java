@@ -77,8 +77,14 @@ public class MainActivity extends AppCompatActivity {
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String s) {
+                        final SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+                        String sortDefault = "min";
+                        int numDefault = -1;
+                        String sortOpt = sharedPref.getString(getString(R.string.sort_opt), sortDefault);
+                        String numOpt = Integer.toString(sharedPref.getInt(getString(R.string.num_item), numDefault));
+
                         String[] dummyArray = {" ", " "};
-                        SearchOptions dummyOptions = new SearchOptions(" ", " ", " ", " ", " ", dummyArray, "min", "20");
+                        SearchOptions dummyOptions = new SearchOptions(" ", " ", " ", " ", " ", dummyArray, sortOpt, numOpt);
 
                         RequestBuilder rb = new RequestBuilder();
                         String dbRequest = rb.buildReadReq(s, dummyOptions, " ");
