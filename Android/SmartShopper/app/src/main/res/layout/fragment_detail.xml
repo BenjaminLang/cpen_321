@@ -69,5 +69,14 @@
             android:layout_alignBottom="@+id/quantity_to_add"
             android:layout_toEndOf="@+id/product_price" />
 
+        <Button
+            android:text="Visit Website"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/visit_url"
+            android:layout_alignBaseline="@+id/add_to_cart"
+            android:layout_alignBottom="@+id/add_to_cart"
+            android:layout_toEndOf="@+id/product_store" />
+
     </RelativeLayout>
 </FrameLayout>

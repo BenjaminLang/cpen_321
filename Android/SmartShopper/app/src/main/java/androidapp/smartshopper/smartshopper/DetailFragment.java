@@ -4,11 +4,13 @@ package androidapp.smartshopper.smartshopper;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -60,7 +62,7 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_detail, container, false);
+        final View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
         ImageView img = (ImageView) view.findViewById(R.id.detail_img);
         TextView name = (TextView) view.findViewById(R.id.product_name);
@@ -70,6 +72,7 @@ public class DetailFragment extends Fragment {
         quantity.setGravity(Gravity.CENTER_HORIZONTAL);
         quantity.setText("1");
         Button addCart = (Button) view.findViewById(R.id.add_to_cart);
+        Button toWeb = (Button) view.findViewById(R.id.visit_url);
 
         addCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +84,24 @@ public class DetailFragment extends Fragment {
                     Toast.makeText(getActivity(), "Added to cart!", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(getActivity(), "Adding failed!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        toWeb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Bundle bundle = new Bundle();
+                bundle.putString("url", product.getURL());
+                ProductWebFragment webFrag = new ProductWebFragment();
+                webFrag.setArguments(bundle);
+
+                FragmentManager fragMan = getFragmentManager();
+                fragMan.beginTransaction()
+                        .replace(R.id.result_frame, webFrag)
+                        .addToBackStack("product_website")
+                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                        .commit();
             }
         });
 

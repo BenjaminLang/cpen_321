@@ -107,6 +107,10 @@ public class RequestBuilder {
         }
     }
 
+    private String buildListJSON(String list) {
+        return null;
+    }
+
     private String[] getSuperString(String[] items){
         String[] collections = Collections.getInstance().getCollection();
         //this is hard

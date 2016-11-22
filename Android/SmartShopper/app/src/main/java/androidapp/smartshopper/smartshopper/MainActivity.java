@@ -149,6 +149,11 @@ public class MainActivity extends AppCompatActivity {
                             .commit();
                     return true;
                 }
+            case R.id.search_filter:
+                FragmentManager fm = getSupportFragmentManager();
+                SearchFilterFragment editNameDialog = new SearchFilterFragment();
+                editNameDialog.show(fm, "fragment_edit_name");
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
