@@ -32,11 +32,13 @@ class ItemOps:
 
     @staticmethod
     def read_items(items_db, json_query, categories):
+        categories.sort()
         results = []
         cat_res = []
         item = [x.lower().replace(',', '') for x in json_query['items'][0].split()]
         price = json_query['options']['price']
         num = int(json_query['options']['num'])
+        list.sort(categories)
         if num == -1:
             num = 100
         try:
@@ -66,3 +68,5 @@ class ItemOps:
             return None
 
         return results, set(cat_res)
+
+

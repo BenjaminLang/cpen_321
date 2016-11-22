@@ -4,7 +4,7 @@ import queue
 import bson.json_util
 from cache_ops import CacheOps as mdo
 from cat_ops import CatOps as cdo
-from user_ops import UserOps as udo
+from src.user_ops import UserOps as udo
 from item_ops import ItemOps as ido
 
 from pymongo import MongoClient
@@ -55,7 +55,6 @@ class RequestHandler:
                 json_response = self.__handle_retrieve_list(json_data)
             elif req_type == 'delete_list':
                 json_response = self.__handle_delete_list(json_data)
-
             print(json_response)
 
             json_response = bson.json_util.dumps(json_response)
@@ -174,9 +173,9 @@ class RequestHandler:
         del json_data['message_type']
 
         log_res = udo.log_in(self.__users_db, json_data)
-
+        if log_res is 'success':
+            response['list_names'] = udo.retrieve_lists(self.__users_db, json_data)
         response['status'] = log_res # DNE, success, or failed
-
         return response
 
     def __handle_update(self, json_data):

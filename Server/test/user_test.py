@@ -1,9 +1,9 @@
 # Takes in Crawler Data and sends it to server
 # Takes in User Request and sends back item
 import socket
-from pymongo import MongoClient
 import json
 import unittest
+
 
 class userTest(unittest.TestCase):
     def __send(self, data):
@@ -31,20 +31,20 @@ class userTest(unittest.TestCase):
         response = self.__send(data)
         self.assertEqual('success', response['status'])
 
-        data['message_type'] = 'log_in'
+        data['message_type'] = 'acc_login'
 
         response = self.__send(data)
         self.assertEqual('success', response['status'])
 
-        data['message_type'] = 'acc_delete'
+        data['message_type'] = 'acc_del'
 
         response = self.__send(data)
         self.assertEqual('success', response['status'])
 
-        data['message_type'] = 'log_in'
+        data['message_type'] = 'acc_login'
 
         response = self.__send(data)
-        self.assertEqual('failed', response['status'])
+        self.assertEqual('DNE', response['status'])
 
     def test_2(self):
         data = {}
@@ -65,12 +65,22 @@ class userTest(unittest.TestCase):
         data['name'] = 'Leo Belanger'
         data['list'] = []
         data['list_names'] = []
-        data['message_type'] = 'log_in'
+        data['message_type'] = 'acc_login'
 
         json_data = json.dumps(data)
 
         response = self.__send(data)
         self.assertEqual('success', response['status'])
+        
+        data['message_type'] = 'acc_del'
+
+        response = self.__send(data)
+        self.assertEqual('success', response['status'])
+
+        data['message_type'] = 'acc_login'
+
+        response = self.__send(data)
+        self.assertEqual('DNE', response['status'])
 
     def test_4(self):
         data = {}
@@ -100,24 +110,35 @@ class userTest(unittest.TestCase):
         response = self.__send(data)
         self.assertEqual('success', response['status'])
 
-    """
-    def start_query_7(self):
+    def test_6(self):
         data = {}
         data['email'] = 'benjaminlang@hotmail.com'
         data['password'] = 'New_Password'
+        data['old_password'] = 'UBC_student_2016'
         data['name'] = 'Benjamin Lang'
         data['list'] = []
         data['list_names'] = []
-        data['message_type'] = 'update_acc'
+        data['message_type'] = 'acc_update'
 
         json_data = json.dumps(data)
 
-        self.sock.connect((self.host, self.port))
-        self.sock.send(json_data.encode())
-        print(self.sock.recv(1024).decode())
-        self.sock.close()
-    """
+        response = self.__send(data)
+        self.assertEqual('success', response['status'])
 
+        data['old_password'] = 'Not_the_right_password'
+        response = self.__send(data)
+        self.assertNotEquals('success', response['status'])
+        
+        data['message_type'] = 'acc_del'
+
+        response = self.__send(data)
+        self.assertEqual('success', response['status'])
+
+        data['message_type'] = 'acc_login'
+
+        response = self.__send(data)
+        self.assertEqual('DNE', response['status'])
+        
 if __name__ == "__main__":
     unittest.main()
 
