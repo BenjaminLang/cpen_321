@@ -25,8 +25,8 @@ function showCart() {
     '</div>' +
     '<div class="media-body">' +
       '<h4 class="media-heading">' + item.Name + '</h4>' + 
-      item.Price + '<br>' + 
-      item.Store +
+      '<p class="itemPrice">' + item.Price + '</p>' + 
+      '<p class="itemStore">' + item.Store + '</p>' +
     '</div>' + 
     '</div>';
     render();
