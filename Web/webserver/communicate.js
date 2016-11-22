@@ -45,6 +45,9 @@ module.exports = {
         // json_request.email = 
         break;
 
+      case constants.ACC_UPDATE_REQ:
+        break;
+
       // case constants.
     }
     socket(json_request, req, res);

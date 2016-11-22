@@ -14,7 +14,7 @@ const constants = {
 	SEARCH_REQ : 'read',
 	CREATE_ACC_REQ : 'acc_create',
 	LOGIN_REQ : 'acc_login',
-	_REQ: '',
+	ACC_UPDATE_REQ: 'acc_update',
 	ADD_LIST_REQ : 'add_list',
 	DEL_LIST_REQ : 'delete_list',
 	GET_LIST_REQ : 'retrieve_list',
@@ -23,6 +23,7 @@ const constants = {
 	READ_RSP : 'read_response',
 	CREATE_ACC_RSP : 'acc_create_response',
 	LOGIN_RSP : 'acc_login_response',
+	ACC_UPDATE_RSP : 'update_response',
 
 	// STATUSES
 	SUCCESS : 'success',

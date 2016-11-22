@@ -55,6 +55,7 @@ app.get('/register', handlers.register);
 app.get('/login', handlers.login);
 app.get('/logout', handlers.logout);
 app.get('/item_searched', handlers.item_searched);
+app.get('/update', handlers.update);
 
 // POST requests
 app.post('/register', handlers.register_post);
