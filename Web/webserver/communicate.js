@@ -38,8 +38,14 @@ module.exports = {
         json_request.password = req.body.password;
         break;
 
-      // more requests to add?
-      // request for saving lists (assuming user is logged in)
+      case constants.ADD_LIST_REQ:
+      case constants.DEL_LIST_REQ:
+      case constants.GET_LIST_REQ:
+        // json_request.list_name = 
+        // json_request.email = 
+        break;
+
+      case constants.
     }
 
     socket(json_request, req, res);
@@ -71,16 +77,14 @@ response = function (res_from_server, req, res) {
     // check if acc_created is true or false
     case constants.CREATE_ACC_RSP:
       // if account creation is successful; then redirect to home page
-      // 
       if (message.status == constants.SUCCESS) {
         req.session.name = req.body.name;
         res.redirect('/');
       }
       else {
-
-        // res.render('register', )
+        // failure, which means email is already in use
+        res.send('<p>That email is already in use.</p>');
       }
-      // otherwise,
       break;
 
     case constants.LOGIN_RSP:
@@ -93,11 +97,12 @@ response = function (res_from_server, req, res) {
       } 
       else if (message.status == constants.FAILURE) {
         // password is incorrect
+        res.send('<p>Incorrect password.</p>');
         
       }
       else if (message.status == constants.DOES_NOT_EXIST) {
         // email does not exist
-        
+        res.send('<p>Account does not exist.</p>');
       }
       break;
 
@@ -109,7 +114,7 @@ response = function (res_from_server, req, res) {
  * Initiates a connection to the main server via TCP socket and sends the given request.
  * The function then waits for a response from the server. Upon receiving it, appropiate actions
  * are taken based on the response and then the connection is closed.
- * @param  req_to_server the request to be sent to the server
+ * @param  req_to_server the request to be sent to the main server
  * @param  req the HTTP request from the browser
  * @param  res the HTTP response to the browser
  * @return nothing
@@ -117,6 +122,7 @@ response = function (res_from_server, req, res) {
 socket = function(req_to_server, req, res) {
   // connect to the main server
   var connection = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST});
+  // container for incoming data
   var data = '';
 
   connection.on('connect', function() {
@@ -130,7 +136,7 @@ socket = function(req_to_server, req, res) {
     data += packet;
   });
 
-  // signal that all data has been received, so take action
+  // all data has been received, so take action
   connection.on('end', function() {
     debug('handling response...');
     response(data, req, res);

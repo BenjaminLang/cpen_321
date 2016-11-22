@@ -1,49 +1,38 @@
 var ip = require('ip');
 
-/**************************************************************************/
-/* HOSTS */
-/**************************************************************************/
+const constants = {
 
-//exports.HOST = ip.address(); // returns local ip address
-exports.HOST = 'ryangroup.westus.cloudapp.azure.com'; // main server host
+	// HOSTS
+	// HOST : ip.address(),
+	HOST : 'ryangroup.westus.cloudapp.azure.com',
 
-/**************************************************************************/
-/* PORTS */
-/**************************************************************************/
+	// PORTS
+	WEBSERVER_PORT : 3000,
+	MAINSERVER_PORT : 6969,
 
- exports.WEBSERVER_PORT = 3000;
- exports.MAINSERVER_PORT = 6969;
+	// REQUESTS
+	SEARCH_REQ : 'read',
+	CREATE_ACC_REQ : 'acc_create',
+	LOGIN_REQ : 'acc_login',
+	_REQ: '',
+	ADD_LIST_REQ : 'add_list',
+	DEL_LIST_REQ : 'delete_list',
+	GET_LIST_REQ : 'retrieve_list',
 
-/**************************************************************************/
-/* REQUESTS */
-/**************************************************************************/
+	// RESPONSES
+	READ_RSP : 'read_response',
+	CREATE_ACC_RSP : 'acc_create_response',
+	LOGIN_RSP : 'acc_login_response',
 
-exports.SEARCH_REQ = 'read';
-exports.CREATE_ACC_REQ = 'acc_create';
-exports.LOGIN_REQ = 'acc_login';
-// more to be added
+	// STATUSES
+	SUCCESS : 'success',
+	FAILURE : 'failed',
+	DOES_NOT_EXIST : 'DNE',
 
-/**************************************************************************/
-/* RESPONSES */
-/**************************************************************************/
+	// ERRORS
+	ADDRESS_IN_USE : 'EADDRINUSE',
+	CONNECTION_REFUSED : 'ECONNREFUSED',
+	CONNECTION_RESET : 'ECONNRESET'
+};
 
-exports.READ_RSP = 'read_response';
-exports.CREATE_ACC_RSP = 'acc_create_response';
-exports.LOGIN_RSP = 'acc_login_response';
-// more to be added
-
-/**************************************************************************/
-/* STATUSES */
-/**************************************************************************/
-
-exports.SUCCESS = 'success';
-exports.FAILURE = 'failed';
-exports.DOES_NOT_EXIST = 'DNE';
-
-/**************************************************************************/
-/* ERRORS */
-/**************************************************************************/
-
-exports.ADDRESS_IN_USE = 'EADDRINUSE';
-exports.CONNECTION_REFUSED = 'ECONNREFUSED';
-exports.CONNECTION_RESET = 'ECONNRESET';
+module.exports = constants;

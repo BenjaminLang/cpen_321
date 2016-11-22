@@ -62,7 +62,7 @@ app.post('/login', handlers.login_post);
 
 /////////////
 
-//Binds and listens for connections on the webserver port. 
+// Binds and listens for connections on the webserver port. 
 http.listen(constants.WEBSERVER_PORT , function() {
   debug('Web server listening on port ' + constants.WEBSERVER_PORT + '...');
 });

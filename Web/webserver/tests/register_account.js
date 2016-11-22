@@ -1,18 +1,13 @@
 module.exports = {
-  'Enter Item': function(browser) {
+  'Go to Registration': function(browser) {
     browser
       .url('http://checkedout.ca/')
       .waitForElementVisible('body', 1000)
-      .setValue('#search-input.form-control.input-lg', 'apple')
-   },
-
-  'Search' : function(browser) {
-   	browser
-   	  .click('#search-btn.btn.btn-info.btn-lg')
-   	  .pause(1000)
-   	  .assert.visible('ul.products')
+      .click('#account')
       .pause(500)
-      .assert.elementPresent('#item0')
-   	  .end();
+      .click('#register')
+      .pause(500)
+      .waitForElementVisible('.Register', 1000)
+      .end()
    }
 };
