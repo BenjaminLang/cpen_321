@@ -26,10 +26,11 @@ class UserOps:
     def del_acc(users_db, json_query):
         try:
             email = json_query['email']
+            collection = email.replace('@', '')
 
-            result = users_db[email].drop()
+            result = users_db[collection].drop()
 
-            if result:
+            if result is None:
                 return 'success'
             else:
                 return 'failed'
@@ -143,4 +144,3 @@ class UserOps:
         except Exception :
             traceback.print_exc()
             return 'exception'
-

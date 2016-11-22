@@ -26,8 +26,6 @@ class MyThread(threading.Thread):
             handler.handle_request()
 
 
-
-
 def main():
     q = queue.Queue()
     q.maxsize = 50
@@ -35,8 +33,6 @@ def main():
     req_handle_thread_1 = MyThread('req_handle', q).start()
     req_handle_thread_2 = MyThread('req_handle', q).start()
     req_handle_thread_3 = MyThread('req_handle', q).start()
-
-
 
 
 if __name__ == "__main__":

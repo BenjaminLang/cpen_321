@@ -3,6 +3,7 @@ from src.crawl_lib import *
 import unittest
 import socket
 
+
 class readWriteTest(unittest.TestCase):
     def test_1(self):
         self.client = MongoClient()
@@ -15,7 +16,7 @@ class readWriteTest(unittest.TestCase):
         write['collection'] = 'food'
         write['url'] = 'SyrupCostco.com'
         write['image'] = 'SyrupCostco.jpeg'
-        send_to_db(write['collection'], write, self.client.cat_db, self.client.items_db, self.client.users_db, self.client.cache_db)
+        send_to_db(write['collection'], write)
 
         # generate read request message
         read = {}
@@ -49,7 +50,7 @@ class readWriteTest(unittest.TestCase):
         write['url'] = 'SyrupWalmart.com'
         write['image'] = 'SyrupWalmart.jpeg'
 
-        send_to_db(write['collection'], write, self.client.cat_db, self.client.items_db, self.client.users_db, self.client.cache_db)
+        send_to_db(write['collection'], write)
 
         # attempt to search for syrups
         read = {}

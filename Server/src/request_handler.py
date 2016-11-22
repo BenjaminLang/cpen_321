@@ -55,6 +55,8 @@ class RequestHandler:
                 json_response = self.__handle_retrieve_list(json_data)
             elif req_type == 'delete_list':
                 json_response = self.__handle_delete_list(json_data)
+            elif req_type == 'drop_db':
+                json_response = self.__handle_drop_db(json_data)
 
             print(json_response)
 
@@ -188,4 +190,18 @@ class RequestHandler:
 
         response['status'] = update_res
 
+        return response
+
+    @staticmethod
+    def __handle_drop_db(json_data):
+        response = {}
+        response['message_type'] = 'drop_response'
+
+        client = MongoClient()
+        res = client.drop_database(json_data['db'])
+
+        if res is None:
+            response['status'] = 'success'
+        else:
+            response['status'] = 'failed'
         return response
