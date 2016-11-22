@@ -2,8 +2,10 @@ import socket
 import json
 import unittest
 
+
 class ListTest(unittest.TestCase):
-    def __send(self, data):
+    @staticmethod
+    def __send(data):
         sock = socket.socket()
         host = socket.gethostbyname(socket.gethostname())
         port = 6969
@@ -51,7 +53,6 @@ class ListTest(unittest.TestCase):
         self.assertEqual('success', response['status'])
         self.assertListEqual(data_list, response['list'])
 
-
     def test_3(self):
         data = {}
         data['message_type'] = 'add_list'
@@ -97,11 +98,6 @@ class ListTest(unittest.TestCase):
         response = self.__send(data)
         self.assertEqual(response['status'], 'failed')
 
+
 if __name__ == '__main__':
     unittest.main()
-
-
-
-
-
-

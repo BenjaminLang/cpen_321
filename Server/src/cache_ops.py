@@ -15,7 +15,7 @@ class CacheOps:
             data['cats'] = list(cat_list)
             data['query'] = words
             data['time'] = curr
-            if len(time_res) < 1000 and len(db_res) == 0:                
+            if len(time_res) < 1000 and len(db_res) == 0:
                 cache_db['cache'].insert(data)
             else:
                 if len(time_res) >= 1000:
