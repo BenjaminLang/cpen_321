@@ -62,7 +62,7 @@ class UserOps:
     def get_user_list_names(users_db, json_query):
         try:
             collection = json_query['email'].replace('@', '')
-            user_data = list(users_db[collection].find())
+            user_data = list(users_db[collection].find())[0]
 
             if len(user_data) == 0:
                 return 'failed'
@@ -131,6 +131,9 @@ class UserOps:
 
             ret_list = shopping_lists[list_index]
             return ret_list
+
+        except ValueError:
+            return []
 
         except Exception :
             traceback.print_exc()

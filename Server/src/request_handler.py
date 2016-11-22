@@ -4,7 +4,7 @@ import queue
 import bson.json_util
 from cache_ops import CacheOps as mdo
 from cat_ops import CatOps as cdo
-from src.user_ops import UserOps as udo
+from user_ops import UserOps as udo
 from item_ops import ItemOps as ido
 
 from pymongo import MongoClient
@@ -174,7 +174,7 @@ class RequestHandler:
 
         log_res = udo.log_in(self.__users_db, json_data)
         if log_res is 'success':
-            response['list_names'] = udo.retrieve_lists(self.__users_db, json_data)
+            response['list_names'] = udo.get_user_list_names(self.__users_db, json_data)
         response['status'] = log_res # DNE, success, or failed
         return response
 
