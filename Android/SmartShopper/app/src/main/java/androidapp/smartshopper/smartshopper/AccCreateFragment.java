@@ -59,7 +59,7 @@ public class AccCreateFragment extends Fragment {
                         JSONObject respJSON = new JSONObject(jsonResponse);
                         String created = respJSON.getString("status");
 
-                        if(!created.equals("true"))
+                        if(created.equals("failed"))
                             Toast.makeText(getActivity(), "Account Already Exists", Toast.LENGTH_SHORT).show();
                         else {
                             Toast.makeText(getActivity(), "Accoutn Has Been Created", Toast.LENGTH_SHORT).show();

@@ -93,11 +93,12 @@ public class RequestBuilder {
         }
     }
 
-    public String modAccReq(String id, String newPass) {
+    public String buildChangePass(String id, String oldPass, String newPass) {
         JSONObject request = new JSONObject();
         try{
             request.put("message_type", "acc_update");
             request.put("email", id);
+            request.put("old_password", oldPass);
             request.put("password", newPass);
 
             return request.toString(2);

@@ -2,6 +2,7 @@ package androidapp.smartshopper.smartshopper;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -67,15 +68,11 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getActivity(), "Kooner's Fault", Toast.LENGTH_SHORT).show();
                     else {
                         Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
+                        SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
+                        editor.putString(getString(R.string.curr_user), id);
+                        editor.putBoolean(getString(R.string.login_stat), true);
+                        editor.commit();
                         getActivity().onBackPressed();
-                    /*
-                    if(status.equals("failed"))
-                        Toast.makeText(getActivity(), "Wrong Password", Toast.LENGTH_SHORT).show();
-                    else if(status.equals("exception"))
-                        Toast.makeText(getActivity(), "Kooner's Fault", Toast.LENGTH_SHORT).show();
-                    else {
-                        Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
-                        getActivity().onBackPressed();*/
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

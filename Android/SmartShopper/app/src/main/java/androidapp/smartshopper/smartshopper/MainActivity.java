@@ -2,10 +2,12 @@ package androidapp.smartshopper.smartshopper;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -31,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("CheckedOut");
         setSupportActionBar(toolbar);
-        toolbar.setTitle("SmartShopper");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -82,8 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         String dbRequest = rb.buildReadReq(s, dummyOptions, " ");
 
                         try {
-                            String jsonResponse;
-                            jsonResponse = new SendRequest().execute(dbRequest).get();
+                            String jsonResponse = new SendRequest().execute(dbRequest).get();
 
                             Bundle bundle = new Bundle();
                             bundle.putString("json_response", jsonResponse);
@@ -122,15 +123,32 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.login:
-                LoginFragment loginFrag = new LoginFragment();
+                SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+                boolean defaultVal = false;
+                boolean loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), defaultVal);
 
-                FragmentManager fragMan = getSupportFragmentManager();
-                fragMan.beginTransaction()
-                        .replace(R.id.result_frame, loginFrag)
-                        .addToBackStack("login")
-                        .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                        .commit();
-                return true;
+                if(!loggedIn) {
+                    LoginFragment loginFrag = new LoginFragment();
+
+                    FragmentManager fragMan = getSupportFragmentManager();
+                    fragMan.beginTransaction()
+                            .replace(R.id.result_frame, loginFrag)
+                            .addToBackStack("login")
+                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                            .commit();
+                    return true;
+                }
+                else {
+                    PostLoginFragment postLoginFrag = new PostLoginFragment();
+
+                    FragmentManager fragMan = getSupportFragmentManager();
+                    fragMan.beginTransaction()
+                            .replace(R.id.result_frame, postLoginFrag)
+                            .addToBackStack("post_login")
+                            .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                            .commit();
+                    return true;
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
