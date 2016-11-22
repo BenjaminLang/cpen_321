@@ -62,7 +62,10 @@ block custom-widget
         .modal-header
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
-          h4#myModalLabel.modal-title Shopping Cart
+          form(method='post')
+          h4#myModalLabel.modal-title
+            input.list(type='text', name='listName', required='', placeholder='Shopping List Name', autocomplete='off')
+            
         .modal-body
         .modal-footer.list
           button.btn.btn-primary.saveChanges(type='button') Save Changes

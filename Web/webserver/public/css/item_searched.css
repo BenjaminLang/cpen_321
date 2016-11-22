@@ -123,5 +123,36 @@ button.btn.btn-primary.saveChanges {
 }
 
 
+.modal-title {
+    text-align: center;
+    margin: 0;
+    line-height: 1.42857143;
+}
+
+input.list @input-border-focus {
+  border-radius: 6px; 
+}
+
+
+input.list {
+  padding: 10px 16px; 
+  border-bottom-color: #b3b3b3;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: #b3b3b3;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: #b3b3b3;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: #b3b3b3;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-top-style: solid;
+    border-top-width: 1px;`
+}
+
 
 
