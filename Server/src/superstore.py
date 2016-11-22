@@ -1,7 +1,7 @@
 from crawl_lib import *
 
 # Takes in a soup and sends the product to the db (including price, url, name, image)
-def _send_product(prod, cat_name):
+def _send_product(prod, cat_name, base_url):
     data = {}
     name = ''
     for span in prod.find_all('span'):
@@ -26,7 +26,7 @@ def _send_product(prod, cat_name):
     data['price'] = '%.2f' % float(price)
 
     for link in prod.find_all('a', limit=1):
-        data['url'] = 'https://www.realcanadiansuperstore.ca' + link['href']
+        data['url'] = base_url + link['href']
 
     data['store'] = 'Superstore'
 
@@ -55,7 +55,7 @@ def parse():
         for prod in cat_soup.find_all('div', 'product-page-hotspot'):
             cat_name = strip_name(link, 'superstore.ca', '/plp').split('/c/')[0].split('/')
             cat_name = cat_name[len(cat_name) - 2].replace('%26', '&')
-            _send_product(prod, cat_name)
+            _send_product(prod, cat_name, base_url)
 
     return
 
