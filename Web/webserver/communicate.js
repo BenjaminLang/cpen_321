@@ -69,6 +69,7 @@ response = function (res_from_server, req, res) {
   
   var message = JSON.parse(res_from_server.toString());
   var type = message.message_type;
+  debug('message is of type: ' + type);
   switch(type) {
     case constants.READ_RSP:
       for (var i = 0; i < message.items.length; i++) {
@@ -99,17 +100,23 @@ response = function (res_from_server, req, res) {
         // login successful
         // need to get name from message
         // req.session.name = message.name;
+        debug('login: successful');
         req.session.email = req.body.email;
         res.redirect('/');
       } 
       else if (message.status == constants.FAILURE) {
         // password is incorrect
+        debug('login: failure');
         res.send('<p>Incorrect password.</p>');
         
       }
       else if (message.status == constants.DOES_NOT_EXIST) {
         // email does not exist
+        debug('login: does not exist');
         res.send('<p>Account does not exist.</p>');
+      }
+      else {
+        debug(message.status);
       }
       break;
 
