@@ -10,7 +10,7 @@ def _send_product(prod, cat_name):
 
     if name == '':
         return # name was not found for this product
-    data['name'] = name.replace(',', '')
+    data['name'] = name
 
     for img in prod.find_all('img', limit=1):
         data['image'] = img['src']
