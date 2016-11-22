@@ -11,7 +11,7 @@ block navigation-bar
         ul.nav.navbar-nav.navbar-right
           // DROP DOWN MENU
           li.dropdown
-            a.dropdown-toggle(href='#', data-toggle='dropdown')
+            a.dropdown-toggle(href='#', data-toggle='dropdown', id='account')
               // | Account
               | Welcome, #{name}
               span.caret
@@ -19,7 +19,7 @@ block navigation-bar
               li
                 a(href='/login') Login
               li
-                a(href='/register') Register
+                a(href='/register', id='register') Register
           li.dropdown
             a.dropdown-toggle(href='#', data-toggle='dropdown')
               | Lists
