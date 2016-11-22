@@ -5,9 +5,6 @@ import time
 class CacheOps:
     @staticmethod
     def insert_cache(cache_db, query, cat_list):
-        if len(cat_list) == 0:
-            return
-
         words = sorted(query.split())
         try:
             db_res = list(cache_db['cache'].find({'query': {'$eq': words}}))
@@ -18,7 +15,7 @@ class CacheOps:
             data['cats'] = list(cat_list)
             data['query'] = words
             data['time'] = curr
-            if len(time_res) < 1000 and len(db_res) == 0:                
+            if len(time_res) < 1000 and len(db_res) == 0:
                 cache_db['cache'].insert(data)
             else:
                 if len(time_res) >= 1000:

@@ -32,6 +32,7 @@ class ItemOps:
 
     @staticmethod
     def read_items(items_db, json_query, categories):
+        categories.sort()
         results = []
         cat_res = []
         item = [x.lower().replace(',', '') for x in json_query['items'][0].split()]
