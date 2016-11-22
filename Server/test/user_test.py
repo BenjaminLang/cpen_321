@@ -6,7 +6,7 @@ import unittest
 
 
 class userTest(unittest.TestCase):
-    def __send(self, data):
+    def _send(self, data):
         sock = socket.socket()
         host = socket.gethostbyname(socket.gethostname())
         port = 6969
@@ -28,22 +28,22 @@ class userTest(unittest.TestCase):
         data['list_names'] = []
         data['message_type'] = 'acc_create'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
         data['message_type'] = 'acc_login'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
         data['message_type'] = 'acc_del'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
         data['message_type'] = 'acc_login'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('DNE', response['status'])
 
     def test_2(self):
@@ -55,7 +55,7 @@ class userTest(unittest.TestCase):
         data['list_names'] = []
         data['message_type'] = 'acc_create'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
     def test_3(self):
@@ -69,17 +69,17 @@ class userTest(unittest.TestCase):
 
         json_data = json.dumps(data)
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
         
         data['message_type'] = 'acc_del'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
         data['message_type'] = 'acc_login'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('DNE', response['status'])
 
     def test_4(self):
@@ -93,7 +93,7 @@ class userTest(unittest.TestCase):
 
         json_data = json.dumps(data)
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
     def test_5(self):
@@ -107,7 +107,7 @@ class userTest(unittest.TestCase):
 
         json_data = json.dumps(data)
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
     def test_6(self):
@@ -122,21 +122,21 @@ class userTest(unittest.TestCase):
 
         json_data = json.dumps(data)
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
         data['old_password'] = 'Not_the_right_password'
-        response = self.__send(data)
-        self.assertNotEquals('success', response['status'])
+        response = self._send(data)
+        self.assertNotEqual('success', response['status'])
         
         data['message_type'] = 'acc_del'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
         data['message_type'] = 'acc_login'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('DNE', response['status'])
         
 if __name__ == "__main__":
