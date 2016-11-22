@@ -44,7 +44,7 @@ module.exports = {
   login : function(req, res) {
     // user is already logged in; redirect them back to home page
     if (req.session.name) res.redirect('/');
-    
+
     res.render('login', {'title': 'Login'});
   },
 
@@ -72,6 +72,22 @@ module.exports = {
     if (req.query.item.replace(/\s/g, '').length > 0) {
       debug('Search request for ' + req.query.item + ' received.');
       communicate.request(constants.SEARCH_REQ, req, res);
+    }
+    // otherwise, just go back to the home page
+    else res.redirect('/');
+  },
+
+  /**
+   * Handler for displaying update (account) page
+   * @param  req the HTTP request from the browser 
+   * @param  res the HTTP response to the browser
+   * @return  nothing
+   */
+  update : function(req, res) {
+    // is user logged in?
+    if (req.session.name) {
+      debug('Account update request received.');
+      communicate.request(constants.ACC_UPDATE_REQ, req, res);
     }
     // otherwise, just go back to the home page
     else res.redirect('/');
