@@ -30,7 +30,7 @@ module.exports = {
       case constants.CREATE_ACC_REQ:
         json_request.name = req.body.name;
         json_request.email = req.body.email;
-        json_request.password = req.body.pwd1;
+        json_request.password = req.body.password;
         break;
 
       case constants.LOGIN_REQ:
@@ -46,6 +46,9 @@ module.exports = {
         break;
 
       case constants.ACC_UPDATE_REQ:
+        json_request.email = req.session.email;
+        json_request.old_password = req.body.old_password;
+        json_request.password = req.body.password;
         break;
 
       // case constants.
@@ -78,9 +81,10 @@ response = function (res_from_server, req, res) {
     
     // check if acc_created is true or false
     case constants.CREATE_ACC_RSP:
-      // if account creation is successful; then redirect to home page
       if (message.status == constants.SUCCESS) {
+        // save name and email, then redirect to home page
         req.session.name = req.body.name;
+        req.session.email = req.body.email;
         res.redirect('/');
       }
       else {
@@ -95,6 +99,7 @@ response = function (res_from_server, req, res) {
         // login successful
         // need to get name from message
         // req.session.name = message.name;
+        req.session.email = req.body.email;
         res.redirect('/');
       } 
       else if (message.status == constants.FAILURE) {
@@ -104,6 +109,20 @@ response = function (res_from_server, req, res) {
       }
       else if (message.status == constants.DOES_NOT_EXIST) {
         // email does not exist
+        res.send('<p>Account does not exist.</p>');
+      }
+      break;
+
+    case constants.ACC_UPDATE_RSP:
+
+      if (message.status == constants.SUCCESS) {
+        res.send('<p>Password successfully updated.</p>');
+      }
+      else if (message.status == constants.FAILURE) {
+        res.send('<p>Old password is incorrect.</p>');
+      }
+      // this should never happen
+      else if (message.status == constants.DOES_NOT_EXIST) {
         res.send('<p>Account does not exist.</p>');
       }
       break;
