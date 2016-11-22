@@ -46,7 +46,12 @@ def parse():
                 set_links.add(base_url + cat_link['href'])
 
     for link in set_links:
-        cat_soup = get_soup(link)
+        print(link)
+        try:
+            cat_soup = get_soup(link)
+        except Exception:
+            traceback.print_exc()
+            continue
         for prod in cat_soup.find_all('div', 'product-page-hotspot'):
             cat_name = strip_name(link, 'superstore.ca', '/plp').split('/c/')[0].split('/')
             cat_name = cat_name[len(cat_name) - 2].replace('%26', '&')
