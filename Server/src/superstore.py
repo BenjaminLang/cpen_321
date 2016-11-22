@@ -1,33 +1,42 @@
-from pymongo import MongoClient
-
-from src.crawl_lib import *
-
-base_url = 'https://www.realcanadiansuperstore.ca'
-client = MongoClient()
-categories_db = client.categories
-item_db = client.items
-users_db = client.users
+from crawl_lib import *
 
 # Takes in a soup and sends the product to the db (including price, url, name, image)
-def _send_product(prod, cat_item, url):
+def _send_product(prod, cat_name):
     data = {}
-    for img in prod.find_all('img'):
-        data['name'] = img['alt']
+    name = ''
+    for span in prod.find_all('span'):
+        if 'js-product-entry' in str(span):
+            name = name + strip_name(str(span), '>', '</')
+
+    if name == '':
+        return # name was not found for this product
+    data['name'] = name
+
+    for img in prod.find_all('img', limit=1):
         data['image'] = img['src']
-    for button in prod.find_all('button'):
-        data['price'] = strip_name(str(button), 'Price:', 'EA').strip().replace('\n', '')
+
+    price = 0
+    for span in prod.find_all('span'):
+        if 'Regular Price:' in str(span):
+            price = strip_name(span['aria-label'], 'Regular Price:', None).strip()
+            break
+
+    if price == 0:
+        return # price was not found for this product
+    data['price'] = '%.2f' % float(price)
+
+    for link in prod.find_all('a', limit=1):
+        data['url'] = 'https://www.realcanadiansuperstore.ca' + link['href']
 
     data['store'] = 'Superstore'
-    data['url'] = url
-    print(data)
-    return
 
-    send_to_db(cat_item, data, categories_db, item_db, users_db)
+    send_to_db(cat_name, data)
 
     return
 
 # Parses starting from the base_url and sends the data to the db
 def parse():
+    base_url = 'https://www.realcanadiansuperstore.ca'
     soup = get_soup(base_url)
 
     set_links = set()
@@ -38,8 +47,10 @@ def parse():
 
     for link in set_links:
         cat_soup = get_soup(link)
-        for prod in cat_soup.find_all('div', 'product-image'):
-            _send_product(prod, strip_name(link, 'superstore.ca', '/plp'), link)
+        for prod in cat_soup.find_all('div', 'product-page-hotspot'):
+            cat_name = strip_name(link, 'superstore.ca', '/plp').split('/c/')[0].split('/')
+            cat_name = cat_name[len(cat_name) - 2].replace('%26', '&')
+            _send_product(prod, cat_name)
 
     return
 

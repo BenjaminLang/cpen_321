@@ -17,6 +17,8 @@ def strip_name(string, pre, post):
 
 # Sending individual categories (documents) to database
 def send_to_db(cat_name, info_object):
+    #TODO: replace certain characters which are formatted incorrectly
+    #info_object['name'] = info_object['name'].replace('&amp', '&')
     item = {}
     data = {}
     sub_data = {}

@@ -1,8 +1,4 @@
-import unicodedata
-
 from crawl_lib import *
-
-base_url = 'http://www.costco.ca'
 
 # take in a soup, tag_name, class_name and return all "a href" links in that soup
 def _get_links(soup, tag_name, class_name):
@@ -35,8 +31,7 @@ def _send_products(soup, cat_name):
                 list_price = caption.find_all('div', 'price')
                 if list_price:
                     price = str(list_price[0]).split('$')[1].split('</')[0]
-                    price = '%.2f' % (price.replace(',', ''))
-                    price = float(price)
+                    price = '%.2f' % float((price.replace(',', '')))
                 else:
                     continue  # no price for this item
 
@@ -61,7 +56,8 @@ def _send_products(soup, cat_name):
 
 # Parses starting from the base_url and sends the data to the db
 def parse():
-    soup = get_soup(base_url)
+    soup = get_soup('http://www.costco.ca')
+
     departments = _get_links(soup, 'li', 'category-level-1')
 
     deps_exclusions = {'auto', 'funeral', 'gift-cards-tickets-floral'}

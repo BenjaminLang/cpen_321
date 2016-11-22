@@ -1,11 +1,7 @@
-import unicodedata
 import json
 import time
 
-from pymongo import MongoClient
-
 from crawl_lib import *
-
 
 # Parses starting from the base_url and sends the data to the db
 def parse():
@@ -45,7 +41,7 @@ def parse():
 
                     if 'salePrice' in item:
                         price = '%.2f' % item['salePrice']
-                        data['price'] = float(price)
+                        data['price'] = price
                     else:
                         continue # no price for this item
 
