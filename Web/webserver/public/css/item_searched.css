@@ -101,6 +101,11 @@ ul.products {
 
 p.itemStore {
     margin-top: -2px;
+    margin-left: 110px;
+}
+
+p.itemPrice {
+    margin-left: 110px;
 }
 
 button.btn.btn-primary.saveChanges {

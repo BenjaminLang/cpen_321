@@ -26,16 +26,16 @@ block navigation-bar
               span.caret
             ul.dropdown-menu
               li
-                a(href='#') View Full Cart
+                a(href='#') View Full List
                 
 block custom-widget
   include search-bar.pug
   
   // Button trigger modal
   button.btn.btn-primary.btn-lg.showCartButton(type='button', data-toggle='modal', data-target='#myModal')
-    | Show Cart
+    | Show List
   button.btn.btn-primary.btn-lg(type='button', onClick='resetLocalStorage()')
-    | Empty Cart
+    | Empty List
   
   
   block content
@@ -51,8 +51,8 @@ block custom-widget
             h3 #{item.data.name}
             p $#{item.data.price}
             p #{item.data.store}
-            a.btn.btn-primary.addToCartButton(href='#', role='button', id='item' + item_id) Add To Cart
-            a.btn.btn-default(href='#', role='button') Visit Website
+            a.btn.btn-primary.addToCartButton(href='#', role='button', id='item' + item_id) Add To List
+            a.btn.btn-default(href=item.data.url, role='button', target='_blank') Visit Website
         - item_id++;
 		
   // Modal
@@ -65,7 +65,7 @@ block custom-widget
           h4#myModalLabel.modal-title Shopping Cart
         .modal-body
         .modal-footer.list
-          button.btn.btn-primary.saveChanges(type='button') Save changes
+          button.btn.btn-primary.saveChanges(type='button') Save Changes
       
         
 
