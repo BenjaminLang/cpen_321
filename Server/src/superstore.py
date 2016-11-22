@@ -1,4 +1,5 @@
 from crawl_lib import *
+import traceback
 
 # Takes in a soup and sends the product to the db (including price, url, name, image)
 def _send_product(prod, cat_name, base_url):
