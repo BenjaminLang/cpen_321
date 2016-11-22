@@ -21,7 +21,6 @@ class UserOps:
             traceback.print_exc()
             return 'exception'
 
-
     @staticmethod
     def del_acc(users_db, json_query):
         try:
@@ -55,6 +54,21 @@ class UserOps:
                 return 'failed'
 
         except Exception:
+            traceback.print_exc()
+            return 'exception'
+
+    @staticmethod
+    def get_user_list_names(users_db, json_query):
+        try:
+            collection = json_query['email'].replace('@', '')
+            user_data = list(users_db[collection].find())
+
+            if len(user_data) == 0:
+                return 'failed'
+            else:
+                return list.sort(user_data['list_names'])
+
+        except Exception :
             traceback.print_exc()
             return 'exception'
 

@@ -5,9 +5,6 @@ import time
 class CacheOps:
     @staticmethod
     def insert_cache(cache_db, query, cat_list):
-        if len(cat_list) == 0:
-            return
-
         words = sorted(query.split())
         try:
             db_res = list(cache_db['cache'].find({'query': {'$eq': words}}))
