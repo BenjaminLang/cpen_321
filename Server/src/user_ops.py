@@ -155,6 +155,9 @@ class UserOps:
             users_db[collection].save(user_data)
             return 'success'
 
+        except ValueError:
+            return 'failed'
+
         except Exception :
             traceback.print_exc()
             return 'exception'

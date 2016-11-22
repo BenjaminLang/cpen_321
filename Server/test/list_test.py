@@ -89,7 +89,7 @@ class ListTest(unittest.TestCase):
         response = self.__send(data)
         self.assertEqual(response['status'], 'failed')
 
-    def __delete_list_3(self):
+    def test_5(self):
         data = {}
         data['message_type'] = 'delete_list'
         data['list_name'] = 'list_3'
@@ -98,6 +98,22 @@ class ListTest(unittest.TestCase):
         response = self.__send(data)
         self.assertEqual(response['status'], 'failed')
 
+    def test_6(self):
+        data = {}
+        data['email'] = 'mablibsking@hotmail.com'
+        data['password'] = 'UBC_student_2016'
+        data['name'] = 'Ryan Liu'
+        data['list'] = []
+        data['list_names'] = []
+        data['message_type'] = 'acc_del'
+
+        response = self.__send(data)
+        self.assertEqual('success', response['status'])
+
+        data['message_type'] = 'acc_login'
+
+        response = self.__send(data)
+        self.assertEqual('DNE', response['status'])
 
 if __name__ == '__main__':
     unittest.main()
