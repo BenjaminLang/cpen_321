@@ -115,7 +115,10 @@ class RequestHandler:
         if num == -1:
             num = 100
 
-        ret_data.sort(key=attrgetter('price'), reverse=True)
+        if json_data['options']['price'] == 'min':
+            ret_data.sort(key=lambda x: float(x['data']['price']))
+        elif json_data['options']['price'] == 'max':
+            ret_data.sort(key=lambda x: float(x['data']['price']), reverse=True)
 
         response['items'] = ret_data[0:num]
 
