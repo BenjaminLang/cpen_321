@@ -9,6 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_wrapper"
+        android:layout_marginBottom="10dp">
+
 
         <ImageView
             android:id="@+id/detail_img"
@@ -79,4 +85,13 @@
             android:layout_toEndOf="@+id/product_store" />
 
     </RelativeLayout>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/suggestion_list"
+        android:layout_below="@+id/detail_wrapper" />
+
+    </RelativeLayout>
+
 </FrameLayout>
