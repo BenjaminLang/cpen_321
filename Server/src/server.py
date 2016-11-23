@@ -18,15 +18,15 @@ class DatabaseServer:
         try:
             while True:
                 connection, addr = self.__server_socket.accept()
-                print('connected')
+                #print('connected')
                 try:
                     data = connection.recv(1024).decode()
                 except Exception :
-                    print('disconnected')
+                    #print('disconnected')
                     continue
 
                 json_data = json.loads(data)
-                print(json_data)
+                #print(json_data)
                 try:
                     self.__queue.put(item=(connection, json_data), block=True, timeout=10)
 

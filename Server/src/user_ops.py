@@ -12,6 +12,8 @@ class UserOps:
             db_res = list(users_db[collection].find())
 
             if len(db_res) == 0:
+                json_query['list_names'] = []
+                json_query['lists'] = []
                 users_db[collection].insert(json_query)
                 return 'success'
             else:
@@ -108,7 +110,7 @@ class UserOps:
 
             user_data = list(users_db[collection].find())[0]
             user_data['list_names'].append(list_name)
-            user_data['list'].append(json_query['list'])
+            user_data['lists'].append(json_query['list'])
             users_db[collection].save(user_data)
             return 'success'
 
@@ -125,7 +127,7 @@ class UserOps:
             list_name = json_query['list_name']
 
             user_data = list(users_db[collection].find())[0]
-            shopping_lists = user_data['list']
+            shopping_lists = user_data['lists']
             names_list = user_data['list_names']
             list_index = names_list.index(list_name)
 
@@ -147,13 +149,13 @@ class UserOps:
             list_name = json_query['list_name']
 
             user_data = list(users_db[collection].find())[0]
-            updated_list = user_data['list']
+            updated_list = user_data['lists']
             updated_names = user_data['list_names']
             list_index = updated_names.index(list_name)
             del updated_names[list_index]
             del updated_list[list_index]
 
-            user_data['list'] = updated_list
+            user_data['lists'] = updated_list
             user_data['list_names'] = updated_names
             users_db[collection].save(user_data)
             return 'success'

@@ -55,7 +55,10 @@ class RequestHandler:
                 json_response = self.__handle_retrieve_list(json_data)
             elif req_type == 'delete_list':
                 json_response = self.__handle_delete_list(json_data)
-            print(json_response)
+
+            if req_type != 'read':
+               # print(json_response)
+                pass
 
             json_response = bson.json_util.dumps(json_response)
             connection.send(json_response.encode())

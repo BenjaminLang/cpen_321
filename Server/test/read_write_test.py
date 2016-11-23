@@ -1,8 +1,8 @@
 from pymongo import MongoClient
-from crawl_lib import *
 import unittest
 import socket
-
+import json
+import time
 
 class readWriteTest(unittest.TestCase):
     def test_1(self):
@@ -10,13 +10,14 @@ class readWriteTest(unittest.TestCase):
 
         # create write and send data to DB
         write = {}
+        write['message_type'] = 'write'
         write['name'] = 'syrup'
         write['store'] = 'costco'
         write['price'] = '12.99'
         write['collection'] = 'food'
         write['url'] = 'SyrupCostco.com'
         write['image'] = 'SyrupCostco.jpeg'
-        send_to_db(write['collection'], write)
+        self.__send(write)
 
         # generate read request message
         read = {}
@@ -43,14 +44,14 @@ class readWriteTest(unittest.TestCase):
 
         # write another syrup item into the DB
         write = {}
+        write['message_type'] = 'write'
         write['name'] = 'syrup'
         write['store'] = 'walmart'
         write['price'] = '34.99'
         write['collection'] = 'food'
         write['url'] = 'SyrupWalmart.com'
         write['image'] = 'SyrupWalmart.jpeg'
-
-        send_to_db(write['collection'], write)
+        self.__send(write)
 
         # attempt to search for syrups
         read = {}
@@ -78,8 +79,8 @@ class readWriteTest(unittest.TestCase):
 
         sock.connect((host, port))
         sock.send(json_data.encode())
-        json_response = sock.recv(1024).decode()
-        response = json.loads(json_response)
+        json_data = sock.recv(1024)
+        response = json.loads(json_data.decode())
         sock.close()
         return response
 
