@@ -70,4 +70,7 @@ function checkForm(form) {
 
     return true;
 }
-	
+
+function save_list() {
+  $("input[name='list']").val(localStorage.cart);
+}

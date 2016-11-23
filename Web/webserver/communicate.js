@@ -41,8 +41,9 @@ module.exports = {
       case constants.ADD_LIST_REQ:
       case constants.DEL_LIST_REQ:
       case constants.GET_LIST_REQ:
-        // json_request.list_name = 
-        // json_request.email = 
+        json_request.list_name = req.body.list_name;
+        json_request.list = req.body.list;
+        json_request.email = req.session.email;
         break;
 
       case constants.ACC_UPDATE_REQ:
@@ -132,6 +133,10 @@ response = function (res_from_server, req, res) {
       else if (message.status == constants.DOES_NOT_EXIST) {
         res.send('<p>Account does not exist.</p>');
       }
+      break;
+
+    case constants.SAVE_LIST_RSP:
+      res.end();
       break;
 
     // more responses to add
