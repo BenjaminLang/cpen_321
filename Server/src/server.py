@@ -26,7 +26,7 @@ class DatabaseServer:
                     continue
 
                 json_data = json.loads(data)
-                #print(json_data)
+                print(json_data)
                 try:
                     self.__queue.put(item=(connection, json_data), block=True, timeout=10)
 
