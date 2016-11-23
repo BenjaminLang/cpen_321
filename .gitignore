@@ -90,3 +90,6 @@ ENV/
 
 # nodejs
 node_modules/
+
+# bin
+bin/

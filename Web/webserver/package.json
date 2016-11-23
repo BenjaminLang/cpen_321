@@ -4,7 +4,8 @@
   "description": "The webserver that connects the website to the mainserver",
   "main": "webserver.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tests": "node_modules/.bin/nightwatch",
+    "postinstall": "node nightwatch.conf.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,8 +14,14 @@
     "cookie-session": "^2.0.0-alpha.2",
     "express": "^4.14.0",
     "ip": "^1.1.4",
-    "nodemon": "^1.11.0",
     "pug": "^2.0.0-beta6",
-    "socket.io": "^1.5.1"
+    "serve-favicon": "^2.3.0"
+  },
+  "devDependencies": {
+    "debug": "^2.3.2",
+    "morgan": "^1.7.0",
+    "nightwatch": "^0.9.9",
+    "nodemon": "^1.11.0",
+    "selenium-download": "^2.0.7"
   }
 }

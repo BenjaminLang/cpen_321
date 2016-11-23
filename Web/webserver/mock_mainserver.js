@@ -1,17 +1,21 @@
 var port = 6969;
 var net = require('net');
+var debug = require('debug')('mock_mainserver');
 
 var server = net.createServer(); 
 
 server.on('connection', (socket) => {
+   
 
-   console.log('Webserver connected');
+   debug('Webserver connected');
+
    
    socket.on('end', () => {
-      console.log('Webserver disconnected');
+      debug('Closing the socket...');
    });
-
+  
    socket.on('data', (request) => {
+      debug('request received');
 
       var sample_item_data_1 = {
         'name' : 'red apples',
@@ -19,7 +23,7 @@ server.on('connection', (socket) => {
         'store' : 'save on foods',
         //'image' : 'green-apple.png'
         // 'image' : '//www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
-        'image' : '//www.epicurious.com/images/articlesguides/seasonalcooking/farmtotable/visualguides/apples_07.jpg'
+        'image' : '//static.pexels.com/photos/39803/pexels-photo-39803.jpeg'
       };
 
       var sample_item_data_2 = {
@@ -28,7 +32,7 @@ server.on('connection', (socket) => {
         'store' : 'costco',
         //'image' : 'green-apple.png'
          'image' : '//www.brandsoftheworld.com/sites/default/files/styles/logo-thumbnail/public/082016/untitled-1_5.png?itok=8JWuhnSo'
-        //'image' : '//www.epicurious.com/images/articlesguides/seasonalcooking/farmtotable/visualguides/apples_07.jpg'
+        //'image' : '//static.pexels.com/photos/39803/pexels-photo-39803.jpeg'
       };
 
       var sample_item_data;
@@ -44,14 +48,14 @@ server.on('connection', (socket) => {
 
       var json_response = {
         'message_type' : 'read_response',
-        'items' : [[]]
+        'items' : []
       };
 
-      for (var i = 0; i < 5; i++) {
-        json_response.items[0].push(sample_item);
+      for (var i = 0; i < 500; i++) {
+        json_response.items.push(sample_item);
       }
       
-      console.log("sending a response...");
+      debug("sending a response...");
       socket.write(JSON.stringify(json_response));
       socket.end(); 
    });
@@ -69,23 +73,5 @@ server.on('connection', (socket) => {
 });
 
 server.listen(port, () => { 
-   console.log('Main server is listening...');
+   debug('Main server is listening...');
 });
-
-/*var io = require("socket.io").listen(6969);
-
-io.on("connection", function(socket){
-    // Display a connected message
-    console.log("Webserver connected.");
-
-    socket.on("disconnect", function() {
-      console.log("Webserver disconnected.");
-    });
-
-    // When we receive a request...
-    socket.on("read request", function(data){
-        // We got a message... I dunno what we should do with this...
-        console.log("Request received by main server");
-        console.log("User searched for: " + data.collection);
-    });
-});*/

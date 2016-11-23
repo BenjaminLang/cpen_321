@@ -1,18 +1,157 @@
+body {
+    /*background-image: url('../Searched_.jpg');
+    background-size: 1920px 1000px; 
+    */
+    
+    background: url(http://liondocs.com/wp-content/uploads/2014/12/Website-Background.jpg) , linear-gradient(to top, #ffee75 3%,#ffb06b 27%,#e86f97 50%,#b08cff 75%,#5477af 100%);
+    background-blend-mode: luminosity;  
+    background-size: cover;  
+}
+
+
+
+
 ul.products {
     margin: 0 auto;
     max-width: 1200px;
-    margin-top: 40px;  
+    margin-top: -20px;  
 }
 
-ul.products li {
-    width: 200px;  
-    display: inline-block;
-    border-style: solid; 
-    border-width: 1px; 
-    text-align:center;
-    margin-left: 10px; 
-    margin-right: 10px; 
-    margin-top: 20px;    
+
+.row {
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: 60px;
+}
+
+
+.btn.btn-default {
+	margin-left: 148px; 
+	background-color: #5bc0de; 
+	color: #fff; 	
+}
+
+.thumbnail {
+    display: block;
+    padding: 4px;
+    margin-bottom: 20px;
+    line-height: 1.42857143;
+    background-color: #efefef;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    -webkit-transition: border .2s ease-in-out;
+    -o-transition: border .2s ease-in-out;
+    transition: border .2s ease-in-out;
+}
+
+
+
+.thumbnail img{
+    margin-left: 0px; 
+    max-height: 100px;
+    max-width: 100px; 
+}
+
+.thumbnail .caption {
+    padding: 9px;
+    color: #333;
+    margin-left: 100px;
+    margin-top: -120px;
+    margin-bottom: -50px;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    margin-left: 970px;
+    margin-top: -200px;
+}
+
+
+.btn.btn-default {
+    margin-left: 148px;
+    background-color: #5bc0de;
+    color: #fff;
+    margin-left: 965px;
+    margin-top: -96px;
+}
+
+
+.btn-lg {
+    margin-left: 30px; 
+}
+
+.media img {
+    border: 0;
+    max-height: 100px;
+    max-width: 100px;
+}
+
+.media, .media-body {
+    zoom: 1;
+    overflow: visible;
+}
+
+.media-heading {
+    margin-top: -100px;
+    margin-bottom: 5px;
+    margin-left: 110px;
+}
+
+p.itemStore {
+    margin-top: -2px;
+    margin-left: 110px;
+}
+
+p.itemPrice {
+    margin-left: 110px;
+}
+
+button.btn.btn-primary.saveChanges {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    margin-left: 0px;
+    margin-top: 0px; 
+}
+
+.modal-footer.list {
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid #e5e5e5;
+}
+
+
+.modal-title {
+    text-align: center;
+    margin: 0;
+    line-height: 1.42857143;
+}
+
+input.list @input-border-focus {
+  border-radius: 6px; 
+}
+
+
+input.list {
+  padding: 10px 16px; 
+  border-bottom-color: #b3b3b3;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: #b3b3b3;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: #b3b3b3;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: #b3b3b3;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-top-style: solid;
+    border-top-width: 1px;`
 }
 
 

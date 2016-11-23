@@ -3,15 +3,20 @@
     text-align: center; 
 }
 #custom-bootstrap-menu.navbar-default {
-    font-size: 12px;
-    background-color: rgba(0, 76, 143, 1);
+    font-size: 14px;
     border-width: 0px;
-    border-radius: 20px;
+    border-radius: 0px;
+    height: 150px; 
+    background-color: #fff;
+    margin: 0;
 }
+
 #custom-bootstrap-menu.navbar-default .navbar-nav>li>a {
-    color: rgba(255, 255, 255, 1);
-    background-color: rgba(0, 76, 143, 1);
+    color: #979aa0;
+	background-color: #fff;
 }
+
+
 #custom-bootstrap-menu.navbar-default .navbar-nav>li>a:hover,
 #custom-bootstrap-menu.navbar-default .navbar-nav>li>a:focus {
     color: rgba(255, 255, 255, 1);
@@ -36,4 +41,32 @@
 #custom-bootstrap-menu.navbar-default .navbar-toggle:hover .icon-bar,
 #custom-bootstrap-menu.navbar-default .navbar-toggle:focus .icon-bar {
     background-color: #004c8f;
+}
+
+#custom-bootstrap-menu.navbar-default .navbar-nav>li>a:hover, #custom-bootstrap-menu.navbar-default .navbar-nav>li>a:focus {
+    color: rgba(255, 255, 255, 1);
+    background-color: #dee1e5;
+    border-radius: 7px;
+}
+
+
+
+
+.nav>li {
+    position: relative;
+    display: block;
+    margin-top: 100px;
+}
+
+
+.navbar-header img {
+    margin-top: 25px;
+    margin-left: 780px;
+    position: relative;
+}
+
+@media (min-width: 768px)
+.navbar-nav {
+    float: left;
+    margin-top: 100px;
 }
