@@ -55,6 +55,7 @@ app.get('/update', handlers.update);
 // POST requests
 app.post('/register', handlers.register_post);
 app.post('/login', handlers.login_post);
+app.post('/save_list', handlers.save_list);
 
 /////////////
 

@@ -117,6 +117,17 @@ module.exports = {
     // password, email, 
     debug('Account create request received.');
     communicate.request(constants.CREATE_ACC_REQ, req, res);
+  },
+
+  /**
+   * Handler for saving lists
+   * @param  req the HTTP request from the browser
+   * @param  res the HTTP response to the browser
+   * @return  nothing
+   */ 
+  save_list : function(req, res) {
+    debug('Save list request received.');
+    communicate.request(constants.ADD_LIST_REQ, req, res);
   }
 
 };

@@ -24,6 +24,7 @@ const constants = {
 	CREATE_ACC_RSP : 'acc_create_response',
 	LOGIN_RSP : 'login_response',
 	ACC_UPDATE_RSP : 'update_response',
+	SAVE_LIST_RSP : 'save_list_response',
 
 	// STATUSES
 	SUCCESS : 'success',
