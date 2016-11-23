@@ -10,13 +10,18 @@ class readWriteTest(unittest.TestCase):
 
         # create write and send data to DB
         write = {}
+        data = {}
         write['message_type'] = 'write'
-        write['name'] = 'syrup'
-        write['store'] = 'costco'
-        write['price'] = '12.99'
         write['collection'] = 'food'
-        write['url'] = 'SyrupCostco.com'
-        write['image'] = 'SyrupCostco.jpeg'
+
+        data['name'] = 'syrup'
+        data['store'] = 'costco'
+        data['price'] = '12.99'
+        data['url'] = 'SyrupCostco.com'
+        data['image'] = 'SyrupCostco.jpeg'
+
+        write['data'] = data
+
         self.__send(write)
 
         # generate read request message
@@ -32,10 +37,10 @@ class readWriteTest(unittest.TestCase):
         # assert the correct message has been written into the DB and
         # that it can be read out correctly
         response = self.__send(read)
-        self.assertEqual(response['items'][0]['data']['name'], write['name'])
-        self.assertEqual(response['items'][0]['data']['price'], write['price'])
-        self.assertEqual(response['items'][0]['data']['store'], write['store'])
-        self.assertEqual(response['items'][0]['data']['url'], write['url'])
+        self.assertEqual(response['items'][0]['data']['name'], write['data']['name'])
+        self.assertEqual(response['items'][0]['data']['price'], write['data']['price'])
+        self.assertEqual(response['items'][0]['data']['store'], write['data']['store'])
+        self.assertEqual(response['items'][0]['data']['url'], write['data']['url'])
         self.assertEqual(response['items'][0]['collection'], write['collection'])
         self.client.close()
 
@@ -44,13 +49,17 @@ class readWriteTest(unittest.TestCase):
 
         # write another syrup item into the DB
         write = {}
+        data = {}
         write['message_type'] = 'write'
-        write['name'] = 'syrup'
-        write['store'] = 'walmart'
-        write['price'] = '34.99'
         write['collection'] = 'food'
-        write['url'] = 'SyrupWalmart.com'
-        write['image'] = 'SyrupWalmart.jpeg'
+
+        data['name'] = 'syrup'
+        data['store'] = 'walmart'
+        data['price'] = '34.99'
+        data['url'] = 'SyrupWalmart.com'
+        data['image'] = 'SyrupWalmart.jpeg'
+
+        write['data'] = data
         self.__send(write)
 
         # attempt to search for syrups
