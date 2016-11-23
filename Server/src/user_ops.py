@@ -50,15 +50,15 @@ class UserOps:
             user_data = list(users_db[collection].find())
 
             if not user_data:
-                return 'DNE'
+                return ('DNE', None)
             elif user_data[0]['password'] == auth:
-                return 'success'
+                return ('success', user_data[0]['name'])
             else:
-                return 'failed'
+                return ('failed', None)
 
         except Exception:
             traceback.print_exc()
-            return 'exception'
+            return ('exception', None)
 
     @staticmethod
     def get_user_list_names(users_db, json_query):

@@ -181,9 +181,10 @@ class RequestHandler:
         response['message_type'] = 'login_response'
         del json_data['message_type']
 
-        log_res = udo.log_in(self.__users_db, json_data)
+        log_res, name = udo.log_in(self.__users_db, json_data)
         if log_res is 'success':
             response['list_names'] = udo.get_user_list_names(self.__users_db, json_data)
+        response['name'] = name
         response['status'] = log_res # DNE, success, or failed
         return response
 
