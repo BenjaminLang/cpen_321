@@ -8,6 +8,7 @@ from user_ops import UserOps as udo
 from item_ops import ItemOps as ido
 
 from pymongo import MongoClient
+from operator import attrgetter
 
 
 class RequestHandler:
@@ -113,6 +114,9 @@ class RequestHandler:
         num = int(json_data['options']['num'])
         if num == -1:
             num = 100
+
+        ret_data.sort(key=attrgetter('price'), reverse=True)
+
         response['items'] = ret_data[0:num]
 
         return response
