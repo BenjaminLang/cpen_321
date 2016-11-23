@@ -1,7 +1,7 @@
 extends layout.pug
 
 block append head-content
-  link(href='css/register_page.css' rel='stylesheet')
+  link(href='css/update.css' rel='stylesheet')
   link(href='http://fonts.googleapis.com/css?family=Source+Sans+Pro', rel='stylesheet', type='text/css')
 
 block navigation-bar
@@ -20,6 +20,10 @@ block navigation-bar
                 a(href='/login') Login
               li
                 a(href='/register') Register
+              li
+                a(href='/update') Update Account
+              li
+                a(href='/') Logout
           li.dropdown
             a.dropdown-toggle(href='#', data-toggle='dropdown')
               | Cart
@@ -29,9 +33,10 @@ block navigation-bar
                 a(href='#') View Lists
 
 block custom-widget
-  .Register
+  .Update
     form(method='post')
-      h5 
+      h5 Update Your Password
       input(type='password', name='old_password', required='', placeholder='Old Password', autocomplete='off')
       input(type='password', name='password', required='', placeholder='New Password', autocomplete='off')
-      input(type='submit', value='Register', title='Register')
+      input(type='password', name='password_verify', required='', placeholder='Confirm New Password', autocomplete='off')
+      input(type='submit', value='Update Account', title='Update')
