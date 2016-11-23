@@ -100,8 +100,8 @@ response = function (res_from_server, req, res) {
       if (message.status == constants.SUCCESS) {
         // login successful
         // need to get name from message
-        // req.session.name = message.name;
         debug('login: successful');
+        req.session.name = message.name;
         req.session.email = req.body.email;
         res.redirect('/');
       } 
