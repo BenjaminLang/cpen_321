@@ -87,11 +87,10 @@ module.exports = {
   update : function(req, res) {
     // is user logged in?
     if (req.session.name) {
-      debug('Account update request received.');
-      communicate.request(constants.ACC_UPDATE_REQ, req, res);
+      res.render('update', {'title' : 'Change Password'});
     }
-    // otherwise, just go back to the home page
-    else res.redirect('/');
+    // otherwise, go to the login page
+    else res.redirect('/login');
   },
 
   /**
@@ -118,6 +117,19 @@ module.exports = {
     debug('Account create request received.');
     communicate.request(constants.CREATE_ACC_REQ, req, res);
   },
+
+  /**
+   * Handler for updating password
+   * @param  req the HTTP request from the browser 
+   * @param  res the HTTP response to the browser
+   * @return  nothing
+   */
+  update_post : function(req, res) {
+    // is user logged in?
+    debug('Account update request received.');
+    communicate.request(constants.ACC_UPDATE_REQ, req, res);
+  },
+
 
   /**
    * Handler for saving lists
