@@ -104,7 +104,6 @@ module.exports = {
     communicate.request(constants.LOGIN_REQ, req, res);
   },
 
-
   /**
    * Handler for submitting new account information
    * @param  req the HTTP request from the browser 

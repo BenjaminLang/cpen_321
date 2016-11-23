@@ -20,13 +20,13 @@ function showCart() {
     console.log(item);
     htmlString += '<div class="media">' + 
     '<a href="#">' + 
-      '<img class="media-object" src="' + item.Image + '" alt="...">' +
+      '<img class="media-object" src="' + item.image + '" alt="...">' +
     '</a>' +
     '</div>' +
     '<div class="media-body">' +
-      '<h4 class="media-heading">' + item.Name + '</h4>' + 
-      '<p class="itemPrice">' + item.Price + '</p>' + 
-      '<p class="itemStore">' + item.Store + '</p>' +
+      '<h4 class="media-heading">' + item.name + '</h4>' + 
+      '<p class="itemPrice">' + item.price + '</p>' + 
+      '<p class="itemStore">' + item.store + '</p>' +
     '</div>' + 
     '</div>';
     render();
@@ -62,15 +62,15 @@ function createObjectForItem(item) {
   var itemImageURL =  item.parent().siblings("img").attr("src");
   var itemPrice =  item.siblings("p:eq(0)").text();
   var itemStore =  item.siblings("p:eq(1)").text();
-  var itemQuantity =  1;
+  var itemQuantity =  '1';
   
   var itemObject = {};
   itemObject = {
-          Name: itemName,
-          Image: itemImageURL,
-          Price: itemPrice,
-          Store: itemStore,
-          Quantity : itemQuantity
+          name: itemName,
+          image: itemImageURL,
+          price: itemPrice,
+          store: itemStore,
+          quantity : itemQuantity
       };
   return itemObject;
 }

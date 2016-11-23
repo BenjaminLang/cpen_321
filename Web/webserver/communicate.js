@@ -136,7 +136,8 @@ response = function (res_from_server, req, res) {
       break;
 
     case constants.SAVE_LIST_RSP:
-      res.end();
+      // stay on same page
+      res.status(204).end();
       break;
 
     // more responses to add
