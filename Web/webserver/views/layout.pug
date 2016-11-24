@@ -12,6 +12,17 @@ html(lang='en')
 
   body
     block navigation-bar
+      #custom-bootstrap-menu.navbar.navbar-default(role='navigation')
+        .container-fluid
+          include navbar-header.pug
+          .collapse.navbar-collapse.navbar-menubuilder
+            ul.nav.navbar-nav.navbar-right
+              // DROP DOWN MENU
+              if logged_in_name
+                include logged_in_menus.pug
+              else
+                include logged_out_menus.pug
+      
     block custom-widget
     block content
     block footer-scripts
