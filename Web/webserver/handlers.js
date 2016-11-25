@@ -19,10 +19,7 @@ module.exports = {
     if (req.session.name) {
       name = req.session.name;
     }
-    else {
-      name = 'Anonymous';
-    }
-    res.render('index', {'title': 'Home', 'name': name});
+    res.render('index', {'title': 'Home', 'logged_in_name': name});
   },
 
   /**

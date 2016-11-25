@@ -3,39 +3,6 @@ extends layout.pug
 block append head-content
   link(href='css/index.css', rel='stylesheet')
 
-block navigation-bar
-  #custom-bootstrap-menu.navbar.navbar-default(role='navigation')
-    .container-fluid
-      include navbar-header.pug
-      .collapse.navbar-collapse.navbar-menubuilder
-        ul.nav.navbar-nav.navbar-right
-          // DROP DOWN MENU
-          li.dropdown
-            a.dropdown-toggle(href='#', data-toggle='dropdown', id='account')
-              // | Account
-              | Welcome, #{name}
-              span.caret
-            ul.dropdown-menu
-              li
-                a(href='/login') Login
-              li
-                a(href='/register', id='register') Register
-              li
-                a(href='/update', id='update') Manage Previous Lists
-              li
-                a(href='/update', id='update') Update Account
-              li
-                a(href='/logout', id='logout') Logout
-          li.dropdown
-            a.dropdown-toggle(href='#', data-toggle='dropdown')
-              | Lists
-              span.caret
-            ul.dropdown-menu
-              li
-                a(href='#') Create New List
-              li
-                a(href='#') Manage Previous Lists
-
 block custom-widget
   include search-bar.pug
 

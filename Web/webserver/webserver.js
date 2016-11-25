@@ -5,16 +5,21 @@
 /**************************************************************************/
 /* REQUIRED MODULES */
 /**************************************************************************/
-
+var fs = require('fs');
 var express = require('express'),
     app = express();
-var http = require('http').Server(app);
+var https = require('https');
 var body_parser = require('body-parser');
 var cookie_session = require('cookie-session');
 var logger = require('morgan');
 var debug = require('debug')('webserver');
 var favicon = require('serve-favicon');
 
+var privateKey  = fs.readFileSync('../../docs/checkedout.key', 'utf8');
+var certificate = fs.readFileSync('../../docs/checkedout.crt', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
+// Our files
 var handlers = require('./handlers.js');
 var constants = require('./constants.js');
 
@@ -42,7 +47,7 @@ app.use(logger('dev'));
 // Serve static files (HTML, CSS, JS) from the public directory.
 app.use(express.static('./public'));
 // icon that displays in the browser tab (Doesn't work for some reason)
-// app.use(favicon('./public/favicon.ico'));
+app.use(favicon('./public/favicon.ico'));
 
 // GET requests
 app.get('/', handlers.home);
@@ -60,7 +65,10 @@ app.post('/save_list', handlers.save_list);
 
 /////////////
 
+
+var httpsServer = https.createServer(credentials, app);
+
 // Binds and listens for connections on the webserver port. 
-http.listen(constants.WEBSERVER_PORT , function() {
+httpsServer.listen(constants.WEBSERVER_PORT , function() {
   debug('Web server listening on port ' + constants.WEBSERVER_PORT + '...');
 });
