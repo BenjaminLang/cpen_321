@@ -1,7 +1,8 @@
 import threading
 
-from I_thread.py import IThread
-from server import DatabaseServer
+from src.I_thread import IThread
+from src.server import DatabaseServer
+
 
 class ServerThread(IThread, threading.Thread):
     def __init__(self, queue):

@@ -12,8 +12,7 @@ class ThreadFactory(IThreadFactory):
     def create_thread(self, thread_type):
         thread = None
         if thread_type == 'server':
-            thread = ServerThread(self.queue)
+            thread = ServerThread(self._queue)
         elif thread_type == 'req_handle':
-            thread = HandlerThread(self.queue)
+            thread = HandlerThread(self._queue)
         return thread
- 

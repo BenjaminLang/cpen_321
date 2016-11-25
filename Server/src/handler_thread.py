@@ -1,7 +1,8 @@
 import threading
 
-from I_thread.py import IThread
-from request_handler import RequestHandler
+from src.I_thread import IThread
+from src.request_handler import RequestHandler
+
 
 class HandlerThread(IThread, threading.Thread):
     def __init__(self, queue):
