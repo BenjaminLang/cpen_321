@@ -1,7 +1,7 @@
 import threading
 
-from src.I_thread import IThread
-from src.request_handler import RequestHandler
+from I_thread import IThread
+from request_handler import RequestHandler
 
 
 class HandlerThread(IThread, threading.Thread):

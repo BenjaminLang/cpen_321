@@ -1,7 +1,7 @@
 import threading
 
-from src.I_thread import IThread
-from src.server import DatabaseServer
+from I_thread import IThread
+from server import DatabaseServer
 
 
 class ServerThread(IThread, threading.Thread):
