@@ -1,11 +1,6 @@
-import queue
-import threading
+from thread_factory import ThreadFactory
 
-from request_handler import RequestHandler
-
-from server import DatabaseServer
-
-
+"""
 class MyThread(threading.Thread):
     def __init__(self, name, q):
         threading.Thread.__init__(self)
@@ -24,16 +19,19 @@ class MyThread(threading.Thread):
             print('starting handler')
             handler = RequestHandler(self.__queue)
             handler.handle_request()
-
+"""
 
 def main():
-    q = queue.Queue()
-    q.maxsize = 50
-    server_thread = MyThread('server', q).start()
-    req_handle_thread_1 = MyThread('req_handle', q).start()
-    req_handle_thread_2 = MyThread('req_handle', q).start()
-    req_handle_thread_3 = MyThread('req_handle', q).start()
+    thread_factory = ThreadFactory()
+    handler1 = thread_factory.create_thread('req_handle')
+    handler2 = thread_factory.create_thread('req_handle')
+    handler3 = thread_factory.create_thread('req_handle')
+    server_thread = thread_factory.create_thread('server')
 
-
+    handler1.start()
+    handler2.start()
+    handler3.start()
+    server_thread.start()
+    
 if __name__ == "__main__":
     main()
