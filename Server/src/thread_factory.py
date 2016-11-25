@@ -1,8 +1,9 @@
 import queue
 
-from I_thread_factory import IThreadFactory
-from server_thread import ServerThread
-from handler_thread import HandlerThread
+from src.I_thread_factory import IThreadFactory
+from src.server_thread import ServerThread
+from src.handler_thread import HandlerThread
+
 
 class ThreadFactory(IThreadFactory):
     def __init__(self):

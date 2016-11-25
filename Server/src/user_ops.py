@@ -1,4 +1,7 @@
 import traceback
+import calendar
+import time
+import random
 
 
 class UserOps:
@@ -166,3 +169,62 @@ class UserOps:
         except Exception :
             traceback.print_exc()
             return 'exception'
+
+    @staticmethod
+    def save_search_cat(users_db, query, cat_list, email):
+        words = sorted(query.split())
+        try:
+            db_res = list(users_db[email].find({'query': {'$eq': words}}))
+            time_res = list(users_db[email].find().sort('time', 1))
+            curr = calendar.timegm(time.gmtime())
+
+            data = {}
+            data['cats'] = list(cat_list)
+            data['query'] = words
+            data['time'] = curr
+            data['type'] = 'save_cat'
+
+            if len(time_res) < 5 and len(db_res) == 0:
+                users_db[email].insert(data)
+            else:
+                if len(time_res) >= 5:
+                    updated_item = list(users_db['cache'].find().sort('time', 1).limit(1))[0]
+                    updated_item['cats'] = list(cat_list)
+                    updated_item['query'] = words
+                    updated_item['time'] = curr
+                    users_db[email].save(updated_item)
+                else:
+                    db_res[0]['time'] = curr
+                    users_db[email].save(db_res[0])
+
+            return 'success'
+
+        except Exception:
+            traceback.print_exc()
+            return 'exception'
+
+    @staticmethod
+    def recommend(users_db, items_db, json_data):
+        email = json_data['email']
+        collection = email.replace('@', '')
+
+        rec_list = []
+        search_cat_list = []
+
+        try:
+            db_res = list(users_db[collection].find({'type': {'$eq': 'save_cat'}}))
+
+            for n in range(0, len(db_res)):
+                cat_list = db_res[n]['cats']
+                seed = random.sample(range(0, len(cat_list)))
+                search_cat_list.append(cat_list[seed])
+
+            for cat in search_cat_list:
+                db_res = list(items_db[cat].find())[0]
+                rec_list.append(db_res)
+
+            return 'success', rec_list
+
+        except Exception:
+            traceback.print_exc()
+            return 'exception', []

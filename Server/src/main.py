@@ -1,4 +1,4 @@
-from thread_factory import ThreadFactory
+from src.thread_factory import ThreadFactory
 
 """
 class MyThread(threading.Thread):

@@ -2,6 +2,7 @@ import traceback
 import calendar
 import time
 
+
 class CacheOps:
     @staticmethod
     def insert_cache(cache_db, query, cat_list):

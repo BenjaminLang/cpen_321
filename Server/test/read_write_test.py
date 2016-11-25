@@ -28,9 +28,12 @@ class readWriteTest(unittest.TestCase):
         read = {}
         read['message_type'] = 'read'
         read['items'] = ['syrup']
+        read['email'] = ''
+
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
+
         read['options'] = options
 
         # send to server and get response
@@ -42,6 +45,7 @@ class readWriteTest(unittest.TestCase):
         self.assertEqual(response['items'][0]['data']['store'], write['data']['store'])
         self.assertEqual(response['items'][0]['data']['url'], write['data']['url'])
         self.assertEqual(response['items'][0]['collection'], write['collection'])
+        self.assertEqual(response['status'], 'No Email')
         self.client.close()
 
     def test_2(self):
@@ -66,17 +70,51 @@ class readWriteTest(unittest.TestCase):
         read = {}
         read['message_type'] = 'read'
         read['items'] = ['syrup']
+        read['email'] = ''
+
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
+
         read['options'] = options
 
         response = self.__send(read)
-        self.assertTrue(len(response) == 2)
+        self.assertTrue(len(response) == 3)
         self.assertTrue((response['items'][0]['data']['url'] == 'SyrupWalmart.com' and
                         (response['items'][1]['data']['url'] == 'SyrupCostco.com')) or
                         ((response['items'][0]['data']['url'] == 'SyrupCostco.com' and
                         (response['items'][1]['data']['url'] == 'SyrupWalmart.com'))))
+        self.assertEqual(response['status'], 'No Email')
+
+        self.client.close()
+
+    def test_3(self):
+        self.client = MongoClient()
+
+        # read as a user, and look at recommended items
+        read = {}
+        read['message_type'] = 'read'
+        read['items'] = ['syrup']
+        read['email'] = 'mablibsking@hotmail.com'
+
+        options = {}
+        options['price'] = 'min'
+        options['num'] = '-1'
+
+        read['options'] = options
+
+        response = self.__send(read)
+        self.assertTrue(len(response) == 3)
+        self.assertEqual(response['status'], 'success')
+
+        recommend = {}
+        recommend['message_type'] = 'recommend'
+        recommend['email'] = read['email']
+
+        response = self.__send(recommend)
+
+        self.assertEqual(response['status'], 'success')
+        self.assertEqual(len(response['rec_list']), 0)
 
         self.client.close()
 
