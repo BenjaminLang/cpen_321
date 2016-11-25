@@ -2,6 +2,7 @@ package androidapp.smartshopper.smartshopper;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -78,9 +79,10 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
+                ShopListHandler listHandler = new ShopListHandler(getActivity(), "cart");
                 int numToAdd = Integer.parseInt(quantity.getText().toString());
 
-                if(addToCart(product, numToAdd))
+                if(listHandler.addToList(product, numToAdd))
                     Toast.makeText(getActivity(), "Added to cart!", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(getActivity(), "Adding failed!", Toast.LENGTH_SHORT).show();
@@ -126,109 +128,6 @@ public class DetailFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }
-    }
-
-    private boolean addToCart(Product toAdd, int numToAdd) {
-        try{
-            JSONObject jsonAppend = new JSONObject();
-            jsonAppend.put("name", toAdd.getName());
-            jsonAppend.put("price", toAdd.getPrice());
-            jsonAppend.put("store", toAdd.getStore());
-            jsonAppend.put("image", toAdd.getImg());
-            jsonAppend.put("url", toAdd.getURL());
-
-            String fileName = getResources().getString(R.string.cart_file_name);
-            File file = this.context.getFileStreamPath(fileName);
-
-            if(file.exists()) {
-                FileInputStream inputStream = this.context.openFileInput(fileName);
-
-                StringBuilder builder = new StringBuilder();
-                int ch;
-                while((ch = inputStream.read()) != -1) {
-                    builder.append((char)ch);
-                }
-                inputStream.close();
-                String cartString = builder.toString();
-
-                boolean alreadyAdded = false;
-                List<Product> currCart = new JSONParser().parseCart(cartString);
-
-                for(int i = 0; i < currCart.size(); i++) {
-                    Product currProduct = currCart.get(i);
-                    if(currProduct.getImg().equals(toAdd.getImg()))
-                        alreadyAdded = true;
-                }
-
-                JSONObject cartJSON = new JSONObject(cartString);
-                JSONArray cartArray = cartJSON.getJSONArray("cart_list");
-                if(!alreadyAdded) {
-                    jsonAppend.put("quantity", Integer.toString(numToAdd));
-                    cartArray.put(jsonAppend);
-
-                    double totalPrice = cartJSON.getDouble("total_price");
-                    totalPrice += numToAdd * Double.parseDouble(toAdd.getPrice());
-                    cartJSON.put("total_price", Double.toString(totalPrice));
-
-                    String newCartString = cartJSON.toString(2);
-                    byte[] buffer = newCartString.getBytes();
-                    //StandardCharsets.US_ASCII
-
-                    FileOutputStream outputStream = this.context.openFileOutput(fileName, Context.MODE_PRIVATE);
-                    outputStream.write(buffer);
-                    outputStream.close();
-                }
-                else {
-                    for(int i = 0; i < cartArray.length(); i++) {
-                        JSONObject currItem = cartArray.getJSONObject(i);
-                        if(currItem.getString("image").equals(toAdd.getImg())) {
-                            int quantity = currItem.getInt("quantity");
-                            quantity += numToAdd;
-                            currItem.put("quantity", Integer.toString(quantity));
-
-                            double totalPrice = cartJSON.getDouble("total_price");
-                            totalPrice += numToAdd * Double.parseDouble(toAdd.getPrice());
-                            cartJSON.put("total_price", Double.toString(totalPrice));
-
-                            String newCartString = cartJSON.toString(2);
-                            byte[] buffer = newCartString.getBytes();
-                            //StandardCharsets.US_ASCII
-
-                            FileOutputStream outputStream = this.context.openFileOutput(fileName, Context.MODE_PRIVATE);
-                            outputStream.write(buffer);
-                            outputStream.close();
-
-                            break;
-                        }
-                    }
-                }
-            }
-            else {
-                File newFile = new File(this.context.getFilesDir(), fileName);
-                FileOutputStream outputStream = new FileOutputStream(newFile);
-
-                JSONObject jsonObj = new JSONObject();
-                JSONArray jsonArray = new JSONArray();
-                jsonAppend.put("quantity", Integer.toString(numToAdd));
-                jsonArray.put(jsonAppend);
-
-                jsonObj.put("cart_list", jsonArray);
-
-                double price = Double.parseDouble(toAdd.getPrice());
-                price *= numToAdd;
-                jsonObj.put("total_price", Double.toString(price));
-
-                String newCartString = jsonObj.toString();
-                byte[] buffer = newCartString.getBytes();
-                outputStream.write(buffer);
-                outputStream.close();
-            }
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
     }
 }

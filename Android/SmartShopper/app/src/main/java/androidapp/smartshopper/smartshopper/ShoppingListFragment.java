@@ -3,13 +3,18 @@ package androidapp.smartshopper.smartshopper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +38,7 @@ public class ShoppingListFragment extends Fragment {
     private List<Product> cartItems;
     private double totalPrice;
 
+    private SharedPreferences sharedPref;
 
     public ShoppingListFragment() {
         // Required empty public constructor
@@ -42,18 +48,11 @@ public class ShoppingListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         this.context = getActivity();
+        sharedPref = sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
 
         try {
-            String fileName = getResources().getString(R.string.cart_file_name);
-            FileInputStream inputStream = this.context.openFileInput(fileName);
-
-            StringBuilder builder = new StringBuilder();
-            int ch;
-            while ((ch = inputStream.read()) != -1) {
-                builder.append((char) ch);
-            }
-            inputStream.close();
-            String cartString = builder.toString();
+            String defaultVal = "";
+            final String cartString = sharedPref.getString("cart", defaultVal);
 
             JSONObject cartJSON = new JSONObject(cartString);
 
@@ -74,6 +73,26 @@ public class ShoppingListFragment extends Fragment {
         final TextView total = (TextView) view.findViewById(R.id.cart_summary);
         total.setText("Total: " + Double.toString(round(totalPrice, 2)));
 
+        final EditText listNameEntry = (EditText) view.findViewById(R.id.new_list_name);
+        final Button saveList = (Button) view.findViewById(R.id.save_list_button);
+
+        saveList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newListName = listNameEntry.getText().toString();
+                String defaultUser = "";
+                String user = sharedPref.getString(getString(R.string.curr_user), defaultUser);
+                String defaultList = "";
+                String list = sharedPref.getString(getString(R.string.curr_user), defaultList);
+                String request = new RequestBuilder().buildSaveListReq(user, newListName, list);
+
+                try {
+                    String jsonResponse = new SendRequest().execute(request).get();
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         if(cartItems != null) {
             adapter = new ProductAdapter(this.context, R.layout.search_result, this.cartItems);
@@ -85,50 +104,12 @@ public class ShoppingListFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Product selected = cartItems.get(position);
 
-                    try {
-                        String fileName = getResources().getString(R.string.cart_file_name);
-                        FileInputStream inputStream = context.openFileInput(fileName);
+                    ShopListHandler listHandler = new ShopListHandler(getActivity(), "cart");
+                    List<Product> updatedList = listHandler.deleteFromList(selected);
+                    double newTotal = listHandler.getListTotal();
 
-                        StringBuilder builder = new StringBuilder();
-                        int ch;
-                        while ((ch = inputStream.read()) != -1) {
-                            builder.append((char) ch);
-                        }
-                        inputStream.close();
-                        String cartString = builder.toString();
-
-                        JSONObject cartJSON = new JSONObject(cartString);
-                        JSONArray cartArray = cartJSON.getJSONArray("cart_list");
-
-                        for(int i = 0; i < cartArray.length(); i++) {
-                            JSONObject currObj = cartArray.getJSONObject(i);
-                            if(currObj.getString("image").equals(selected.getImg())) {
-                                double newTotal = cartJSON.getDouble("total_price");
-                                int quantity = currObj.getInt("quantity");
-                                double price = currObj.getDouble("price");
-                                newTotal -= (quantity * price);
-                                cartJSON.put("total_price", Double.toString(round(newTotal, 2)));
-
-                                cartArray.remove(i);
-
-                                String newCartString = cartJSON.toString(2);
-                                List<Product> updatedList = new JSONParser().parseCart(newCartString);
-
-                                byte[] buffer = newCartString.getBytes();
-                                //StandardCharsets.US_ASCII
-
-                                FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-                                outputStream.write(buffer);
-                                outputStream.close();
-
-                                adapter.updateProductList(updatedList);
-                                total.setText("Total: " + Double.toString(round(newTotal,2)));
-                                break;
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    adapter.updateProductList(updatedList);
+                    total.setText("Total: " + Double.toString(round(newTotal,2)));
                 }
             });
         }
@@ -142,5 +123,21 @@ public class ShoppingListFragment extends Fragment {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    private class SendRequest extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... request) {
+            SmartShopClient client = new SmartShopClient();
+            if(client.getStatus())
+                return client.sendRequest(request[0]);
+            else
+                return "Connection Not Established";
+        }
+
+        @Override
+        protected void onPostExecute(String request) {
+            super.onPostExecute(request);
+        }
     }
 }

@@ -7,23 +7,48 @@
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/cart_wrapper">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/cart_summary"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="bold"
-            android:layout_margin="10dp"
-            android:text="Total: $xx.xx" />
+            android:layout_height="match_parent"
+            android:id="@+id/cart_wrapper"
+            android:layout_below="@+id/save_list_button">
 
-        <ListView
+            <TextView
+                android:id="@+id/cart_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"
+                android:layout_margin="10dp"
+                android:text="Total: $xx.xx" />
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cart_list"
+                android:layout_below="@id/cart_summary" />
+
+        </RelativeLayout>
+
+        <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/cart_list"
-            android:layout_below="@id/cart_summary" />
+            android:inputType="textPersonName"
+            android:text="List Name"
+            android:ems="10"
+            android:layout_above="@+id/cart_wrapper"
+            android:layout_alignParentStart="true"
+            android:id="@+id/new_list_name" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/save_list_button"
+            android:text="Save List"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 

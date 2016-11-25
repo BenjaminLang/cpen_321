@@ -107,6 +107,35 @@ public class RequestBuilder {
         }
     }
 
+    public String buildSaveListReq(String email, String listName, String cartItems){
+        JSONObject request = new JSONObject();
+        try{
+            request.put("message_type", "add_list");
+            request.put("email", email);
+            request.put("list_name", listName);
+            JSONObject cartJSON = new JSONObject(cartItems);
+            JSONArray cartArray = cartJSON.getJSONArray("cart_list");
+            request.put("list", cartArray);
+
+            return request.toString(2);
+        } catch(JSONException e){
+            return "cannot generate message";
+        }
+    }
+
+    public String buildDeleteListReq(String email, String listName) {
+        JSONObject request = new JSONObject();
+        try{
+            request.put("message_type", "delete_list");
+            request.put("email", email);
+            request.put("list_name", listName);
+
+            return request.toString(2);
+        } catch(JSONException e){
+            return "cannot generate message";
+        }
+    }
+
     private String buildListJSON(String list) {
         return null;
     }
