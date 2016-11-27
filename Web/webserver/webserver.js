@@ -15,8 +15,8 @@ var logger = require('morgan');
 var debug = require('debug')('webserver');
 var favicon = require('serve-favicon');
 
-var privateKey  = fs.readFileSync('../../docs/checkedout.key', 'utf8');
-var certificate = fs.readFileSync('../../docs/checkedout.crt', 'utf8');
+var privateKey  = fs.readFileSync('/etc/letsencrypt/live/checkedout.ca/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('/etc/letsencrypt/live/checkedout.ca/fullchain.pem', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
 // Our files
@@ -64,7 +64,6 @@ app.post('/update', handlers.update_post);
 app.post('/save_list', handlers.save_list);
 
 /////////////
-
 
 var httpsServer = https.createServer(credentials, app);
 
