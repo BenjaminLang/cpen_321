@@ -1,9 +1,5 @@
-var ip = require('ip');
-
 const constants = {
-
 	// HOSTS
-	// HOST : ip.address(),
 	HOST : 'ryangroup.westus.cloudapp.azure.com',
 
 	// PORTS

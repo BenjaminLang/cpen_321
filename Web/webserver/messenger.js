@@ -4,7 +4,7 @@
 
 var constants = require('./constants.js');
 var net = require('net');
-var debug = require('debug')('communicate');
+var debug = require('debug')('messenger');
 
 module.exports = {
 

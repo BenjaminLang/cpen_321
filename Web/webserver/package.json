@@ -2,7 +2,7 @@
   "name": "checkedout_webserver",
   "version": "1.0.0",
   "description": "The webserver that connects the website to the mainserver",
-  "main": "webserver.js",
+  "main": "main.js",
   "scripts": {
     "tests": "node_modules/.bin/nightwatch",
     "postinstall": "node nightwatch.conf.js"
@@ -13,7 +13,6 @@
     "body-parser": "^1.15.2",
     "cookie-session": "^2.0.0-alpha.2",
     "express": "^4.14.0",
-    "ip": "^1.1.4",
     "pug": "^2.0.0-beta6",
     "serve-favicon": "^2.3.0"
   },
