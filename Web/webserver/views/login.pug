@@ -9,8 +9,8 @@ block custom-widget
   #login-page
     form(method='post')
       h4 Login Information
-      input.email(type='text', name='email' placeholder='Enter Email')
-      input.pw(type='password', name='password' placeholder='Enter Password')
+      input.email(type='text', name='email', required='', placeholder='Enter Email')
+      input.pw(type='password', name='password', required='', placeholder='Enter Password')
       li
         a(href='/register') Register
       input.button(type='submit', value='Log in')   
