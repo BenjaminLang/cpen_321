@@ -15,13 +15,14 @@ var logger = require('morgan');
 var debug = require('debug')('main');
 var favicon = require('serve-favicon');
 
-var privateKey  = fs.readFileSync('/etc/letsencrypt/live/checkedout.ca/privkey.pem', 'utf8');
-var certificate = fs.readFileSync('/etc/letsencrypt/live/checkedout.ca/fullchain.pem', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
-
 // Our files
 var handler = require('./handler.js');
 var constants = require('./constants.js');
+
+// Secure stuff
+var private_key  = fs.readFileSync(constants.PRIVATE_KEY_LOCATION, 'utf8');
+var certificate = fs.readFileSync(constants.CERTIFICATE_LOCATION, 'utf8');
+var credentials = {key: private_key, cert: certificate};
 
 /**************************************************************************/
 /* ROUTING AND MIDDLEWARE */

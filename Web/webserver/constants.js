@@ -30,7 +30,11 @@ const constants = {
 	// ERRORS
 	ADDRESS_IN_USE : 'EADDRINUSE',
 	CONNECTION_REFUSED : 'ECONNREFUSED',
-	CONNECTION_RESET : 'ECONNRESET'
+	CONNECTION_RESET : 'ECONNRESET',
+
+	// FILE PATHS
+	PRIVATE_KEY_LOCATION : '/etc/letsencrypt/live/checkedout.ca/privkey.pem',
+	CERTIFICATE_LOCATION : '/etc/letsencrypt/live/checkedout.ca/fullchain.pem'
 };
 
 module.exports = constants;
