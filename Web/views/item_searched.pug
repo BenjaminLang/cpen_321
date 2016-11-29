@@ -1,0 +1,53 @@
+extends layout.pug
+
+block append head-content
+  link(href='css/item_searched.css', rel='stylesheet', type='text/css')
+  script(src='js/list.js', type='text/javascript') 
+                
+block custom-widget
+  include search-bar.pug
+  // Button trigger modal
+  button.btn.btn-primary.btn-lg.showCartButton(type='button', data-toggle='modal', data-target='#myModal')
+    | Show List
+  button.btn.btn-primary.btn-lg(type='button', onClick='resetLocalStorage()')
+    | Empty List
+  
+  block content
+  // SEARCH RESULTS
+  ul.products
+    .row
+      .col-sm-6.col-md-4
+      - item_id = 0;
+      for item in list_items
+        .thumbnail
+          img(src=(item.data.image))
+          .caption
+            h3 #{item.data.name}
+            p $#{item.data.price}
+            p #{item.data.store}
+            a.btn.btn-primary.addToCartButton(href='#', role='button', id='item' + item_id) Add to List
+            a.btn.btn-default(href=item.data.url, role='button', target='_blank') Visit Website
+        - item_id++;
+		
+  // Modal
+  #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        form(action='/save_list', method='post')
+          h4#myModalLabel.modal-title
+            input.list(type='text', name='list_name', required='', placeholder='Shopping List Name', autocomplete='off')
+            
+          .modal-body
+          .modal-footer.list
+            //-form(method='post')
+            input(type='hidden', name='list', value='')
+            button.btn.btn-primary.saveChanges(type='submit', onClick='save_list()') Save Changes
+      
+        
+
+        
+        
+        

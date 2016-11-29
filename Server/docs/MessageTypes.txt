@@ -1,0 +1,116 @@
+Message Types:
+    //placed into JSON message for server to understand
+    - Write / Write response
+    - Read :
+        - ReadMinPrice
+        - ReadLocation
+        - ReadwithStores
+    - ReadCollectionDocuments
+    - UpdateCollection
+    - CreateNewAcc
+    - Login
+    - Signout
+    //maybe pictures
+
+MessageExample JSON:
+
+FOR READ and subtypes:
+
+    {   "message_type" : "read",
+        "userID" : "id",
+        "options" : {
+            "locationX" : "x_coord",
+            "locationY" : "y_coord",
+            "Radius" : "radius",
+            "stores" : ["store1", "store2" ...]
+        },
+        "items" : ["item name"]
+    }
+    
+FOR UPDATE COLLECTION REQUEST //gets the list of collection types in database
+    {   "message_type" : "collection_request"   }
+    
+FOR COLLECTION REQUEST RESPONSE //returns list of collection types
+    {   "message_type" : "collection_request_response",
+        "collections" : [   "col_name_1",
+                            "col_name_2",
+                            "col_name_3",
+                            ...
+                            "col_name_n"],
+    }
+                            
+
+FOR READ RESPONSE:
+    {
+    	"message_type": "response",
+    	"items": [
+    		[{
+    			"name": "Green Apples",
+    			"price": "1.50",
+    			"store": "save on foods"
+    		}, {
+    			"name": "Red Apples",
+    			"price": "1.42",
+    			"store": "CostCo"
+
+    		}]
+    	]
+    }
+
+
+
+FOR WRITE:
+    {   "message_type" : "write",
+        "collectionType" : "collection",
+        "options" : {
+            //unsure of what options to put in here
+        }
+        "data" : {
+            "name" : "Green Apples",
+            "price" : "1.50",
+            "store" : "save on foods",
+            "image link" : "www.link.com"
+            "URL to page" : "www.link.com"
+        }
+    }
+
+COLLECTION DATA:
+    {
+        "collections": {
+                "milk" : {
+                    "type" : ["2%", "1%", "fat-free"]
+                }
+                ...
+                ...
+                ...
+                ...
+            }
+    }
+
+FOR CREATENEWACC:
+    {   "message_type" : "acc_create",
+        "userID" : "id",
+        "password" : "pass"
+    }
+    
+FOR CREATENEWACC RESPONSE:
+    {   "message_type" : "acc_create_response",
+        "acc_created" : "true"    
+    }
+
+FOR LOGIN:
+    {   "message_type" : "acc_login",
+        "userID" : "id",
+        "password" : "pass",
+    }
+    
+FOR LOGIN RESPONSE:
+    {   "message_type" : "acc_login_response",
+        "acc_exists" : "true",
+        "correct_password" : "true"
+    }
+    
+FOR LOGOUT:
+    {   "message_type" : "acc_logout",
+        "userID" : "id"
+    }
