@@ -1,12 +1,4 @@
 from crawl_lib import *
-from pymongo import MongoClient
-import unicodedata
-
-
-base_url = 'http://www.costco.ca'
-client = MongoClient()
-categories_db = client.categories
-item_db = client.items
 
 # take in a soup, tag_name, class_name and return all "a href" links in that soup
 def _get_links(soup, tag_name, class_name):
@@ -17,7 +9,7 @@ def _get_links(soup, tag_name, class_name):
     return links
 
 # Takes a soup and sends all products to the db (including price, url, name, image)
-def _send_products(soup, cat_item):
+def _send_products(soup, cat_name):
     for prod in soup.find_all('div', 'col-xs-6 col-md-4 col-xl-3 product'):
         list_a = prod.find_all('a')
         if list_a:
@@ -29,9 +21,9 @@ def _send_products(soup, cat_item):
             if list_img:
                 img = list_img[0]
                 if img.has_attr('src'):
-                    image = img['src']
+                    image = 'http:' + img['src']
                 elif img.has_attr('data-src'):
-                    image = img['data-src']
+                    image = 'http:' + img['data-src']
 
             list_caption = thumbnail.find_all('div', 'caption')
             if list_caption:
@@ -39,6 +31,7 @@ def _send_products(soup, cat_item):
                 list_price = caption.find_all('div', 'price')
                 if list_price:
                     price = str(list_price[0]).split('$')[1].split('</')[0]
+                    price = '%.2f' % float((price.replace(',', '')))
                 else:
                     continue  # no price for this item
 
@@ -50,20 +43,21 @@ def _send_products(soup, cat_item):
             else:
                 continue  # no info for this item
 
+
             data = {}
-            name.encode('ascii', 'ignore')
-            data['name'] = name.replace('.', '-').lower()
+            data['name'] = name
             data['price'] = price
             data['url'] = url
             data['image'] = image
             data['store'] = 'Costco'
 
-            send_to_db(cat_item, data, categories_db, item_db)
+            send_to_db(cat_name, data)
     return
 
 # Parses starting from the base_url and sends the data to the db
 def parse():
-    soup = get_soup(base_url)
+    soup = get_soup('http://www.costco.ca')
+
     departments = _get_links(soup, 'li', 'category-level-1')
 
     deps_exclusions = {'auto', 'funeral', 'gift-cards-tickets-floral'}
@@ -71,6 +65,7 @@ def parse():
     for department in departments:
         if strip_name(department, 'costco.ca/', '.html') in deps_exclusions:
             continue
+        print(strip_name(department, 'costco.ca/', '.html'))
 
         dep_soup = get_soup(department)
         categories = _get_links(dep_soup, 'div', 'col-xs-6 col-md-3')
@@ -83,9 +78,8 @@ def parse():
                 _send_products(cat_soup, cat_name)
             else:
                 for subcat in sub_cats:
-                    subcat_name = strip_name(subcat, 'www.costco.ca/', '.html')
                     product_soup = get_soup(subcat)
-                    _send_products(product_soup, subcat_name)
+                    _send_products(product_soup, cat_name)
     return
 
 if __name__ == '__main__':
