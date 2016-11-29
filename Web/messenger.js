@@ -91,7 +91,7 @@ response = function (res_from_server, req, res) {
       }
       else {
         // failure, which means email is already in use
-        res.send('<p>That email is already in use.</p>');
+        res.render('register', {'email_taken' : 'That email is already in use.'});
       }
       break;
 
@@ -108,13 +108,13 @@ response = function (res_from_server, req, res) {
       else if (message.status == constants.FAILURE) {
         // password is incorrect
         debug('login: failure');
-        res.send('<p>Incorrect password.</p>');
+        res.render('login', {'login_failed' : 'Password is incorrect.'});
         
       }
       else if (message.status == constants.DOES_NOT_EXIST) {
         // email does not exist
         debug('login: does not exist');
-        res.send('<p>Account does not exist.</p>');
+        res.render('login', {'login_failed' : 'Email does not exist.'});
       }
       else {
         debug(message.status);
@@ -124,10 +124,10 @@ response = function (res_from_server, req, res) {
     case constants.ACC_UPDATE_RSP:
 
       if (message.status == constants.SUCCESS) {
-        res.send('<p>Password successfully updated.</p>');
+        res.render('update', {'status' : 'Password successfully updated.'});
       }
       else if (message.status == constants.FAILURE) {
-        res.send('<p>Old password is incorrect.</p>');
+        res.render('update', {'status' : 'Old password is incorrect.'});
       }
       // this should never happen
       else if (message.status == constants.DOES_NOT_EXIST) {

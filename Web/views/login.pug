@@ -9,6 +9,8 @@ block custom-widget
   #login-page
     form(method='post')
       h4 Login Information
+      if login_failed
+        h5 #{login_failed}
       input.email(type='text', name='email', required='', placeholder='Enter Email')
       input.pw(type='password', name='password', required='', placeholder='Enter Password')
       li
