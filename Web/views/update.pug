@@ -1,0 +1,14 @@
+extends layout.pug
+
+block append head-content
+  link(href='css/update.css' rel='stylesheet')
+  link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro', rel='stylesheet', type='text/css')
+
+block custom-widget
+  .Update
+    form(method='post')
+      h5 Update Your Password
+      input(type='password', name='old_password', required='', placeholder='Old Password', autocomplete='off')
+      input(type='password', name='password', required='', placeholder='New Password', autocomplete='off')
+      input(type='password', name='password_verify', required='', placeholder='Confirm New Password', autocomplete='off')
+      input(type='submit', value='Update Account', title='Update')
