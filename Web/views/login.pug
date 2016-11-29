@@ -2,15 +2,15 @@ extends layout.pug
 
 block append head-content
   link(href='css/login_page.css', rel='stylesheet')
-  link(href='http://fonts.googleapis.com/css?family=Source+Sans+Pro', rel='stylesheet', type='text/css')
+  link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro', rel='stylesheet', type='text/css')
 
 block custom-widget
   // Login Form
   #login-page
     form(method='post')
       h4 Login Information
-      input.email(type='text', name='email' placeholder='Enter Email')
-      input.pw(type='password', name='password' placeholder='Enter Password')
+      input.email(type='text', name='email', required='', placeholder='Enter Email')
+      input.pw(type='password', name='password', required='', placeholder='Enter Password')
       li
         a(href='/register') Register
       input.button(type='submit', value='Log in')   

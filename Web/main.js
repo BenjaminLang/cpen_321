@@ -12,16 +12,17 @@ var https = require('https');
 var body_parser = require('body-parser');
 var cookie_session = require('cookie-session');
 var logger = require('morgan');
-var debug = require('debug')('webserver');
+var debug = require('debug')('main');
 var favicon = require('serve-favicon');
 
-var privateKey  = fs.readFileSync('../../docs/checkedout.key', 'utf8');
-var certificate = fs.readFileSync('../../docs/checkedout.crt', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
-
 // Our files
-var handlers = require('./handlers.js');
+var handler = require('./handler.js');
 var constants = require('./constants.js');
+
+// Secure stuff
+var private_key  = fs.readFileSync(constants.PRIVATE_KEY_LOCATION, 'utf8');
+var certificate = fs.readFileSync(constants.CERTIFICATE_LOCATION, 'utf8');
+var credentials = {key: private_key, cert: certificate};
 
 /**************************************************************************/
 /* ROUTING AND MIDDLEWARE */
@@ -50,21 +51,20 @@ app.use(express.static('./public'));
 app.use(favicon('./public/favicon.ico'));
 
 // GET requests
-app.get('/', handlers.home);
-app.get('/register', handlers.register);
-app.get('/login', handlers.login);
-app.get('/logout', handlers.logout);
-app.get('/item_searched', handlers.item_searched);
-app.get('/update', handlers.update);
+app.get('/', handler.home);
+app.get('/register', handler.register);
+app.get('/login', handler.login);
+app.get('/logout', handler.logout);
+app.get('/item_searched', handler.item_searched);
+app.get('/update', handler.update);
 
 // POST requests
-app.post('/register', handlers.register_post);
-app.post('/login', handlers.login_post);
-app.post('/update', handlers.update_post);
-app.post('/save_list', handlers.save_list);
+app.post('/register', handler.register_post);
+app.post('/login', handler.login_post);
+app.post('/update', handler.update_post);
+app.post('/save_list', handler.save_list);
 
 /////////////
-
 
 var httpsServer = https.createServer(credentials, app);
 

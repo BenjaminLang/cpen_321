@@ -3,8 +3,8 @@
 /**************************************************************************/
 
 var constants = require('./constants.js');
-var communicate = require('./communicate.js');
-var debug = require('debug')('handlers');
+var messenger = require('./messenger.js');
+var debug = require('debug')('handler');
 
 module.exports = {
 
@@ -69,7 +69,7 @@ module.exports = {
     // if input is not empty or a bunch of spaces, then send a request
     if (req.query.item.replace(/\s/g, '').length > 0) {
       debug('Search request for ' + req.query.item + ' received.');
-      communicate.request(constants.SEARCH_REQ, req, res);
+      messenger.request(constants.SEARCH_REQ, req, res);
     }
     // otherwise, just go back to the home page
     else res.redirect('/');
@@ -98,7 +98,7 @@ module.exports = {
    */
   login_post : function(req, res) {
     debug('Login request received');
-    communicate.request(constants.LOGIN_REQ, req, res);
+    messenger.request(constants.LOGIN_REQ, req, res);
   },
 
   /**
@@ -111,7 +111,7 @@ module.exports = {
     // if successful, redirect to home page. otherwise, redirect to register page with 
     // password, email, 
     debug('Account create request received.');
-    communicate.request(constants.CREATE_ACC_REQ, req, res);
+    messenger.request(constants.CREATE_ACC_REQ, req, res);
   },
 
   /**
@@ -123,7 +123,7 @@ module.exports = {
   update_post : function(req, res) {
     // is user logged in?
     debug('Account update request received.');
-    communicate.request(constants.ACC_UPDATE_REQ, req, res);
+    messenger.request(constants.ACC_UPDATE_REQ, req, res);
   },
 
 
@@ -135,7 +135,7 @@ module.exports = {
    */ 
   save_list : function(req, res) {
     debug('Save list request received.');
-    communicate.request(constants.ADD_LIST_REQ, req, res);
+    messenger.request(constants.ADD_LIST_REQ, req, res);
   }
 
 };
