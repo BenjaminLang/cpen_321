@@ -34,7 +34,7 @@ Because the installation for Windows and Ubuntu are very similar, below is an in
     - To run the &quot;stress\_test.py&quot;, refer to Locust.io documentation
       - [http://docs.locust.io/en/latest/running-locust-distributed.html](http://docs.locust.io/en/latest/running-locust-distributed.html)
   - Webserver
-    - In Web/webserver, run &quot;npm install&quot; to install Node.js dependencies
+    - In Web/, run &quot;npm install&quot; to install Node.js dependencies
     - Run &quot;npm run postinstall&quot; to configure the testing environment
     - Run all tests with: &quot;npm run tests&quot;
   - Android
@@ -59,11 +59,11 @@ Main Server:
 
 Webserver:
 
-- all tests in Web/webserver/tests
+- all tests in Web/tests
 
 Android:
 
-- all tests in android/tests folder
+- all tests in Android/tests folder
 
 ## **Contributors**
 
