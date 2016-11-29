@@ -25,7 +25,11 @@ class DatabaseServer:
                     #print('disconnected')
                     continue
 
-                json_data = json.loads(data)
+                try:
+                    json_data = json.loads(data)
+                except json.decoder.JSONDecodeError:
+                    print('caught JSON decode error')
+                    continue
                 print(json_data)
                 try:
                     self.__queue.put(item=(connection, json_data), block=True, timeout=10)
