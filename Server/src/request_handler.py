@@ -62,6 +62,7 @@ class RequestHandler:
 
             json_response = bson.json_util.dumps(json_response)
             connection.send(json_response.encode())
+            connection.shutdown(socket.SHUT_RDWR)
             connection.close()
 
         return

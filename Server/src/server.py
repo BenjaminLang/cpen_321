@@ -2,25 +2,32 @@ import json
 import queue
 import socket
 import traceback
-
+import ssl
 
 class DatabaseServer:
     def __init__(self, queue):
         self.__queue = queue
         # set up server socket
-        self.__server_socket = socket.socket()
+        # from python documentation
+        self._context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+        self._context.load_cert_chain(certfile="mainserver.crt", keyfile="mainserver.key")
+
         host = socket.gethostbyname(socket.gethostname())
         port = 6969
-        self.__server_socket.bind((host, port))
+        self._server_socket = socket.socket()
+        self._server_socket.bind((host,port))
+
 
     def test_server(self):
-        self.__server_socket.listen(5)
+        self._server_socket.listen(5)
         try:
             while True:
-                connection, addr = self.__server_socket.accept()
+                connection, addr = self._server_socket.accept()
+                secure_conn = self._context.wrap_socket(connection, server_side=True)
+                
                 #print('connected')
                 try:
-                    data = connection.recv(1024).decode()
+                    data = secure_conn.recv(1024).decode()
                 except Exception :
                     #print('disconnected')
                     continue
@@ -30,9 +37,11 @@ class DatabaseServer:
                 except json.decoder.JSONDecodeError:
                     print('caught JSON decode error')
                     continue
+
                 print(json_data)
+               
                 try:
-                    self.__queue.put(item=(connection, json_data), block=True, timeout=10)
+                    self.__queue.put(item=(secure_conn, json_data), block=True, timeout=10)
 
                 except queue.Full:
                     print('queue full')
