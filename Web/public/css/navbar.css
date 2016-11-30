@@ -60,9 +60,11 @@
 
 
 .navbar-header img {
-    margin-top: 25px;
-    margin-left: 780px;
-    position: relative;
+    margin-top: 70px;
+    margin-left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
 }
 
 @media (min-width: 768px)
