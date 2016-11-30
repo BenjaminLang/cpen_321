@@ -36,11 +36,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="List Name"
             android:ems="10"
             android:layout_above="@+id/cart_wrapper"
             android:layout_alignParentStart="true"
-            android:id="@+id/new_list_name" />
+            android:id="@+id/new_list_name"
+            android:hint="List Name" />
 
         <Button
             android:layout_width="wrap_content"

@@ -59,6 +59,7 @@ public class RequestBuilder {
         JSONObject request = new JSONObject();
         try{
             request.put("message_type", "acc_create");
+            request.put("name", "kooner");
             request.put("email", id);
             request.put("password", pw);
 
@@ -73,6 +74,7 @@ public class RequestBuilder {
         try{
             request.put("message_type", "acc_login");
             request.put("email", id);
+            request.put("name", "kooner");
             request.put("password", pw);
 
             return request.toString(2);

@@ -46,8 +46,10 @@ public class JSONParser {
                     String img = currData.getString(IMG_TAG);
                     String url = currData.getString(URL_TAG);
 
+                    /*
                     if(!img.substring(0, 1).equals("h"))
                         img = "http:" + img;
+                        */
 
                     Product currProduct = new Product(name, price, store, img, url, null);
                     parseList.add(currProduct);

@@ -83,7 +83,7 @@ public class ShoppingListFragment extends Fragment {
                 String defaultUser = "";
                 String user = sharedPref.getString(getString(R.string.curr_user), defaultUser);
                 String defaultList = "";
-                String list = sharedPref.getString(getString(R.string.curr_user), defaultList);
+                String list = sharedPref.getString("cart", defaultList);
                 String request = new RequestBuilder().buildSaveListReq(user, newListName, list);
 
                 try {
