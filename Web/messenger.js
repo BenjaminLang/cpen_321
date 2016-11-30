@@ -4,8 +4,11 @@
 
 var constants = require('./constants.js');
 var net = require('net');
+var tls = require('tls');
+var fs = require('fs');
 var debug = require('debug')('messenger');
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports = {
 
   /**
@@ -155,7 +158,17 @@ response = function (res_from_server, req, res) {
  */
 socket = function(req_to_server, req, res) {
   // connect to the main server
-  var connection = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST});
+  var options = { 
+    key : fs.readFileSync('../Server/src/client.key'),
+    cert : fs.readFileSync('../Server/src/client.crt'),
+    ca : [ fs.readFileSync('../Server/src/server.crt') ]
+  };
+  var connection = tls.connect({
+      port : constants.MAINSERVER_PORT,
+      host : constants.HOST,
+      options : options
+  });
+  //var connection = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST});
   // container for incoming data
   var data = '';
 
