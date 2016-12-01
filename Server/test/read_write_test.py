@@ -2,12 +2,33 @@ from pymongo import MongoClient
 import unittest
 import socket
 import json
+import ssl
 
 
 class readWriteTest(unittest.TestCase):
+    @staticmethod
+    def __send(data):
+        sock = socket.socket()
+        host = socket.gethostbyname(socket.gethostname())
+        port = 6969
+
+        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+        context.verify_mode = ssl.CERT_REQUIRED
+        context.check_hostname = True
+        context.load_verify_locations('/home/ryangroup/cpen_321/Server/src/ca.crt')
+        connection = context.wrap_socket(sock, server_hostname='checkedout')
+        json_data = json.dumps(data)
+
+        connection.connect((host, port))
+        connection.send(json_data.encode())
+        json_response = connection.recv(1024).decode()
+        response = json.loads(json_response)
+        connection.close()
+        return response
+
     def test_1(self):
         self.client = MongoClient()
-
+        context = ssl.create_default_context()
         # create write and send data to DB
         write = {}
         data = {}
@@ -179,19 +200,6 @@ class readWriteTest(unittest.TestCase):
 
         print(response['items'])
         self.client.close()
-
-    def __send(self, data):
-        sock = socket.socket()
-        host = socket.gethostbyname(socket.gethostname())
-        port = 6969
-        json_data = json.dumps(data)
-
-        sock.connect((host, port))
-        sock.send(json_data.encode())
-        json_data = sock.recv(1024)
-        response = json.loads(json_data.decode())
-        sock.close()
-        return response
 
 if __name__ == "__main__":
     unittest.main()

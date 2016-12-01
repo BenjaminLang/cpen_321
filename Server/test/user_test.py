@@ -3,20 +3,28 @@
 import socket
 import json
 import unittest
+import ssl
 
 
 class userTest(unittest.TestCase):
-    def _send(self, data):
+    @staticmethod
+    def __send(data):
         sock = socket.socket()
         host = socket.gethostbyname(socket.gethostname())
         port = 6969
+
+        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+        context.verify_mode = ssl.CERT_REQUIRED
+        context.check_hostname = True
+        context.load_verify_locations('/home/ryangroup/cpen_321/Server/src/ca.crt')
+        connection = context.wrap_socket(sock, server_hostname='checkedout')
         json_data = json.dumps(data)
 
-        sock.connect((host, port))
-        sock.send(json_data.encode())
-        json_response = sock.recv(1024).decode()
+        connection.connect((host, port))
+        connection.send(json_data.encode())
+        json_response = connection.recv(1024).decode()
         response = json.loads(json_response)
-        sock.close()
+        connection.close()
         return response
 
     def test_1(self):
