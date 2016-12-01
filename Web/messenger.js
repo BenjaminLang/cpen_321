@@ -90,8 +90,9 @@ response = function (res_from_server, req, res) {
         message.items[i].data.name = message.items[i].data.name.replace('&amp;', '&');
       }
       
-      res.render('item_searched', {'title': req.query.item + ' - Search Results', 
-                                  'list_items': message.items});
+      res.render('item_searched', {'title' : req.query.item + ' - Search Results',
+                                  'logged_in_name' : req.session.name,
+                                  'list_items' : message.items});
       break;
     
     // check if acc_created is true or false
