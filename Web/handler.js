@@ -64,7 +64,7 @@ module.exports = {
    */
   logout : function(req, res) {
     // delete the session variable
-    req.session.destroy();
+    req.session = null;
     // redirect user to homepage
     res.redirect('/');
   },
