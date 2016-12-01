@@ -23,7 +23,12 @@ class DatabaseServer:
         try:
             while True:
                 connection, addr = self._server_socket.accept()
-                secure_conn = self._context.wrap_socket(connection, server_side=True)
+
+                try:
+                    secure_conn = self._context.wrap_socket(connection, server_side=True)
+                except ssl.SSLError:
+                    print('caught SSL Error!!')
+                    continue
                 
                 #print('connected')
                 try:
@@ -39,7 +44,7 @@ class DatabaseServer:
                     continue
 
                 print(json_data)
-               
+
                 try:
                     self.__queue.put(item=(secure_conn, json_data), block=True, timeout=10)
 

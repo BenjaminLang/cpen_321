@@ -3,10 +3,10 @@ import queue
 import socket
 
 import bson.json_util
-from src.cache_ops import CacheOps as mdo
-from src.cat_ops import CatOps as cdo
-from src.user_ops import UserOps as udo
-from src.item_ops import ItemOps as ido
+from cache_ops import CacheOps as mdo
+from cat_ops import CatOps as cdo
+from user_ops import UserOps as udo
+from item_ops import ItemOps as ido
 
 from pymongo import MongoClient
 
@@ -151,7 +151,7 @@ class RequestHandler:
     def __handle_list_names(self, json_data):
         response = {}
         response['message_type'] = 'get_list_names_response'
-        list_names = udo.get_user_list_names(self.__users_db, json_data)
+        list_names = udo.get_list_names(self.__users_db, json_data)
         if list_names == 'failed':
             response['status'] = 'failed'
             response['list_names'] = []
@@ -219,7 +219,7 @@ class RequestHandler:
 
         log_res, name = udo.log_in(self.__users_db, json_data)
         if log_res is 'success':
-            response['list_names'] = udo.get_user_list_names(self.__users_db, json_data)
+            response['list_names'] = udo.get_list_names(self.__users_db, json_data)
         response['name'] = name
         response['status'] = log_res # DNE, success, or failed
         return response

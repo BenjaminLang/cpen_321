@@ -35,12 +35,12 @@ class ItemOps:
         results = []
         cat_res = []
         item = [x.lower().replace(',', '') for x in json_query['items'][0].split()]
-        store_list = json_query['options']['store']
+        store_list = json_query['options']['stores']
 
         list.sort(categories)
         try:
             for cat in categories:
-            # set up approp'riate indexing information, json_data is a dict
+            # set up appropriate indexing information, json_data is a dict
                 words_query = {'words': { '$all': item }}
                 if store_list:
                     store_query = []
