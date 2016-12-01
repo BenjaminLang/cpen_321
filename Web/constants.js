@@ -15,7 +15,7 @@ const constants = {
 	ADD_LIST_REQ : 'add_list',
 	DEL_LIST_REQ : 'delete_list',
 	GET_LIST_REQ : 'retrieve_list',
-	GET_LIST_NAMES_REQ : 'get_list_names'
+	GET_LIST_NAMES_REQ : 'get_list_names',
 
 	// RESPONSES
 	READ_RSP : 'read_response',
@@ -24,7 +24,7 @@ const constants = {
 	ACC_UPDATE_RSP : 'acc_update_response',
 	SAVE_LIST_RSP : 'save_list_response',
 	DELETE_LIST_RSP : 'delete_list_response',
-	GET_LIST_NAMES_RSP : 'get_list_names_response'
+	GET_LIST_NAMES_RSP : 'get_list_names_response',
 
 	// STATUSES
 	SUCCESS : 'success',
