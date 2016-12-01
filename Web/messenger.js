@@ -44,17 +44,10 @@ module.exports = {
         json_request.password = req.body.password;
         break;
 
+      case constants.DEL_ACC_REQ:
       case constants.LOGIN_REQ:
         json_request.email = req.body.email;
         json_request.password = req.body.password;
-        break;
-
-      case constants.ADD_LIST_REQ:
-      case constants.DEL_LIST_REQ:
-      case constants.GET_LIST_REQ:
-        json_request.list_name = req.body.list_name;
-        json_request.list = req.body.list;
-        json_request.email = req.session.user.email;
         break;
 
       case constants.ACC_UPDATE_REQ:
@@ -63,7 +56,14 @@ module.exports = {
         json_request.password = req.body.password;
         break;
 
-      // case constants.
+      case constants.ADD_LIST_REQ:
+        json_request.list = req.body.list;
+      case constants.DEL_LIST_REQ:
+      case constants.GET_LIST_REQ:
+        json_request.list_name = req.body.list_name;
+      case constants.GET_LIST_NAMES:
+        json_request.email = req.session.user.email;
+        break;
     }
     socket(json_request, req, res);
   }
@@ -82,7 +82,9 @@ response = function (res_from_server, req, res) {
   var message = JSON.parse(res_from_server.toString());
   var type = message.message_type;
   debug('message is of type: ' + type);
+
   switch(type) {
+    //////////////////////////////
     case constants.READ_RSP:
       for (var i = 0; i < message.items.length; i++) {
         // replace all instances of '&amp;' in item names with '&'
@@ -94,8 +96,7 @@ response = function (res_from_server, req, res) {
                                   'logged_in_name' : name,
                                   'list_items' : message.items});
       break;
-    
-    // check if acc_created is true or false
+    //////////////////////////////
     case constants.CREATE_ACC_RSP:
       if (message.status == constants.SUCCESS) {
         // save user info, then redirect to home page
@@ -110,7 +111,13 @@ response = function (res_from_server, req, res) {
         });
       }
       break;
-
+    //////////////////////////////
+    case constants.DEL_ACC_RSP:
+      if (message.status == constants.SUCCESS) {
+        
+      }
+      break;
+    //////////////////////////////
     case constants.LOGIN_RSP:
       if (message.status == constants.SUCCESS) {
         // login successful
@@ -128,7 +135,7 @@ response = function (res_from_server, req, res) {
         });
         
       }
-      else if (message.status == constants.DOES_NOT_EXIST) {
+      else {
         // email does not exist
         debug('login: does not exist');
         res.render('login', {
@@ -136,13 +143,9 @@ response = function (res_from_server, req, res) {
           'login_failed' : 'Email does not exist.'
         });
       }
-      else {
-        debug(message.status);
-      }
       break;
-
+    //////////////////////////////
     case constants.ACC_UPDATE_RSP:
-
       if (message.status == constants.SUCCESS) {
         res.render('update', {
           'title' : 'Change Password',
@@ -151,7 +154,6 @@ response = function (res_from_server, req, res) {
         });
       }
       else if (message.status == constants.FAILURE) {
-        
         res.render('update', {
           'title' : 'Change Password',
           'logged_in_name' : req.session.user.name,
@@ -159,17 +161,27 @@ response = function (res_from_server, req, res) {
         });
       }
       // this should never happen
-      else if (message.status == constants.DOES_NOT_EXIST) {
+      else {
         res.send('<p>Account does not exist.</p>');
       }
       break;
 
-    case constants.SAVE_LIST_RSP:
+    case constants.ADD_LIST_RSP:
       // stay on same page
       res.status(204).end();
       break;
 
-    // more responses to add
+    case constants.GET_LIST_RSP:
+      // do something with the lists
+      break;
+
+    case constants.GET_LIST_NAMES_RSP:
+      // do something with the list names
+      break;
+
+    case constants.DEL_LIST_RSP:
+      // refresh the page the user is on, but with the list deleted
+      break;
   }
 };
 
@@ -196,7 +208,8 @@ socket = function(req_to_server, req, res) {
       port : constants.MAINSERVER_PORT,
       host : constants.HOST,
       options : options
-  });
+  }, function() {debug('Connection protocol: ' + connection.getProtocol());}
+  );
 
   // container for incoming data
   var data = '';

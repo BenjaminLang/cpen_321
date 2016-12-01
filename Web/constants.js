@@ -13,18 +13,20 @@ const constants = {
 	LOGIN_REQ : 'acc_login',
 	ACC_UPDATE_REQ: 'acc_update',
 	ADD_LIST_REQ : 'add_list',
-	DEL_LIST_REQ : 'delete_list',
 	GET_LIST_REQ : 'retrieve_list',
 	GET_LIST_NAMES_REQ : 'get_list_names',
+	DEL_LIST_REQ : 'delete_list',
 
 	// RESPONSES
 	READ_RSP : 'read_response',
 	CREATE_ACC_RSP : 'acc_create_response',
+	DEL_ACC_RSP : 'acc_delete_response',
 	LOGIN_RSP : 'acc_login_response',
 	ACC_UPDATE_RSP : 'acc_update_response',
-	SAVE_LIST_RSP : 'save_list_response',
-	DELETE_LIST_RSP : 'delete_list_response',
+	ADD_LIST_RSP : 'add_list_response',
+	GET_LIST_RSP : 'get_list_response',
 	GET_LIST_NAMES_RSP : 'get_list_names_response',
+	DEL_LIST_RSP : 'delete_list_response',
 
 	// STATUSES
 	SUCCESS : 'success',

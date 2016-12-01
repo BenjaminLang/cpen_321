@@ -35,19 +35,15 @@ app.set('view engine', 'pug');
 
 // for parsing application/json
 app.use(body_parser.json()); 
-
 // for parsing application/x-www-form-urlencoded     
 app.use(body_parser.urlencoded({ extended: true }));
-
 // for storing cookies
 app.use(cookie_session({ name: 'session', keys: ['key1', 'key2']}));
-
 // for logging http requests from browser
 app.use(logger('dev'));
-
-// Serve static files (HTML, CSS, JS) from the public directory.
+// Serve static files from the public directory.
 app.use(express.static('./public'));
-// icon that displays in the browser tab (Doesn't work for some reason)
+// icon that displays in the browser tab
 app.use(favicon('./public/favicon.ico'));
 
 // MIDDLEWARE
