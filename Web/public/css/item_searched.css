@@ -42,6 +42,7 @@ ul.products {
     -webkit-transition: border .2s ease-in-out;
     -o-transition: border .2s ease-in-out;
     transition: border .2s ease-in-out;
+    min-height: 110px;
 }
 
 
@@ -64,17 +65,15 @@ ul.products {
     color: #fff;
     background-color: #337ab7;
     border-color: #2e6da4;
-    margin-left: 970px;
-    margin-top: -200px;
+    margin-left: 974px;
+    position: absolute;
 }
 
 
 .btn.btn-default {
-    margin-left: 148px;
     background-color: #5bc0de;
     color: #fff;
-    margin-left: 965px;
-    margin-top: -96px;
+    margin-left: 1073px;
 }
 
 
