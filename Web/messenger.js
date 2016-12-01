@@ -3,7 +3,6 @@
 /**************************************************************************/
 
 var constants = require('./constants.js');
-// var net = require('net');
 var tls = require('tls');
 var fs = require('fs');
 var debug = require('debug')('messenger');
@@ -26,7 +25,7 @@ module.exports = {
     switch(type) {
       case constants.SEARCH_REQ:
         // Need to extract actual options from user options
-        if (json_request.email) json_request.email = req.session.email;
+        if (json_request.email) json_request.email = req.session.user.email;
         else json_request.email = '';
         json_request.options = {
           'stores' : '',
@@ -55,11 +54,11 @@ module.exports = {
       case constants.GET_LIST_REQ:
         json_request.list_name = req.body.list_name;
         json_request.list = req.body.list;
-        json_request.email = req.session.email;
+        json_request.email = req.session.user.email;
         break;
 
       case constants.ACC_UPDATE_REQ:
-        json_request.email = req.session.email;
+        json_request.email = req.session.user.email;
         json_request.old_password = req.body.old_password;
         json_request.password = req.body.password;
         break;
@@ -91,7 +90,7 @@ response = function (res_from_server, req, res) {
       }
       
       res.render('item_searched', {'title' : req.query.item + ' - Search Results',
-                                  'logged_in_name' : req.session.name,
+                                  'logged_in_name' : req.session.user.name,
                                   'list_items' : message.items});
       break;
     
@@ -99,8 +98,9 @@ response = function (res_from_server, req, res) {
     case constants.CREATE_ACC_RSP:
       if (message.status == constants.SUCCESS) {
         // save name and email, then redirect to home page
-        req.session.name = req.body.name;
-        req.session.email = req.body.email;
+        req.session.user = {name : req.body.name, email : req.body.email};
+        //req.session.name = req.body.name;
+        //req.session.email = req.body.email;
         res.redirect('/');
       }
       else {
@@ -114,8 +114,7 @@ response = function (res_from_server, req, res) {
         // login successful
         // need to get name from message
         debug('login: successful');
-        req.session.name = message.name;
-        req.session.email = req.body.email;
+        req.session.user = {name : message.name, email : req.body.email};
         res.redirect('/');
       } 
       else if (message.status == constants.FAILURE) {
@@ -167,18 +166,21 @@ response = function (res_from_server, req, res) {
  * @return nothing
  */
 socket = function(req_to_server, req, res) {
-  // connect to the main server
+  
+  // for TLS
   var options = { 
     key : fs.readFileSync('../Server/src/client.key'),
     cert : fs.readFileSync('../Server/src/client.crt'),
     ca : [ fs.readFileSync('../Server/src/server.crt') ]
   };
+
+  // connect to the main server
   var connection = tls.connect({
       port : constants.MAINSERVER_PORT,
       host : constants.HOST,
       options : options
   });
-  //var connection = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST});
+
   // container for incoming data
   var data = '';
 
