@@ -3,13 +3,12 @@ import queue
 import socket
 
 import bson.json_util
-from cache_ops import CacheOps as mdo
-from cat_ops import CatOps as cdo
-from user_ops import UserOps as udo
-from item_ops import ItemOps as ido
+from src.cache_ops import CacheOps as mdo
+from src.cat_ops import CatOps as cdo
+from src.user_ops import UserOps as udo
+from src.item_ops import ItemOps as ido
 
 from pymongo import MongoClient
-from operator import attrgetter
 
 class RequestHandler:
     def __init__(self, queue=None):
@@ -58,6 +57,8 @@ class RequestHandler:
                 json_response = self.__handle_delete_list(json_data)
             elif req_type == 'get_list_names':
                 json_response = self.__handle_list_names(json_data)
+            elif req_type == 'recommend':
+                json_response = self.__handle_recommend(json_data)
 
             if req_type != 'read':
                print(json_response)
@@ -66,7 +67,6 @@ class RequestHandler:
             connection.send(json_response.encode())
             connection.close()
 
-        return
 
     def __handle_write(self, json_data):
         # insert the data into the database
@@ -98,6 +98,7 @@ class RequestHandler:
         response = {}
         response['message_type'] = 'read_response'
         item_name = json_data['items'][0].lower()
+
         cache_results = mdo.read_cache(self.__cache_db, item_name)
         if cache_results == 'Not found':
             # get the categories to search into
@@ -108,6 +109,14 @@ class RequestHandler:
             results, cat_list = ido.read_items(self.__items_db, json_data, cache_results)
 
         mdo.insert_cache(self.__cache_db, item_name, cat_list)
+
+        email = json_data['email']
+        email = email.replace('@', '')
+        save_cat_res = 'No Email'
+
+        if email is not '':
+            save_cat_res = udo.save_search_cat(self.__users_db, item_name, cat_list, email)
+
         ret_data = []
         for i in results:
             for j in i:
@@ -116,13 +125,20 @@ class RequestHandler:
         num = int(json_data['options']['num'])
         if num == -1:
             num = 100
-
         if json_data['options']['price'] == 'min':
             ret_data.sort(key=lambda x: float(x['data']['price']))
         elif json_data['options']['price'] == 'max':
             ret_data.sort(key=lambda x: float(x['data']['price']), reverse=True)
 
+        if json_data['options']['range_min'] != '':
+            price_min = float(json_data['options']['range_min'])
+            ret_data = [x for x in ret_data if float(x['data']['price']) >= price_min]
+        if json_data['options']['range_max'] != '':
+            price_max = float(json_data['options']['range_max'])
+            ret_data = [x for x in ret_data if float(x['data']['price']) <= price_max]
+
         response['items'] = ret_data[0:num]
+        response['status'] = save_cat_res
 
         return response
 
@@ -213,3 +229,14 @@ class RequestHandler:
 
         return response
 
+    def __handle_recommend(self, json_data):
+        response = {}
+        response['message_type'] = 'recommend_response'
+        del json_data['message_type']
+
+        result, rec_list = udo.recommend(self.__users_db, self.__items_db, json_data)
+
+        response['status'] = result
+        response['rec_list'] = rec_list
+
+        return response
