@@ -65,7 +65,6 @@ class RequestHandler:
             connection.send(json_response.encode())
             connection.close()
 
-        return
 
     def __handle_write(self, json_data):
         # insert the data into the database
@@ -124,11 +123,17 @@ class RequestHandler:
         num = int(json_data['options']['num'])
         if num == -1:
             num = 100
-
         if json_data['options']['price'] == 'min':
             ret_data.sort(key=lambda x: float(x['data']['price']))
         elif json_data['options']['price'] == 'max':
             ret_data.sort(key=lambda x: float(x['data']['price']), reverse=True)
+
+        if json_data['options']['range_min'] != '':
+            price_min = float(json_data['options']['range_min'])
+            ret_data = [x for x in ret_data if float(x['data']['price']) >= price_min]
+        if json_data['options']['range_max'] != '':
+            price_max = float(json_data['options']['range_max'])
+            ret_data = [x for x in ret_data if float(x['data']['price']) <= price_max]
 
         response['items'] = ret_data[0:num]
         response['status'] = save_cat_res

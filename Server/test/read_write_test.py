@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import unittest
 import socket
 import json
-import time
+
 
 class readWriteTest(unittest.TestCase):
     def test_1(self):
@@ -33,6 +33,7 @@ class readWriteTest(unittest.TestCase):
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
+        options['store'] = []
 
         read['options'] = options
 
@@ -75,6 +76,7 @@ class readWriteTest(unittest.TestCase):
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
+        options['store'] = []
 
         read['options'] = options
 
@@ -100,6 +102,7 @@ class readWriteTest(unittest.TestCase):
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
+        options['store'] = []
 
         read['options'] = options
 
@@ -114,8 +117,67 @@ class readWriteTest(unittest.TestCase):
         response = self.__send(recommend)
 
         self.assertEqual(response['status'], 'success')
-        self.assertEqual(len(response['rec_list']), 0)
+        self.assertEqual(len(response['rec_list']), 1)
 
+        self.client.close()
+
+    def test_4(self):
+        self.client = MongoClient()
+
+        # read as a user, and look at recommended items
+        read = {}
+        read['message_type'] = 'read'
+        read['items'] = ['syrup']
+        read['email'] = ''
+
+        options = {}
+        options['price'] = 'min'
+        options['num'] = '-1'
+        options['store'] = ['walmart']
+
+        read['options'] = options
+
+        response = self.__send(read)
+        self.assertTrue(len(response) == 3)
+        self.assertEqual(response['status'], 'No Email')
+
+        ret_list = response['items']
+
+        for item in ret_list:
+            self.assertEqual(item['data']['store'], options['store'][0]
+                             # or item['data']['store'], options['store'][1]
+                            )
+
+        self.client.close()
+
+    def test_5(self):
+        self.client = MongoClient()
+
+        # read as a user, and look at recommended items
+        read = {}
+        read['message_type'] = 'read'
+        read['items'] = ['syrup']
+        read['email'] = ''
+
+        options = {}
+        options['price'] = 'min'
+        options['num'] = '-1'
+        options['store'] = ''
+        options['range_min'] = '1.00'
+        options['range_max'] = '34.00'
+
+        read['options'] = options
+
+        response = self.__send(read)
+        self.assertTrue(len(response) == 3)
+        self.assertEqual(response['status'], 'No Email')
+
+        ret_list = response['items']
+
+        for item in ret_list:
+            self.assertTrue(options['range_min'] <= item['data']['price'] <= options['range_max'])
+
+        print(response['items'])
         self.client.close()
 
     def __send(self, data):

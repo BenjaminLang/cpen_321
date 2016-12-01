@@ -36,24 +36,22 @@ class ItemOps:
         results = []
         cat_res = []
         item = [x.lower().replace(',', '') for x in json_query['items'][0].split()]
-        price = json_query['options']['price']
-        num = int(json_query['options']['num'])
+        store_list = json_query['options']['store']
+
         list.sort(categories)
-        if num == -1:
-            num = 100
         try:
             for cat in categories:
-            # set up appropriate indexing information, json_data is a dict
-                query = {'words': { '$all': item }}
+            # set up approp'riate indexing information, json_data is a dict
+                words_query = {'words': { '$all': item }}
+                if store_list:
+                    store_query = []
+                    for store in store_list:
+                        store_query.append({'data.store' : {'$eq' : store}})
 
-                if(price == 'min'):
-                    res_data = list(items_db[cat].find(query).sort('data.price',1).limit(num))
-
-                elif(price == 'max'):
-                    res_data = list(items_db[cat].find(query).sort('data.price',-1).limit(num))
-
+                    query = {'$and' : [words_query, {'$or' : store_query}]}
+                    res_data = list(items_db[cat].find(query))
                 else:
-                    res_data = list(items_db[cat].find(query).limit(num))
+                    res_data = list(items_db[cat].find(words_query))
 
                 if res_data is not None:
                     for res in res_data:
@@ -68,5 +66,3 @@ class ItemOps:
             return None
 
         return results, set(cat_res)
-
-

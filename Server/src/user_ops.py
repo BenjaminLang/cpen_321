@@ -86,14 +86,13 @@ class UserOps:
             auth = json_query['old_password']
             collection = email.replace('@', '')
 
-            db_res = list(users_db[collection].find())
+            db_res = list(users_db[collection].find())[0]
 
             if db_res:
-                if db_res[0]['password'] == auth:
-                    del json_query['old_password']
-                    user_id = db_res[0]['_id']
-                    json_query['_id'] = user_id
-                    users_db[collection].save(json_query)
+                if db_res['password'] == auth:
+                    db_res['old_password'] = auth
+                    db_res['password'] = json_query['password']
+                    users_db[collection].save(db_res)
                     return 'success'
                 else:
                     return 'failed'
@@ -214,14 +213,15 @@ class UserOps:
         try:
             db_res = list(users_db[collection].find({'type': {'$eq': 'save_cat'}}))
 
-            for n in range(0, len(db_res)):
-                cat_list = db_res[n]['cats']
-                seed = random.sample(range(0, len(cat_list)))
-                search_cat_list.append(cat_list[seed])
+            if db_res:
+                for n in range(0, len(db_res)):
+                    cat_list = db_res[n]['cats']
+                    seed = random.sample(range(0, len(cat_list)), 1)
+                    search_cat_list.append(cat_list[seed[0]])
 
-            for cat in search_cat_list:
-                db_res = list(items_db[cat].find())[0]
-                rec_list.append(db_res)
+                for cat in search_cat_list:
+                    db_res = list(items_db[cat].find())[0]
+                    rec_list.append(db_res)
 
             return 'success', rec_list
 
