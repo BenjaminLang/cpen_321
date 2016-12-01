@@ -187,7 +187,7 @@ button.btn.btn-primary.btn-lg.emptyCartButton {
 }
 
 
-a.btn.btn-default.visitWebsiteButton {
+.thumbnail a.btn.btn-default.visitWebsiteButton {
     border-radius: 12px;
     margin-top: -69px;
     margin-left: 964px;
