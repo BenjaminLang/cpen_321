@@ -25,8 +25,8 @@ block custom-widget
             h3.ellipsis #{item.data.name}
             p $#{item.data.price}
             p #{item.data.store}
-            a.btn.btn-primary.addToCartButton(href='#', role='button', id='item' + item_id) Add to List
-            a.btn.btn-default(href=item.data.url, role='button', target='_blank') Visit Website
+          a.btn.btn-primary.addToCartButton(href='#', role='button', id='item' + item_id) Add to List
+          a.btn.btn-default(href=item.data.url, role='button', target='_blank') Visit Website
         - item_id++;
 		
   // Modal
