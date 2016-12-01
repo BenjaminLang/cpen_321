@@ -125,7 +125,7 @@ button.btn.btn-primary.saveChanges {
 
 .modal-title {
     text-align: center;
-    margin: 0;
+    margin-top: -49px;
     line-height: 1.42857143;
 }
 
