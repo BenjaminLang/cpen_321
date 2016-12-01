@@ -4,6 +4,11 @@ function render() {
   $('.modal-body').html(htmlString);
 }
 
+function resetLocalStorageIndex() {
+    localStorage.cart = JSON.stringify([]);
+}
+
+
 function resetLocalStorage() {
     localStorage.cart = JSON.stringify([]);
     render();
