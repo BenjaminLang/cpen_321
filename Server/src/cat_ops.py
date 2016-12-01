@@ -1,5 +1,6 @@
 import traceback
 
+
 class CatOps:
     @staticmethod
     def insert_cat(cat_db, collection):

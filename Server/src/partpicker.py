@@ -1,4 +1,4 @@
-from crawl_lib import *
+from src.crawl_lib import *
 
 # Takes in a soup and sends the products to the db (including price, url, name, image)
 def _send_products(link, cat_name, base_url):
