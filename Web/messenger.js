@@ -6,6 +6,7 @@ var constants = require('./constants.js');
 var tls = require('tls');
 var fs = require('fs');
 var debug = require('debug')('messenger');
+var util = require('util');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports = {
@@ -208,9 +209,8 @@ socket = function(req_to_server, req, res) {
       port : constants.MAINSERVER_PORT,
       host : constants.HOST,
       options : options
-  }); //function() {debug('Connection protocol: ' + connection.getProtocol());}
-  //);
-
+    }, function() {debug('Connection protocol: ' + connection.getProtocol());}
+  );
   // container for incoming data
   var data = '';
 
