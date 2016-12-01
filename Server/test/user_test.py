@@ -8,7 +8,7 @@ import ssl
 
 class userTest(unittest.TestCase):
     @staticmethod
-    def __send(data):
+    def _send(data):
         sock = socket.socket()
         host = socket.gethostbyname(socket.gethostname())
         port = 6969
