@@ -28,43 +28,43 @@ function checkForm(form) {
     return false;
   }
 
-  if(form.pwd1.value != "" && form.pwd1.value == form.pwd2.value) {
-    if(form.pwd1.value.length < 6) {
+  if(form.password.value != "" && form.password.value == form.pwd2.value) {
+    if(form.password.value.length < 6) {
       alert("Error: Password must contain at least six characters!");
-      form.pwd1.focus();
+      form.password.focus();
       return false;
     }
 
-    if(form.pwd1.value == form.name.value) {
+    if(form.password.value == form.name.value) {
       alert("Error: Password must be different from your name!");
-      form.pwd1.focus();
+      form.password.focus();
       return false;
     }
 
 	re = /[0-9]/;
-    if(!re.test(form.pwd1.value)) {
+    if(!re.test(form.password.value)) {
       alert("Error: password must contain at least one number (0-9)!");
-      form.pwd1.focus();
+      form.password.focus();
       return false;
     }
 
     re = /[a-z]/;
-    if(!re.test(form.pwd1.value)) {
+    if(!re.test(form.password.value)) {
       alert("Error: password must contain at least one lowercase letter (a-z)!");
-      form.pwd1.focus();
+      form.password.focus();
       return false;
     }
 
     re = /[A-Z]/;
-    if(!re.test(form.pwd1.value)) {
+    if(!re.test(form.password.value)) {
       alert("Error: password must contain at least one uppercase letter (A-Z)!");
-      form.pwd1.focus();
+      form.password.focus();
       return false;
     }
     
   } else {
       alert("Error: Please check that you've entered and confirmed your password!");
-      form.pwd1.focus();
+      form.password.focus();
       return false;
     }
 

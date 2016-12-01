@@ -59,11 +59,10 @@ function require_login(req, res, next) {
   }
 };
 
-
 // GET requests
 app.get('/', handler.home);
 app.get('/register', handler.register);
-app.get('/delete_acc', handler.delete_acc);
+app.get('/delete_acc', require_login, handler.delete_acc);
 app.get('/login', handler.login);
 app.get('/logout', handler.logout);
 app.get('/item_searched', handler.item_searched);
@@ -72,7 +71,7 @@ app.get('/update', require_login, handler.update);
 // POST requests
 app.post('/register', handler.register_post);
 app.post('/login', handler.login_post);
-app.post('/update', handler.update_post);
+app.post('/update', require_login, handler.update_post);
 app.post('/save_list', handler.save_list);
 
 /////////////
