@@ -89,7 +89,10 @@ module.exports = {
    * @return  nothing
    */
   update : function(req, res) {
-    res.render('update', {'title' : 'Change Password'});
+    res.render('update', {
+      'title' : 'Change Password',
+      'logged_in_name' : req.session.user.name
+    });
   },
 
   /**

@@ -91,7 +91,6 @@ response = function (res_from_server, req, res) {
       var name;
       if (req.session.user) name = req.session.user.name;
       res.render('item_searched', {'title' : req.query.item + ' - Search Results',
-
                                   'logged_in_name' : name,
                                   'list_items' : message.items});
       break;
@@ -105,7 +104,10 @@ response = function (res_from_server, req, res) {
       }
       else {
         // failure, which means email is already in use
-        res.render('register', {'email_taken' : 'That email is already in use.'});
+        res.render('register', {
+          'title' : 'Registration Form',
+          'email_taken' : 'That email is already in use.'
+        });
       }
       break;
 
@@ -120,13 +122,19 @@ response = function (res_from_server, req, res) {
       else if (message.status == constants.FAILURE) {
         // password is incorrect
         debug('login: failure');
-        res.render('login', {'login_failed' : 'Password is incorrect.'});
+        res.render('login', {
+          'title' : 'Login',
+          'login_failed' : 'Password is incorrect.'
+        });
         
       }
       else if (message.status == constants.DOES_NOT_EXIST) {
         // email does not exist
         debug('login: does not exist');
-        res.render('login', {'login_failed' : 'Email does not exist.'});
+        res.render('login', {
+          'title' : 'Login',
+          'login_failed' : 'Email does not exist.'
+        });
       }
       else {
         debug(message.status);
@@ -136,10 +144,19 @@ response = function (res_from_server, req, res) {
     case constants.ACC_UPDATE_RSP:
 
       if (message.status == constants.SUCCESS) {
-        res.render('update', {'status' : 'Password successfully updated.'});
+        res.render('update', {
+          'title' : 'Change Password',
+          'logged_in_name' : req.session.user.name,
+          'status' : 'Password successfully updated.'
+        });
       }
       else if (message.status == constants.FAILURE) {
-        res.render('update', {'status' : 'Old password is incorrect.'});
+        
+        res.render('update', {
+          'title' : 'Change Password',
+          'logged_in_name' : req.session.user.name,
+          'status' : 'Old password is incorrect.'
+        });
       }
       // this should never happen
       else if (message.status == constants.DOES_NOT_EXIST) {
