@@ -28,6 +28,7 @@ class DatabaseServer:
                     secure_conn = self._context.wrap_socket(connection, server_side=True)
                 except ssl.SSLError:
                     print('caught SSL Error!!')
+                    traceback.print_exec()
                     continue
                 
                 #print('connected')
