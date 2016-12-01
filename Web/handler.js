@@ -16,8 +16,8 @@ module.exports = {
    */
   home : function(req, res) {
     var name;
-    if (req.session.name) {
-      name = req.session.name;
+    if (req.session.user) {
+      name = req.session.user.name;
     }
     res.render('index', {'title': 'Home', 'logged_in_name': name});
   },
@@ -39,7 +39,7 @@ module.exports = {
    * @return  nothing
    */
   delete_acc : function(req, res) {
-    debug('Delete account request for user: ' + req.session.email);
+    debug('Delete account request for user: ' + req.session.user);
     messenger.request(constants.DEL_ACC_REQ, req, res);
   },
 
@@ -51,7 +51,7 @@ module.exports = {
    */
   login : function(req, res) {
     // user is already logged in; redirect them back to home page
-    if (req.session.name) res.redirect('/');
+    if (req.session.user) res.redirect('/');
 
     res.render('login', {'title': 'Login'});
   },
@@ -92,12 +92,7 @@ module.exports = {
    * @return  nothing
    */
   update : function(req, res) {
-    // is user logged in?
-    if (req.session.name) {
-      res.render('update', {'title' : 'Change Password'});
-    }
-    // otherwise, go to the login page
-    else res.redirect('/login');
+    res.render('update', {'title' : 'Change Password'});
   },
 
   /**

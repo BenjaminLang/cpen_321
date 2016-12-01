@@ -52,18 +52,26 @@ app.use(favicon('./public/favicon.ico'));
 
 // MIDDLEWARE
 function require_login(req, res, next) {
-	if (req.session.name) {
+	if (!req.session.user) {
     res.redirect('/login');
   } else {
     next();
   }
 };
 
+function require_logout(req, res, next) {
+  if (req.session.user) {
+    res.redirect('/');
+  } else {
+    next();
+  }
+}
+
 // GET requests
 app.get('/', handler.home);
-app.get('/register', handler.register);
+app.get('/register', require_logout, handler.register);
 app.get('/delete_acc', require_login, handler.delete_acc);
-app.get('/login', handler.login);
+app.get('/login', require_logout, handler.login);
 app.get('/logout', handler.logout);
 app.get('/item_searched', handler.item_searched);
 app.get('/update', require_login, handler.update);
