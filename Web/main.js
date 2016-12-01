@@ -50,13 +50,24 @@ app.use(express.static('./public'));
 // icon that displays in the browser tab (Doesn't work for some reason)
 app.use(favicon('./public/favicon.ico'));
 
+// MIDDLEWARE
+function require_login(req, res, next) {
+	if (req.session.name) {
+    res.redirect('/login');
+  } else {
+    next();
+  }
+};
+
+
 // GET requests
 app.get('/', handler.home);
 app.get('/register', handler.register);
+app.get('/delete_acc', handler.delete_acc);
 app.get('/login', handler.login);
 app.get('/logout', handler.logout);
 app.get('/item_searched', handler.item_searched);
-app.get('/update', handler.update);
+app.get('/update', require_login, handler.update);
 
 // POST requests
 app.post('/register', handler.register_post);

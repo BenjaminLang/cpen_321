@@ -9,6 +9,7 @@ const constants = {
 	// REQUESTS
 	SEARCH_REQ : 'read',
 	CREATE_ACC_REQ : 'acc_create',
+	DEL_ACC_REQ : 'acc_del',
 	LOGIN_REQ : 'acc_login',
 	ACC_UPDATE_REQ: 'acc_update',
 	ADD_LIST_REQ : 'add_list',

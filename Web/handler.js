@@ -33,6 +33,17 @@ module.exports = {
   },
 
   /**
+   * Handler for deleting account
+   * @param  req the HTTP request from the browser 
+   * @param  res the HTTP response to the browser
+   * @return  nothing
+   */
+  delete_acc : function(req, res) {
+    debug('Delete account request for user: ' + req.session.email);
+    messenger.request(constants.DEL_ACC_REQ, req, res);
+  },
+
+  /**
    * Handler for login page
    * @param  req the HTTP request from the browser 
    * @param  res the HTTP response to the browser
@@ -53,8 +64,7 @@ module.exports = {
    */
   logout : function(req, res) {
     // delete the session variable
-    delete req.session.name;
-    delete req.session.email;
+    req.session.destroy();
     // redirect user to homepage
     res.redirect('/');
   },

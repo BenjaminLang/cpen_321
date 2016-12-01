@@ -24,7 +24,8 @@ module.exports = {
     json_request.message_type = type;
 
     switch(type) {
-      case constants.SEARCH_REQ:  
+      case constants.SEARCH_REQ:
+        // Need to extract actual options from user options  
         json_request.options = {'price' : 'none', 'num' : '-1'};
         json_request.items = [req.query.item];
         // json_request.name 
