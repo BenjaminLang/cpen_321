@@ -50,9 +50,6 @@ module.exports = {
    * @return  nothing
    */
   login : function(req, res) {
-    // user is already logged in; redirect them back to home page
-    if (req.session.user) res.redirect('/');
-
     res.render('login', {'title': 'Login'});
   },
 
