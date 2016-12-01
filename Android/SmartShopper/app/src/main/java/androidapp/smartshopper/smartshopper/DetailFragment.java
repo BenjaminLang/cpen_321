@@ -79,7 +79,7 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                ShopListHandler listHandler = new ShopListHandler(getActivity(), "cart");
+                ShopListHandler listHandler = new ShopListHandler(getActivity(), "default_list");
                 int numToAdd = Integer.parseInt(quantity.getText().toString());
 
                 if(listHandler.addToList(product, numToAdd))

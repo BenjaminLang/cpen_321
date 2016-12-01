@@ -66,14 +66,14 @@ public class JSONParser {
     }
 
     public List<Product> parseCart(String json) {
-        if(json != null) {
+        if (json != null) {
             List<Product> parseList = new ArrayList<Product>();
 
-            try{
+            try {
                 JSONObject jsonObj = new JSONObject(json);
                 JSONArray items = jsonObj.getJSONArray(CART_TAG);
 
-                for(int i = 0; i < items.length(); i++) {
+                for (int i = 0; i < items.length(); i++) {
                     JSONObject currItem = items.getJSONObject(i);
 
                     String name = currItem.getString(NAME_TAG);
@@ -87,11 +87,32 @@ public class JSONParser {
                     parseList.add(currProduct);
                 }
 
-            }catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             return parseList;
+        } else {
+            return null;
+        }
+    }
+
+    public List<String> parseListNames(String json) {
+        if(json != null) {
+            List<String> shopLists = new ArrayList<String>();
+
+            try{
+                JSONObject jsonObj = new JSONObject(json);
+                JSONArray listArray = jsonObj.getJSONArray("list_names");
+
+                for(int i = 0; i < listArray.length(); i++) {
+                    shopLists.add(listArray.getString(i));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return shopLists;
         }
         else {
             return null;

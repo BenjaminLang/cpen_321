@@ -13,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,8 @@ public class ShoppingListFragment extends Fragment {
     private ProductAdapter adapter;
     private List<Product> cartItems;
     private double totalPrice;
+    private String[] listNameOpts = {};
+    private String email;
 
     private SharedPreferences sharedPref;
 
@@ -48,18 +52,50 @@ public class ShoppingListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         this.context = getActivity();
-        sharedPref = sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
 
-        try {
-            String defaultVal = "";
-            final String cartString = sharedPref.getString("cart", defaultVal);
+        email = sharedPref.getString(getString(R.string.curr_user), "");
+        boolean loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), true);
 
-            JSONObject cartJSON = new JSONObject(cartString);
+        if(loggedIn) {
+            try {
+                String getListsReq = new RequestBuilder().buildGetListNamesJSON(email);
+                String getAllListResp = new SendRequest().execute(getListsReq).get();
 
-            cartItems = new JSONParser().parseCart(cartString);
-            totalPrice = cartJSON.getDouble("total_price");
-        } catch(Exception e) {
-            e.printStackTrace();
+                JSONObject respJSON = new JSONObject(getAllListResp);
+                String stat = respJSON.getString("status");
+
+                JSONArray listsArray = respJSON.getJSONArray("list_names");
+                JSONObject listNamesJSON = new JSONObject();
+                listNamesJSON.put("list_names", listsArray);
+
+                if(stat == "success") {
+                    List<String> listNames = new JSONParser().parseListNames(getAllListResp);
+                    listNames.add("Add New List");
+                    listNameOpts = listNames.toArray(new String[0]);
+
+                    editor.putString("list_names", listNamesJSON.toString());
+                    editor.commit();
+                }
+                else {
+                    Toast.makeText(getActivity(), "Shopping Lists Cannot be Retrieved", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                String defaultVal = "";
+                final String cartString = sharedPref.getString("default_list", defaultVal);
+                JSONObject cartJSON = new JSONObject(cartString);
+
+                cartItems = new JSONParser().parseCart(cartString);
+                totalPrice = cartJSON.getDouble("total_price");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -73,12 +109,31 @@ public class ShoppingListFragment extends Fragment {
         final TextView total = (TextView) view.findViewById(R.id.cart_summary);
         total.setText("Total: " + Double.toString(round(totalPrice, 2)));
 
-        final EditText listNameEntry = (EditText) view.findViewById(R.id.new_list_name);
-        final Button saveList = (Button) view.findViewById(R.id.save_list_button);
+        final Spinner listNameSpin = (Spinner) view.findViewById(R.id.all_usr_list);
+        ArrayAdapter<String> listNamesAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, listNameOpts);
+        listNameSpin.setAdapter(listNamesAdpt);
+
+        final Button saveList = (Button) view.findViewById(R.id.new_list_button);
+
+        /*
+        allShopLists.setOnItemClickListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                numSelected = numItemActual[position];
+                editor.putInt(getString(R.string.num_spin_pos), position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                return;
+            }
+        });*/
 
         saveList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 String newListName = listNameEntry.getText().toString();
                 String defaultUser = "";
                 String user = sharedPref.getString(getString(R.string.curr_user), defaultUser);
@@ -91,6 +146,10 @@ public class ShoppingListFragment extends Fragment {
                 } catch (Exception e) {
                     Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
                 }
+                */
+                FragmentManager fm = getFragmentManager();
+                CreateListFragment newListDialog = new CreateListFragment();
+                newListDialog.show(fm, "fragment_new_list");
             }
         });
 
@@ -104,7 +163,7 @@ public class ShoppingListFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Product selected = cartItems.get(position);
 
-                    ShopListHandler listHandler = new ShopListHandler(getActivity(), "cart");
+                    ShopListHandler listHandler = new ShopListHandler(getActivity(), "default_list");
                     List<Product> updatedList = listHandler.deleteFromList(selected);
                     double newTotal = listHandler.getListTotal();
 

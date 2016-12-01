@@ -138,8 +138,29 @@ public class RequestBuilder {
         }
     }
 
-    private String buildListJSON(String list) {
-        return null;
+    public String buildGetListNamesJSON(String email) {
+        JSONObject request = new JSONObject();
+        try{
+            request.put("message_type", "get_list_names");
+            request.put("email", email);
+
+            return request.toString(2);
+        } catch(JSONException e){
+            return "cannot generate message";
+        }
+    }
+
+    public String buildGetListJSON(String email, String list) {
+        JSONObject request = new JSONObject();
+        try{
+            request.put("message_type", "get_list");
+            request.put("email", email);
+            request.put("list_name", list);
+
+            return request.toString(2);
+        } catch(JSONException e){
+            return "cannot generate message";
+        }
     }
 
     private String[] getSuperString(String[] items){
