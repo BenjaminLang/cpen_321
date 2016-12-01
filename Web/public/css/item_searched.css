@@ -180,7 +180,7 @@ button.btn.btn-primary.btn-lg.emptyCartButton {
 }
 
 
-.caption.a.btn.btn-primary.addToCartButton {
+.caption .a.btn.btn-primary.addToCartButton {
     border-radius: 12px;
     margin-left: 855px;
     margin-top: -40px;
