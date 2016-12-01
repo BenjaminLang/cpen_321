@@ -1,5 +1,6 @@
 import json
 import queue
+import socket
 
 import bson.json_util
 from cache_ops import CacheOps as mdo
@@ -9,7 +10,6 @@ from item_ops import ItemOps as ido
 
 from pymongo import MongoClient
 from operator import attrgetter
-
 
 class RequestHandler:
     def __init__(self, queue=None):
@@ -44,25 +44,26 @@ class RequestHandler:
                 json_response = self.__handle_read(json_data)
             elif req_type == 'acc_create':
                 json_response = self.__handle_create(json_data)
-            elif req_type == 'acc_del':
+            elif req_type == 'acc_delete':
                 json_response = self.__handle_delete(json_data)
             elif req_type == 'acc_login':
                 json_response = self.__handle_login(json_data)
             elif req_type == 'acc_update':
                 json_response = self.__handle_update(json_data)
             elif req_type == 'add_list':
-                json_response = self.__handle_save_list(json_data)
-            elif req_type == 'retrieve_list':
-                json_response = self.__handle_retrieve_list(json_data)
+                json_response = self.__handle_add_list(json_data)
+            elif req_type == 'get_list':
+                json_response = self.__handle_get_list(json_data)
             elif req_type == 'delete_list':
                 json_response = self.__handle_delete_list(json_data)
+            elif req_type == 'get_list_names':
+                json_response = self.__handle_list_names(json_data)
 
             if req_type != 'read':
                print(json_response)
 
             json_response = bson.json_util.dumps(json_response)
             connection.send(json_response.encode())
-            connection.shutdown(socket.SHUT_RDWR)
             connection.close()
 
         return
@@ -94,7 +95,7 @@ class RequestHandler:
         return response
 
     def __handle_read(self, json_data):
-        response = {}  
+        response = {}
         response['message_type'] = 'read_response'
         item_name = json_data['items'][0].lower()
         cache_results = mdo.read_cache(self.__cache_db, item_name)
@@ -125,19 +126,31 @@ class RequestHandler:
 
         return response
 
-    def __handle_save_list(self, json_data):
+    def __handle_list_names(self, json_data):
         response = {}
-        response['message_type'] = 'save_list_response'
+        response['message_type'] = 'get_list_names_response'
+        list_names = udo.get_user_list_names(self.__users_db, json_data)
+        if list_names == 'failed':
+            response['status'] = 'failed'
+            response['list_names'] = []
+        else:
+            response['list_names'] = list_names
+            response['status'] = 'success'
+        return response
+
+    def __handle_add_list(self, json_data):
+        response = {}
+        response['message_type'] = 'add_list_response'
         list_save_status = udo.add_list(self.__users_db, json_data)
 
         response['status'] = list_save_status
 
         return response
 
-    def __handle_retrieve_list(self, json_data):
+    def __handle_get_list(self, json_data):
         response = {}
-        response['message_type'] = 'retrieve_list_response'
-        retrieved_list = udo.retrieve_lists(self.__users_db, json_data)
+        response['message_type'] = 'get_list_response'
+        retrieved_list = udo.get_list(self.__users_db, json_data)
 
         if len(retrieved_list) != 0:
             response['list'] = retrieved_list
@@ -179,7 +192,7 @@ class RequestHandler:
 
     def __handle_login(self, json_data):
         response = {}
-        response['message_type'] = 'login_response'
+        response['message_type'] = 'acc_login_response'
         del json_data['message_type']
 
         log_res, name = udo.log_in(self.__users_db, json_data)
@@ -191,7 +204,7 @@ class RequestHandler:
 
     def __handle_update(self, json_data):
         response = {}
-        response['message_type'] = 'update_response'
+        response['message_type'] = 'acc_update_response'
         del json_data['message_type']
 
         update_res = udo.update_acc(self.__users_db, json_data)

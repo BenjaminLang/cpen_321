@@ -1,116 +1,178 @@
-Message Types:
-    //placed into JSON message for server to understand
-    - Write / Write response
-    - Read :
-        - ReadMinPrice
-        - ReadLocation
-        - ReadwithStores
-    - ReadCollectionDocuments
-    - UpdateCollection
-    - CreateNewAcc
-    - Login
-    - Signout
-    //maybe pictures
+READ:
+{
+    'message_type' : 'read',
+    'email' : 'email@hotmail.com',
+    'options' : {
+        'stores' : <['store1', 'store2' ...], []>,
+        'price' : <'min', 'max'>,
+        'num' : '50',
+        'range_min' : '20.50',
+        'range_max' : '49.25'
+    },
+    'items' : ['item name']
+}
 
-MessageExample JSON:
+READ RESPONSE:
+{
+    'message_type': 'read_response',
+    'items': [{
+            'name' : 'Green Apples',
+            'price' : '1.50',
+            'store' : 'Save on Foods',
+            'image' : 'image.jpeg',
+            'url' : 'saveonfoods.com/apples'
+        }, {
+            'name': 'Red Apples',
+            'price': '1.42',
+            'store': 'Walmart',
+            'image' : 'image.jpeg',
+            'url' : 'saveonfoods.com/apples'
+    }]
+}
 
-FOR READ and subtypes:
-
-    {   "message_type" : "read",
-        "userID" : "id",
-        "options" : {
-            "locationX" : "x_coord",
-            "locationY" : "y_coord",
-            "Radius" : "radius",
-            "stores" : ["store1", "store2" ...]
-        },
-        "items" : ["item name"]
+WRITE:
+{
+    'message_type' : 'write',
+    'collection' : 'fruits',
+    'data' : {
+        'name' : 'Green Apples',
+        'price' : '1.50',
+        'store' : 'Save on Foods',
+        'image' : 'www.link.com'
+        'url' : 'www.link.com'
     }
-    
-FOR UPDATE COLLECTION REQUEST //gets the list of collection types in database
-    {   "message_type" : "collection_request"   }
-    
-FOR COLLECTION REQUEST RESPONSE //returns list of collection types
-    {   "message_type" : "collection_request_response",
-        "collections" : [   "col_name_1",
-                            "col_name_2",
-                            "col_name_3",
-                            ...
-                            "col_name_n"],
-    }
-                            
+}
 
-FOR READ RESPONSE:
-    {
-    	"message_type": "response",
-    	"items": [
-    		[{
-    			"name": "Green Apples",
-    			"price": "1.50",
-    			"store": "save on foods"
-    		}, {
-    			"name": "Red Apples",
-    			"price": "1.42",
-    			"store": "CostCo"
+CREATE ACCOUNT:
+{
+    'message_type' : 'acc_create',
+    'email' : 'email@hotmail.com',
+    'password' : 'pass',
+    'name' : 'Andy Schlong'
+}
 
-    		}]
-    	]
-    }
+CREATE ACCOUNT RESPONSE:
+{
+    'message_type' : 'acc_create_response',
+    'status' : <'success', 'failed', 'exception'>
+}
 
+LOGIN:
+{
+    'message_type' : 'acc_login',
+    'email' : 'email@hotmail.com',
+    'password' : 'pass'
+}
 
+LOGIN RESPONSE:
+{
+    'message_type' : 'acc_login_response',
+    'status' : <'success', 'failed', 'DNE', 'exception'>,
+    'name' : 'Andy Schlong'
+}
 
-FOR WRITE:
-    {   "message_type" : "write",
-        "collectionType" : "collection",
-        "options" : {
-            //unsure of what options to put in here
-        }
-        "data" : {
-            "name" : "Green Apples",
-            "price" : "1.50",
-            "store" : "save on foods",
-            "image link" : "www.link.com"
-            "URL to page" : "www.link.com"
-        }
-    }
+UPDATE ACCOUNT:
+{
+    'message_type' : 'acc_update',
+    'email' : 'email@hotmail.com',
+    'old_password' : 'pass',
+    'password' : 'pass123'
+}
 
-COLLECTION DATA:
-    {
-        "collections": {
-                "milk" : {
-                    "type" : ["2%", "1%", "fat-free"]
-                }
-                ...
-                ...
-                ...
-                ...
-            }
-    }
+UPDATE ACCOUNT RESPONSE:
+{
+    'message_type' : 'acc_update_response',
+    'status' : <'success', 'failed', 'DNE', 'exception'>
+}
 
-FOR CREATENEWACC:
-    {   "message_type" : "acc_create",
-        "userID" : "id",
-        "password" : "pass"
-    }
-    
-FOR CREATENEWACC RESPONSE:
-    {   "message_type" : "acc_create_response",
-        "acc_created" : "true"    
-    }
+DELETE ACCOUNT:
+{
+    'message_type' : 'acc_delete',
+    'email' : 'email@hotmail.com',
+    'password' : 'pass'
+}
 
-FOR LOGIN:
-    {   "message_type" : "acc_login",
-        "userID" : "id",
-        "password" : "pass",
-    }
-    
-FOR LOGIN RESPONSE:
-    {   "message_type" : "acc_login_response",
-        "acc_exists" : "true",
-        "correct_password" : "true"
-    }
-    
-FOR LOGOUT:
-    {   "message_type" : "acc_logout",
-        "userID" : "id"
-    }
+DELETE ACCOUNT RESPONSE:
+{
+    'message_type' : 'acc_delete_response',
+    'status' : <'success', 'failed', 'DNE', 'exception'>
+}
+
+ADD LIST:
+{
+    'message_type' : 'add_list',
+    'list_name' : 'list1',
+    'email' : 'email@hotmail.com',
+    'list': [{
+            'name' : 'Green Apples',
+            'price' : '1.50',
+            'store' : 'Save on Foods',
+            'image' : 'image.jpeg',
+            'url' : 'saveonfoods.com/apples'
+        }, {
+            'name': 'Red Apples',
+            'price': '1.42',
+            'store': 'Walmart',
+            'image' : 'image.jpeg',
+            'url' : 'saveonfoods.com/apples'
+    }]
+}
+
+ADD LIST RESPONSE:
+{
+    'message_type' : 'add_list_response',
+    'status' : <'success', 'exception'>
+}
+
+GET LIST:
+{
+    'message_type' : 'get_list',
+    'email' : 'email@hotmail.com',
+    'list_name' : 'list2'
+}
+
+GET LIST RESPONSE:
+{
+    'message_type' : 'get_list_response',
+    'status' : <'success', 'failed'>,
+    'list': [{
+            'name' : 'Green Apples',
+            'price' : '1.50',
+            'store' : 'Save on Foods',
+            'image' : 'image.jpeg',
+            'url' : 'saveonfoods.com/apples'
+        }, {
+            'name': 'Red Apples',
+            'price': '1.42',
+            'store': 'Walmart',
+            'image' : 'image.jpeg',
+            'url' : 'saveonfoods.com/apples'
+    }]
+}
+
+GET LIST NAMES:
+{
+    'message_type' : 'get_list_names',
+    'email' : 'email@hotmail.com'
+}
+
+GET LIST NAMES RESPONSE:
+{
+    'message_type' : 'get_list_names_response',
+    'status' : <'success', 'failed'>,
+    'list_names' : ['list1', 'list2', 'list3']
+}
+
+DELETE LIST:
+{
+    'message_type' : 'delete_list',
+    'email' : 'email@hotmail.com',
+    'list_name' : 'list3'
+}
+
+DELETE LIST RESPONSE:
+{
+    'message_type' : 'delete_list_response',
+    'status' : <'success', 'failed', 'exception'>
+}
+

@@ -10,7 +10,7 @@ class DatabaseServer:
         # set up server socket
         # from python documentation
         self._context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-        self._context.load_cert_chain(certfile="mainserver.crt", keyfile="mainserver.key")
+        self._context.load_cert_chain(certfile="server.crt", keyfile="server.key")
 
         host = socket.gethostbyname(socket.gethostname())
         port = 6969

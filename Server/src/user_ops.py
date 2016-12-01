@@ -1,6 +1,5 @@
 import traceback
 
-
 class UserOps:
     @staticmethod
     def create_acc(users_db, json_query):
@@ -50,18 +49,18 @@ class UserOps:
             user_data = list(users_db[collection].find())
 
             if not user_data:
-                return ('DNE', None)
+                return ('DNE', '')
             elif user_data[0]['password'] == auth:
                 return ('success', user_data[0]['name'])
             else:
-                return ('failed', None)
+                return ('failed', '')
 
         except Exception:
             traceback.print_exc()
-            return ('exception', None)
+            return ('exception', '')
 
     @staticmethod
-    def get_user_list_names(users_db, json_query):
+    def get_list_names(users_db, json_query):
         try:
             collection = json_query['email'].replace('@', '')
             user_data = list(users_db[collection].find())[0]
@@ -119,7 +118,7 @@ class UserOps:
             return 'exception'
 
     @staticmethod
-    def retrieve_lists(users_db, json_query):
+    def get_list(users_db, json_query):
         try:
             ret_list = []
             email = json_query['email']
