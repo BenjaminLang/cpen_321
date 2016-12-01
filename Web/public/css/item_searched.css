@@ -64,21 +64,6 @@ ul.products {
     margin-bottom: -50px;
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #337ab7;
-    border-color: #2e6da4;
-    margin-left: 974px;
-    position: absolute;
-}
-
-
-.btn.btn-default {
-    background-color: #5bc0de;
-    color: #fff;
-    margin-left: 1073px;
-}
-
 
 .btn-lg {
     margin-left: 30px; 
@@ -168,27 +153,29 @@ input.list {
 
 button.btn.btn-primary.btn-lg.showCartButton {
     margin-left: 50px;
-    margin-top: -100px;
+    margin-top: -180px;
     border-radius: 12px;
 }
 
 
 button.btn.btn-primary.btn-lg.emptyCartButton {
-    margin-left: 210px;
-    margin-top: -99px;
+    margin-left: 50px;
+    margin-top: -180px;
     border-radius: 12px;
 }
 
 
 .thumbnail a.btn.btn-primary.addToCartButton {
     border-radius: 12px;
-    margin-left: 855px;
     margin-top: -40px;
+    margin-right: 105px; 
+    float: right;
 }
 
 
 .thumbnail a.btn.btn-default.visitWebsiteButton {
     border-radius: 12px;
-    margin-top: -69px;
-    margin-left: 964px;
+    margin-top: -40px;
+    margin-right: -8px;
+    float: right; 
 }
