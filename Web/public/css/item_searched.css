@@ -179,3 +179,11 @@ button.btn.btn-primary.btn-lg.emptyCartButton {
     margin-right: -8px;
     float: right; 
 }
+
+
+li.greeting {
+    position: relative;
+    display: block;
+    margin-top: 103px;
+    padding: 12px;
+}
