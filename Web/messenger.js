@@ -3,7 +3,7 @@
 /**************************************************************************/
 
 var constants = require('./constants.js');
-var net = require('net');
+// var net = require('net');
 var tls = require('tls');
 var fs = require('fs');
 var debug = require('debug')('messenger');
@@ -81,7 +81,8 @@ response = function (res_from_server, req, res) {
         message.items[i].data.name = message.items[i].data.name.replace('&amp;', '&');
       }
       
-      res.render('item_searched', {'title': 'Search Results', 'list_items': message.items});
+      res.render('item_searched', {'title': req.query.item + ' - Search Results', 
+                                  'list_items': message.items});
       break;
     
     // check if acc_created is true or false
@@ -99,7 +100,6 @@ response = function (res_from_server, req, res) {
       break;
 
     case constants.LOGIN_RSP:
-      // check if either acc_exists is false or correct_password is false;
       if (message.status == constants.SUCCESS) {
         // login successful
         // need to get name from message

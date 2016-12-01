@@ -19,7 +19,7 @@ var favicon = require('serve-favicon');
 var handler = require('./handler.js');
 var constants = require('./constants.js');
 
-// Secure stuff
+// SSL
 var private_key  = fs.readFileSync(constants.PRIVATE_KEY_LOCATION, 'utf8');
 var certificate = fs.readFileSync(constants.CERTIFICATE_LOCATION, 'utf8');
 var credentials = {key: private_key, cert: certificate};

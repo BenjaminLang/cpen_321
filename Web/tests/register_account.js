@@ -1,3 +1,7 @@
+/**
+ * End-to-end test for whether a user can visit the website and register for an account
+ */
+
 module.exports = {
   'Go to Registration': function(browser) {
     browser

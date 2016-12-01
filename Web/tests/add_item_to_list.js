@@ -1,3 +1,8 @@
+/**
+ * End-to-end test for whether a user can visit the website, search for an item
+ * and add the item to a list.
+ */
+
 module.exports = {
   'Enter Item': function(browser) {
     browser
