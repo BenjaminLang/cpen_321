@@ -122,6 +122,19 @@ class RequestHandler:
         elif json_data['options']['price'] == 'max':
             ret_data.sort(key=lambda x: float(x['data']['price']), reverse=True)
 
+        if json_data['options']['range_min'] != '':
+            price_min = float(json_data['options']['range_min'])
+            ret_data = [ x for x in ret_data if float(x['data']['price']) >= price_min ]
+        if json_data['options']['range_max'] != '':
+            price_max = float(json_data['options']['range_max'])
+            ret_data = [ x for x in ret_data if float(x['data']['price']) <= price_max ]
+
+        '''
+        if json_data['options']['stores'] != None:
+            stores = json_data['options']['stores']
+            ret_data = [ x for x in ret_data if x['data']['store'] in stores ]
+        '''
+
         response['items'] = ret_data[0:num]
 
         return response
