@@ -44,7 +44,7 @@ class userTest(unittest.TestCase):
         response = self._send(data)
         self.assertEqual('success', response['status'])
 
-        data['message_type'] = 'acc_del'
+        data['message_type'] = 'acc_delete'
 
         response = self._send(data)
         self.assertEqual('success', response['status'])
@@ -80,7 +80,7 @@ class userTest(unittest.TestCase):
         response = self._send(data)
         self.assertEqual('success', response['status'])
         
-        data['message_type'] = 'acc_del'
+        data['message_type'] = 'acc_delete'
 
         response = self._send(data)
         self.assertEqual('success', response['status'])
@@ -137,7 +137,7 @@ class userTest(unittest.TestCase):
         response = self._send(data)
         self.assertNotEqual('success', response['status'])
         
-        data['message_type'] = 'acc_del'
+        data['message_type'] = 'acc_delete'
 
         response = self._send(data)
         self.assertEqual('success', response['status'])

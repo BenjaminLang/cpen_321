@@ -54,7 +54,9 @@ class readWriteTest(unittest.TestCase):
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
-        options['store'] = []
+        options['stores'] = []
+        options['range_max'] = ''
+        options['range_min'] = ''
 
         read['options'] = options
 
@@ -97,7 +99,9 @@ class readWriteTest(unittest.TestCase):
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
-        options['store'] = []
+        options['stores'] = []
+        options['range_max'] = ''
+        options['range_min'] = ''
 
         read['options'] = options
 
@@ -123,7 +127,9 @@ class readWriteTest(unittest.TestCase):
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
-        options['store'] = []
+        options['stores'] = []
+        options['range_max'] = ''
+        options['range_min'] = ''
 
         read['options'] = options
 
@@ -140,6 +146,13 @@ class readWriteTest(unittest.TestCase):
         self.assertEqual(response['status'], 'success')
         self.assertEqual(len(response['rec_list']), 1)
 
+        data = {}
+        data['email'] = read['email']
+        data['message_type'] = 'acc_delete'
+        
+        response = self.__send(data)
+        self.assertEqual('success', response['status'])
+
         self.client.close()
 
     def test_4(self):
@@ -154,7 +167,9 @@ class readWriteTest(unittest.TestCase):
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
-        options['store'] = ['walmart']
+        options['stores'] = ['walmart']
+        options['range_max'] = ''
+        options['range_min'] = ''
 
         read['options'] = options
 
@@ -165,8 +180,8 @@ class readWriteTest(unittest.TestCase):
         ret_list = response['items']
 
         for item in ret_list:
-            self.assertEqual(item['data']['store'], options['store'][0]
-                             # or item['data']['store'], options['store'][1]
+            self.assertEqual(item['data']['store'], options['stores'][0]
+                             # or item['data']['store'], options['stores'][1]
                             )
 
         self.client.close()
@@ -183,7 +198,7 @@ class readWriteTest(unittest.TestCase):
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
-        options['store'] = ''
+        options['stores'] = ''
         options['range_min'] = '1.00'
         options['range_max'] = '34.00'
 
