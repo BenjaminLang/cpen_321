@@ -7,7 +7,7 @@ import ssl
 
 class readWriteTest(unittest.TestCase):
     @staticmethod
-    def __send(data):
+    def _send(data):
         sock = socket.socket()
         host = socket.gethostbyname(socket.gethostname())
         port = 6969
@@ -43,7 +43,7 @@ class readWriteTest(unittest.TestCase):
 
         write['data'] = data
 
-        self.__send(write)
+        self._send(write)
 
         # generate read request message
         read = {}
@@ -63,7 +63,7 @@ class readWriteTest(unittest.TestCase):
         # send to server and get response
         # assert the correct message has been written into the DB and
         # that it can be read out correctly
-        response = self.__send(read)
+        response = self._send(read)
         self.assertEqual(response['items'][0]['data']['name'], write['data']['name'])
         self.assertEqual(response['items'][0]['data']['price'], write['data']['price'])
         self.assertEqual(response['items'][0]['data']['store'], write['data']['store'])
@@ -88,7 +88,7 @@ class readWriteTest(unittest.TestCase):
         data['image'] = 'SyrupWalmart.jpeg'
 
         write['data'] = data
-        self.__send(write)
+        self._send(write)
 
         # attempt to search for syrups
         read = {}
@@ -105,7 +105,7 @@ class readWriteTest(unittest.TestCase):
 
         read['options'] = options
 
-        response = self.__send(read)
+        response = self._send(read)
         self.assertTrue(len(response) == 3)
         self.assertTrue((response['items'][0]['data']['url'] == 'SyrupWalmart.com' and
                         (response['items'][1]['data']['url'] == 'SyrupCostco.com')) or
@@ -133,7 +133,7 @@ class readWriteTest(unittest.TestCase):
 
         read['options'] = options
 
-        response = self.__send(read)
+        response = self._send(read)
         self.assertTrue(len(response) == 3)
         self.assertEqual(response['status'], 'success')
 
@@ -141,7 +141,7 @@ class readWriteTest(unittest.TestCase):
         recommend['message_type'] = 'recommend'
         recommend['email'] = read['email']
 
-        response = self.__send(recommend)
+        response = self._send(recommend)
 
         self.assertEqual(response['status'], 'success')
         self.assertEqual(len(response['rec_list']), 1)
@@ -150,7 +150,7 @@ class readWriteTest(unittest.TestCase):
         data['email'] = read['email']
         data['message_type'] = 'acc_delete'
         
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
         self.client.close()
@@ -173,7 +173,7 @@ class readWriteTest(unittest.TestCase):
 
         read['options'] = options
 
-        response = self.__send(read)
+        response = self._send(read)
         self.assertTrue(len(response) == 3)
         self.assertEqual(response['status'], 'No Email')
 
@@ -204,7 +204,7 @@ class readWriteTest(unittest.TestCase):
 
         read['options'] = options
 
-        response = self.__send(read)
+        response = self._send(read)
         self.assertTrue(len(response) == 3)
         self.assertEqual(response['status'], 'No Email')
 

@@ -6,7 +6,7 @@ import ssl
 
 class ListTest(unittest.TestCase):
     @staticmethod
-    def __send(data):
+    def _send(data):
         sock = socket.socket()
         host = socket.gethostbyname(socket.gethostname())
         port = 6969
@@ -34,7 +34,7 @@ class ListTest(unittest.TestCase):
         data['list_names'] = []
         data['message_type'] = 'acc_create'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
     def test_2(self):
@@ -51,12 +51,12 @@ class ListTest(unittest.TestCase):
                           'store': 'walmart',
                           'price': '5.99'})
         data['list'] = data_list
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
         del data['list']
         data['message_type'] = 'retrieve_list'
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
         self.assertListEqual(data_list, response['list'])
 
@@ -74,12 +74,12 @@ class ListTest(unittest.TestCase):
                           'store': 'walmart',
                           'price': '5.99'})
         data['list'] = data_list
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
         del data['list']
         data['message_type'] = 'retrieve_list'
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
         self.assertListEqual(data_list, response['list'])
 
@@ -89,11 +89,11 @@ class ListTest(unittest.TestCase):
         data['list_name'] = 'list_1'
         data['email'] = 'mablibsking@hotmail.com'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual(response['status'], 'success')
 
         data['message_type'] = 'retrieve_list'
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual(response['status'], 'failed')
 
     def test_5(self):
@@ -102,7 +102,7 @@ class ListTest(unittest.TestCase):
         data['list_name'] = 'list_3'
         data['email'] = 'mablibsking@hotmail.com'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual(response['status'], 'failed')
 
     def test_6(self):
@@ -114,12 +114,12 @@ class ListTest(unittest.TestCase):
         data['list_names'] = []
         data['message_type'] = 'acc_del'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('success', response['status'])
 
         data['message_type'] = 'acc_login'
 
-        response = self.__send(data)
+        response = self._send(data)
         self.assertEqual('DNE', response['status'])
 
 if __name__ == '__main__':
