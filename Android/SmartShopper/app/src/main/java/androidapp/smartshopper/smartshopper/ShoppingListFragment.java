@@ -41,6 +41,8 @@ public class ShoppingListFragment extends Fragment {
     private double totalPrice;
     private String[] listNameOpts = {};
     private String email;
+    private boolean loggedIn;
+    private String currList = "default_list";
 
     private SharedPreferences sharedPref;
 
@@ -56,7 +58,7 @@ public class ShoppingListFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
 
         email = sharedPref.getString(getString(R.string.curr_user), "");
-        boolean loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), true);
+        loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), true);
 
         if(loggedIn) {
             try {
@@ -114,7 +116,6 @@ public class ShoppingListFragment extends Fragment {
         listNameSpin.setAdapter(listNamesAdpt);
 
         final Button saveList = (Button) view.findViewById(R.id.new_list_button);
-
         /*
         allShopLists.setOnItemClickListener(new AdapterView.OnItemSelectedListener() {
 
@@ -153,24 +154,58 @@ public class ShoppingListFragment extends Fragment {
             }
         });
 
-        if(cartItems != null) {
-            adapter = new ProductAdapter(this.context, R.layout.search_result, this.cartItems);
-            ListView list = (ListView) view.findViewById(R.id.cart_list);
-            list.setAdapter(adapter);
+        if(loggedIn) {
+            String defaultVal = "";
+            final String cartString = sharedPref.getString("default_list", defaultVal);
 
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Product selected = cartItems.get(position);
+            try {
+                JSONObject cartJSON = new JSONObject(cartString);
 
-                    ShopListHandler listHandler = new ShopListHandler(getActivity(), "default_list");
-                    List<Product> updatedList = listHandler.deleteFromList(selected);
-                    double newTotal = listHandler.getListTotal();
+                cartItems = new JSONParser().parseCart(cartString);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                    adapter.updateProductList(updatedList);
-                    total.setText("Total: " + Double.toString(round(newTotal,2)));
-                }
-            });
+            if (cartItems != null) {
+                adapter = new ProductAdapter(this.context, R.layout.search_result, this.cartItems);
+                ListView list = (ListView) view.findViewById(R.id.cart_list);
+                list.setAdapter(adapter);
+
+                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Product selected = cartItems.get(position);
+
+                        ShopListHandler listHandler = new ShopListHandler(getActivity(), "default_list");
+                        List<Product> updatedList = listHandler.deleteFromList(selected);
+                        double newTotal = listHandler.getListTotal();
+
+                        adapter.updateProductList(updatedList);
+                        total.setText("Total: " + Double.toString(round(newTotal, 2)));
+                    }
+                });
+            }
+        }
+        else {
+            if (cartItems != null) {
+                adapter = new ProductAdapter(this.context, R.layout.search_result, this.cartItems);
+                ListView list = (ListView) view.findViewById(R.id.cart_list);
+                list.setAdapter(adapter);
+
+                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Product selected = cartItems.get(position);
+
+                        ShopListHandler listHandler = new ShopListHandler(getActivity(), "default_list");
+                        List<Product> updatedList = listHandler.deleteFromList(selected);
+                        double newTotal = listHandler.getListTotal();
+
+                        adapter.updateProductList(updatedList);
+                        total.setText("Total: " + Double.toString(round(newTotal, 2)));
+                    }
+                });
+            }
         }
 
         return view;
