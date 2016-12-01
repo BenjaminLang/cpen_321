@@ -88,19 +88,19 @@ response = function (res_from_server, req, res) {
         // replace all instances of '&amp;' in item names with '&'
         message.items[i].data.name = message.items[i].data.name.replace('&amp;', '&');
       }
-      
+      var name;
+      if (req.session.user) name = req.session.user.name;
       res.render('item_searched', {'title' : req.query.item + ' - Search Results',
-                                  'logged_in_name' : req.session.user.name,
+
+                                  'logged_in_name' : name,
                                   'list_items' : message.items});
       break;
     
     // check if acc_created is true or false
     case constants.CREATE_ACC_RSP:
       if (message.status == constants.SUCCESS) {
-        // save name and email, then redirect to home page
+        // save user info, then redirect to home page
         req.session.user = {name : req.body.name, email : req.body.email};
-        //req.session.name = req.body.name;
-        //req.session.email = req.body.email;
         res.redirect('/');
       }
       else {
