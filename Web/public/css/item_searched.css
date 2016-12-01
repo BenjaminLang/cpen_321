@@ -116,6 +116,7 @@ button.btn.btn-primary.saveChanges {
     border-color: #2e6da4;
     margin-left: 0px;
     margin-top: 0px; 
+    position: relative;
 }
 
 .modal-footer.list {
@@ -158,9 +159,10 @@ input.list {
 
 
 .ellipsis {
-    width: 900px;
-    overflow: auto;
+    max-width: 1050px;
     white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 
