@@ -25,8 +25,16 @@ module.exports = {
 
     switch(type) {
       case constants.SEARCH_REQ:
-        // Need to extract actual options from user options  
-        json_request.options = {'price' : 'none', 'num' : '-1'};
+        // Need to extract actual options from user options
+        if (json_request.email) json_request.email = req.session.email;
+        else json_request.email = '';
+        json_request.options = {
+          'stores' : '',
+          'price' : '', 
+          'num' : '-1',
+          'range_min' : '',
+          'range_max' : ''
+        };
         json_request.items = [req.query.item];
         // json_request.name 
         break;
