@@ -1,0 +1,79 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="androidapp.smartshopper.smartshopper.LoginFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:text="Login With Existing Account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/id"
+            android:id="@+id/curr_user"
+            android:layout_alignEnd="@+id/id" />
+
+        <TextView
+            android:text="Username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_indicator"
+            android:layout_marginTop="13dp"
+            android:layout_below="@+id/curr_user"
+            android:layout_alignStart="@+id/curr_user" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/id"
+            android:layout_below="@+id/id_indicator"
+            android:layout_alignStart="@+id/pw"
+            android:layout_alignEnd="@+id/pw" />
+
+        <TextView
+            android:text="Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/id"
+            android:layout_alignStart="@+id/id"
+            android:id="@+id/pw_indicator" />
+
+        <EditText
+            android:layout_width="250dip"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/pw"
+            android:selectAllOnFocus="false"
+            android:maxLines="1"
+            android:layout_below="@+id/pw_indicator"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:text="Login"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/login_button"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/pw"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:text="Create New Account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/createAcc"
+            android:layout_below="@+id/login_button"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="11dp" />
+
+    </RelativeLayout>
+
+</FrameLayout>

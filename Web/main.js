@@ -19,7 +19,7 @@ var favicon = require('serve-favicon');
 var handler = require('./handler.js');
 var constants = require('./constants.js');
 
-// Secure stuff
+// SSL
 var private_key  = fs.readFileSync(constants.PRIVATE_KEY_LOCATION, 'utf8');
 var certificate = fs.readFileSync(constants.CERTIFICATE_LOCATION, 'utf8');
 var credentials = {key: private_key, cert: certificate};
@@ -50,18 +50,28 @@ app.use(express.static('./public'));
 // icon that displays in the browser tab (Doesn't work for some reason)
 app.use(favicon('./public/favicon.ico'));
 
+// MIDDLEWARE
+function require_login(req, res, next) {
+	if (req.session.name) {
+    res.redirect('/login');
+  } else {
+    next();
+  }
+};
+
 // GET requests
 app.get('/', handler.home);
 app.get('/register', handler.register);
+app.get('/delete_acc', require_login, handler.delete_acc);
 app.get('/login', handler.login);
 app.get('/logout', handler.logout);
 app.get('/item_searched', handler.item_searched);
-app.get('/update', handler.update);
+app.get('/update', require_login, handler.update);
 
 // POST requests
 app.post('/register', handler.register_post);
 app.post('/login', handler.login_post);
-app.post('/update', handler.update_post);
+app.post('/update', require_login, handler.update_post);
 app.post('/save_list', handler.save_list);
 
 /////////////

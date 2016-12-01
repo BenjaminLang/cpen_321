@@ -3,9 +3,12 @@
 /**************************************************************************/
 
 var constants = require('./constants.js');
-var net = require('net');
+// var net = require('net');
+var tls = require('tls');
+var fs = require('fs');
 var debug = require('debug')('messenger');
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 module.exports = {
 
   /**
@@ -21,7 +24,8 @@ module.exports = {
     json_request.message_type = type;
 
     switch(type) {
-      case constants.SEARCH_REQ:  
+      case constants.SEARCH_REQ:
+        // Need to extract actual options from user options  
         json_request.options = {'price' : 'none', 'num' : '-1'};
         json_request.items = [req.query.item];
         // json_request.name 
@@ -78,7 +82,8 @@ response = function (res_from_server, req, res) {
         message.items[i].data.name = message.items[i].data.name.replace('&amp;', '&');
       }
       
-      res.render('item_searched', {'title': 'Search Results', 'list_items': message.items});
+      res.render('item_searched', {'title': req.query.item + ' - Search Results', 
+                                  'list_items': message.items});
       break;
     
     // check if acc_created is true or false
@@ -91,12 +96,11 @@ response = function (res_from_server, req, res) {
       }
       else {
         // failure, which means email is already in use
-        res.send('<p>That email is already in use.</p>');
+        res.render('register', {'email_taken' : 'That email is already in use.'});
       }
       break;
 
     case constants.LOGIN_RSP:
-      // check if either acc_exists is false or correct_password is false;
       if (message.status == constants.SUCCESS) {
         // login successful
         // need to get name from message
@@ -108,13 +112,13 @@ response = function (res_from_server, req, res) {
       else if (message.status == constants.FAILURE) {
         // password is incorrect
         debug('login: failure');
-        res.send('<p>Incorrect password.</p>');
+        res.render('login', {'login_failed' : 'Password is incorrect.'});
         
       }
       else if (message.status == constants.DOES_NOT_EXIST) {
         // email does not exist
         debug('login: does not exist');
-        res.send('<p>Account does not exist.</p>');
+        res.render('login', {'login_failed' : 'Email does not exist.'});
       }
       else {
         debug(message.status);
@@ -124,10 +128,10 @@ response = function (res_from_server, req, res) {
     case constants.ACC_UPDATE_RSP:
 
       if (message.status == constants.SUCCESS) {
-        res.send('<p>Password successfully updated.</p>');
+        res.render('update', {'status' : 'Password successfully updated.'});
       }
       else if (message.status == constants.FAILURE) {
-        res.send('<p>Old password is incorrect.</p>');
+        res.render('update', {'status' : 'Old password is incorrect.'});
       }
       // this should never happen
       else if (message.status == constants.DOES_NOT_EXIST) {
@@ -155,7 +159,17 @@ response = function (res_from_server, req, res) {
  */
 socket = function(req_to_server, req, res) {
   // connect to the main server
-  var connection = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST});
+  var options = { 
+    key : fs.readFileSync('../Server/src/client.key'),
+    cert : fs.readFileSync('../Server/src/client.crt'),
+    ca : [ fs.readFileSync('../Server/src/server.crt') ]
+  };
+  var connection = tls.connect({
+      port : constants.MAINSERVER_PORT,
+      host : constants.HOST,
+      options : options
+  });
+  //var connection = net.createConnection({port: constants.MAINSERVER_PORT, host : constants.HOST});
   // container for incoming data
   var data = '';
 
