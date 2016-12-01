@@ -114,7 +114,7 @@ response = function (res_from_server, req, res) {
     //////////////////////////////
     case constants.DEL_ACC_RSP:
       if (message.status == constants.SUCCESS) {
-        
+        res.redirect('/logout');
       }
       break;
     //////////////////////////////
@@ -208,8 +208,8 @@ socket = function(req_to_server, req, res) {
       port : constants.MAINSERVER_PORT,
       host : constants.HOST,
       options : options
-  }, function() {debug('Connection protocol: ' + connection.getProtocol());}
-  );
+  }); //function() {debug('Connection protocol: ' + connection.getProtocol());}
+  //);
 
   // container for incoming data
   var data = '';
