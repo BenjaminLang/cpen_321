@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
 /**
  * Created by Ben on 2016-10-22.
  */
@@ -21,11 +24,14 @@ public class SmartShopClient {
 
     public SmartShopClient() {
         try {
+            SSLSocketFactory sslSocFact = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            SSLSocket sslSocket = (SSLSocket) sslSocFact.createSocket(addr, port);
+
             connection = new Socket(addr, port);
             outputStream = new BufferedWriter(
-                    new OutputStreamWriter(connection.getOutputStream()));
+                    new OutputStreamWriter(sslSocket.getOutputStream()));
             inputStream = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
+                    new InputStreamReader(sslSocket.getInputStream()));
             connected = true;
         } catch (Exception e){
             e.printStackTrace();
