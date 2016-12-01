@@ -76,7 +76,7 @@ body {
     margin-top: 300px;
 }
 
-.nav>li .greeting {
+li.greeting {
     position: relative;
     display: block;
     margin-top: 100px;
