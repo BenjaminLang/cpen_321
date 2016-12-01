@@ -9,7 +9,7 @@ block custom-widget
   // Button trigger modal
   button.btn.btn-primary.btn-lg.showCartButton(type='button', data-toggle='modal', data-target='#myModal')
     | Show List
-  button.btn.btn-primary.btn-lg(type='button', onClick='resetLocalStorage()')
+  button.btn.btn-primary.btn-lg.emptyCartButton(type='button', onClick='resetLocalStorage()')
     | Empty List
   
   block content
