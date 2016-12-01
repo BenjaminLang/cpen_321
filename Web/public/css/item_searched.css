@@ -51,6 +51,7 @@ ul.products {
     margin-left: 0px; 
     max-height: 100px;
     max-width: 100px; 
+    border-radius: 12px; 
 }
 
 .thumbnail .caption {
