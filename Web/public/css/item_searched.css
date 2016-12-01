@@ -167,22 +167,26 @@ input.list {
 button.btn.btn-primary.btn-lg.showCartButton {
     margin-left: 50px;
     margin-top: -100px;
+    border-radius: 12px;
 }
 
 
 button.btn.btn-primary.btn-lg.emptyCartButton {
     margin-left: 210px;
     margin-top: -99px;
+    border-radius: 12px;
 }
 
 
 a.btn.btn-primary.addToCartButton {
-  
-  
+    border-radius: 12px;
+    margin-left: 855px;
+    margin-top: -40px;
 }
 
 
 a.btn.btn-default.visitWebsiteButton {
-  
-  
+    border-radius: 12px;
+    margin-top: -69px;
+    margin-left: 964px;
 }
