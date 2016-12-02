@@ -74,6 +74,7 @@ app.get('/update', require_login, handler.update);
 
 // POST requests
 app.post('/register', handler.register_post);
+app.post('/delete_acc', handler.delete_acc_post); 
 app.post('/login', handler.login_post);
 app.post('/update', require_login, handler.update_post);
 app.post('/save_list', handler.save_list);

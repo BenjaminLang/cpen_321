@@ -26,14 +26,14 @@ module.exports = {
     switch(type) {
       case constants.SEARCH_REQ:
         // Need to extract actual options from user options
-        if (json_request.email) json_request.email = req.session.user.email;
+        if (req.session.user) json_request.email = req.session.user.email;
         else json_request.email = '';
         json_request.options = {
-          'stores' : '',
-          'price' : '', 
+          'stores' : [''],
+          'price' : 'min', 
           'num' : '-1',
-          'range_min' : '',
-          'range_max' : ''
+          'range_min' : formatter(req.query.range_min),
+          'range_max' : formatter(req.query.range_max)
         };
         json_request.items = [req.query.item];
         // json_request.name 
@@ -63,6 +63,10 @@ module.exports = {
       case constants.GET_LIST_REQ:
         json_request.list_name = req.body.list_name;
       case constants.GET_LIST_NAMES:
+        json_request.email = req.session.user.email;
+        break;
+
+      case constants.RECOMMEND_REQ:
         json_request.email = req.session.user.email;
         break;
     }
@@ -166,22 +170,37 @@ response = function (res_from_server, req, res) {
         res.send('<p>Account does not exist.</p>');
       }
       break;
-
+    //////////////////////////////
     case constants.ADD_LIST_RSP:
       // stay on same page
       res.status(204).end();
       break;
-
+    //////////////////////////////
     case constants.GET_LIST_RSP:
       // do something with the lists
+      res.render('list', {list :});
       break;
-
+    //////////////////////////////
     case constants.GET_LIST_NAMES_RSP:
       // do something with the list names
+      res.render('lists', {list_names : message.list_names});
       break;
-
+    //////////////////////////////
     case constants.DEL_LIST_RSP:
       // refresh the page the user is on, but with the list deleted
+      if (message.status == constants.SUCCESS) {
+        
+      }
+      
+      break;
+    //////////////////////////////
+    case constants.RECOMMEND_RSP:
+      // do something with the recommended list
+      res.render('index', {
+        'title': 'Home', 
+        'logged_in_name': req.session.user.name,
+        'lists' : message.rec_list
+      });
       break;
   }
 };

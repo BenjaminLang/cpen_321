@@ -1,0 +1,14 @@
+extends layout.pug
+
+block append head-content
+  link(href='css/update.css' rel='stylesheet')
+  link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro', rel='stylesheet', type='text/css')
+  
+block custom-widget
+  .Update
+    form(method='post')
+      h5 Delete your account
+      if status
+        h4 #{status}
+      input(type='password', name='password', required='', placeholder='Password', autocomplete='off')
+      input(type='submit', value='Delete Account', title='Delete Account')
