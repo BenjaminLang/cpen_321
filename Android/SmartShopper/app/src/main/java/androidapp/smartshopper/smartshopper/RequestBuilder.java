@@ -164,7 +164,7 @@ public class RequestBuilder {
     }
 
     private String[] getSuperString(String[] items){
-        String[] collections = Collections.getInstance().getCollection();
+        //String[] collections = Collections.getInstance().getCollection();
         //this is hard
         return null;
     }

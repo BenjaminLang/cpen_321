@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
     private class SendRequest extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... request) {
-            SmartShopClient client = new SmartShopClient();
+            SmartShopClient client = new SmartShopClient(MainActivity.this);
             if(client.getStatus())
                 return client.sendRequest(request[0]);
             else

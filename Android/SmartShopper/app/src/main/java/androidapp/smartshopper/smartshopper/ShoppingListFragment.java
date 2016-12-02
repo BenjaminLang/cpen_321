@@ -222,7 +222,7 @@ public class ShoppingListFragment extends Fragment {
     private class SendRequest extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... request) {
-            SmartShopClient client = new SmartShopClient();
+            SmartShopClient client = new SmartShopClient(getActivity());
             if(client.getStatus())
                 return client.sendRequest(request[0]);
             else

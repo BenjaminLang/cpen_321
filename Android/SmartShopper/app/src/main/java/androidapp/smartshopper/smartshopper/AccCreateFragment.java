@@ -83,7 +83,7 @@ public class AccCreateFragment extends Fragment {
     private class SendAccCreateRequest extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... request) {
-            SmartShopClient client = new SmartShopClient();
+            SmartShopClient client = new SmartShopClient(getActivity());
             if(client.getStatus())
                 return client.sendRequest(request[0]);
             else

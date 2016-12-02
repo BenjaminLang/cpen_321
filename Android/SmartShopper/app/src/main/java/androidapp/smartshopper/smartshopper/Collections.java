@@ -1,5 +1,7 @@
 package androidapp.smartshopper.smartshopper;
 
+import android.content.Context;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,12 +45,12 @@ public class Collections {
         }
     }
 
-    public String[] getCollection() {
+    public String[] getCollection(Context context) {
         if (!collectionsCached && hasUpdatedCollections) {
             cacheCollection();
         } else if (!hasUpdatedCollections){
             RequestBuilder reqBuilder = new RequestBuilder();
-            SmartShopClient client = new SmartShopClient();
+            SmartShopClient client = new SmartShopClient(context);
             String response = client.sendRequest(reqBuilder.buildCollectionReq());
             ResponseHandler handler = new ResponseHandler();
             collectionArray = handler.HandleUpdateCollection(response);

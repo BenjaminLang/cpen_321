@@ -1,14 +1,23 @@
 package androidapp.smartshopper.smartshopper;
 
+import android.content.Context;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 
 /**
  * Created by Ben on 2016-10-22.
@@ -16,18 +25,50 @@ import javax.net.ssl.SSLSocketFactory;
 public class SmartShopClient {
     private int port = 6969;
     private String addr = "ryangroup.westus.cloudapp.azure.com";
-    //private String addr = "192.168.0.19";
+    private String server_hostname = "checkedout";
     private Socket connection;
     private BufferedWriter outputStream;
     private BufferedReader inputStream;
     private boolean connected;
 
-    public SmartShopClient() {
-        try {
-            SSLSocketFactory sslSocFact = (SSLSocketFactory) SSLSocketFactory.getDefault();
-            SSLSocket sslSocket = (SSLSocket) sslSocFact.createSocket(addr, port);
+    private char[] keyPass = "ryangroup".toCharArray();
 
-            connection = new Socket(addr, port);
+    public SmartShopClient(Context context) {
+        try {
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+
+            InputStream certIn =  context.getResources().openRawResource(R.raw.client);
+            InputStream keyIn = context.getResources().openRawResource(R.raw.client_key);
+            Certificate ca;
+            try {
+                ca = cf.generateCertificate(certIn);
+            } finally {
+                certIn.close();
+            }
+
+            String keyStoreType = KeyStore.getDefaultType();
+            KeyStore ks = KeyStore.getInstance(keyStoreType);
+            ks.load(null, null);
+            ks.setCertificateEntry("ca", ca);
+
+            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+            TrustManagerFactory trustMan = TrustManagerFactory.getInstance(tmfAlgorithm);
+            trustMan.init(ks);
+
+            /*
+            KeyStore keyStore = KeyStore.getInstance("BKS");
+            keyStore.load(keyIn, keyPass);
+            String kmfAlgorithm = KeyManagerFactory.getDefaultAlgorithm();
+            KeyManagerFactory keyMan = KeyManagerFactory.getInstance(kmfAlgorithm);
+            keyMan.init(keyStore, keyPass);*/
+
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustMan.getTrustManagers(), null);
+
+            SSLSocketFactory sslSocFact = sslContext.getSocketFactory();
+            Socket client_socket = new Socket(addr, port);
+            SSLSocket sslSocket = (SSLSocket) sslSocFact.createSocket(client_socket, server_hostname, port, false);
+
             outputStream = new BufferedWriter(
                     new OutputStreamWriter(sslSocket.getOutputStream()));
             inputStream = new BufferedReader(
