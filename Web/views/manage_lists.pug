@@ -1,0 +1,22 @@
+extends layout.pug
+
+block append head-content
+  link(href='css/manage_lists.css', rel='stylesheet', type='text/css')
+                
+block custom-widget
+  
+  
+  
+  block content
+  // SEARCH RESULTS
+  ul.products
+    .row
+      .col-sm-6.col-md-4
+      for (A LIST) in (ALL OF USERS LIST)
+        form.userLists(method='get')
+          a.viewList(href='/item_searched')
+            p $#{LIST NAME}
+
+		
+      
+        
