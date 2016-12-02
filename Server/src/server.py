@@ -10,8 +10,11 @@ class DatabaseServer:
         # set up server socket
         # from python documentation
         self._context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-        self._context.load_cert_chain(certfile="server.crt", keyfile="server.key")
+        self._context.load_cert_chain(certfile='server.crt', keyfile='server.key')
 
+        self._context.verify_mode = ssl.CERT_NONE
+        self._context.load_verify_locations(cafile='ca.crt')
+        self._context.protocol = ssl.PROTOCOL_TLSv1_2
         host = socket.gethostbyname(socket.gethostname())
         port = 6969
         self._server_socket = socket.socket()
@@ -24,13 +27,12 @@ class DatabaseServer:
             while True:
                 connection, addr = self._server_socket.accept()
 
-                try:
+                try:  
                     secure_conn = self._context.wrap_socket(connection, server_side=True)
                 except ssl.SSLError:
-                    print('caught SSL Error!!')
-                    traceback.print_exec()
+                    traceback.print_exc()
                     continue
-                
+
                 #print('connected')
                 try:
                     data = secure_conn.recv(1024).decode()
