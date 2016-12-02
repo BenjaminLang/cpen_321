@@ -3,7 +3,7 @@ import unittest
 import socket
 import json
 import ssl
-from request_handler import RequestHandler as rq
+from request_handler import RequestHandler
 
 
 class readWriteTest(unittest.TestCase):
@@ -43,8 +43,9 @@ class readWriteTest(unittest.TestCase):
         data['image'] = 'SyrupCostco.jpeg'
 
         write['data'] = data
-
-        rq.handle_crawler(write)
+        json_write = json.dumps(write)
+        rq = RequestHandler()
+        rq.handle_crawler(json_write)
 
         # generate read request message
         read = {}
@@ -88,9 +89,10 @@ class readWriteTest(unittest.TestCase):
         data['url'] = 'SyrupWalmart.com'
         data['image'] = 'SyrupWalmart.jpeg'
 
-        write['data'] = data
-
-        rq.handle_crawler(write)
+        write['data'] = data   
+        json_write = json.dumps(write)
+        rq = RequestHandler()
+        rq.handle_crawler(json_write)
 
         # attempt to search for syrups
         read = {}
