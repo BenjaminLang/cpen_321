@@ -3,6 +3,7 @@ package androidapp.smartshopper.smartshopper;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -60,7 +61,7 @@ public class ShopListHandler {
                     cartJSON.put("total_price", Double.toString(totalPrice));
 
                     String newCartString = cartJSON.toString(2);
-                    editor.putString("cart", newCartString);
+                    editor.putString(listName, newCartString);
                     editor.commit();
                 }
                 else {
@@ -76,7 +77,7 @@ public class ShopListHandler {
                             cartJSON.put("total_price", Double.toString(totalPrice));
 
                             String newCartString = cartJSON.toString(2);
-                            editor.putString("cart", newCartString);
+                            editor.putString(listName, newCartString);
                             editor.commit();
 
                             break;
@@ -97,7 +98,7 @@ public class ShopListHandler {
                 jsonObj.put("total_price", Double.toString(price));
 
                 String newCartString = jsonObj.toString();
-                editor.putString("cart", newCartString);
+                editor.putString(listName, newCartString);
                 editor.commit();
             }
 
@@ -133,7 +134,7 @@ public class ShopListHandler {
                     String newCartString = cartJSON.toString(2);
                     updatedList = new JSONParser().parseCart(newCartString);
 
-                    editor.putString("cart", newCartString);
+                    editor.putString(listName, newCartString);
                     editor.commit();
 
                     break;

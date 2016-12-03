@@ -79,7 +79,18 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                ShopListHandler listHandler = new ShopListHandler(getActivity(), "default_list");
+                final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                boolean loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), false);
+
+                String currListName;
+                if(loggedIn) {
+                    currListName = "default_list";
+                }
+                else {
+                    currListName = "default_list";
+                }
+
+                ShopListHandler listHandler = new ShopListHandler(getActivity(), currListName);
                 int numToAdd = Integer.parseInt(quantity.getText().toString());
 
                 if(listHandler.addToList(product, numToAdd))

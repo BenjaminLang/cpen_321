@@ -37,7 +37,7 @@ public class SmartShopClient {
         try {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
-            InputStream certIn =  context.getResources().openRawResource(R.raw.client);
+            InputStream certIn =  context.getResources().openRawResource(R.raw.server);
             InputStream keyIn = context.getResources().openRawResource(R.raw.client_key);
             Certificate ca;
             try {

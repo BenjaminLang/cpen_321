@@ -83,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
                         String sortOpt = sharedPref.getString(getString(R.string.sort_opt), sortDefault);
                         String numOpt = Integer.toString(sharedPref.getInt(getString(R.string.num_item), numDefault));
 
-                        String[] dummyArray = {" ", " "};
-                        SearchOptions dummyOptions = new SearchOptions(" ", " ", " ", " ", " ", dummyArray, sortOpt, numOpt);
+                        String[] dummyArray = {};
+                        SearchOptions options = new SearchOptions(dummyArray, sortOpt, "", "", numOpt);
 
                         RequestBuilder rb = new RequestBuilder();
-                        String dbRequest = rb.buildReadReq(s, dummyOptions, " ");
+                        String dbRequest = rb.buildReadReq(s, "", options, "");
 
                         try {
                             String jsonResponse = new SendRequest().execute(dbRequest).get();

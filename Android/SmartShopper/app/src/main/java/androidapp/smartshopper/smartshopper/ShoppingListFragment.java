@@ -58,7 +58,7 @@ public class ShoppingListFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
 
         email = sharedPref.getString(getString(R.string.curr_user), "");
-        loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), true);
+        loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), false);
 
         if(loggedIn) {
             try {
@@ -87,6 +87,7 @@ public class ShoppingListFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+        /*
         else {
             try {
                 String defaultVal = "";
@@ -98,7 +99,7 @@ public class ShoppingListFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     @Override
@@ -155,16 +156,16 @@ public class ShoppingListFragment extends Fragment {
         });
 
         if(loggedIn) {
+            /*
             String defaultVal = "";
             final String cartString = sharedPref.getString("default_list", defaultVal);
 
             try {
                 JSONObject cartJSON = new JSONObject(cartString);
-
                 cartItems = new JSONParser().parseCart(cartString);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
 
             if (cartItems != null) {
                 adapter = new ProductAdapter(this.context, R.layout.search_result, this.cartItems);
@@ -187,6 +188,18 @@ public class ShoppingListFragment extends Fragment {
             }
         }
         else {
+            try {
+                String defaultVal = "";
+                final String cartString = sharedPref.getString("default_list", defaultVal);
+                Toast.makeText(getActivity(), cartString, Toast.LENGTH_LONG).show();
+                JSONObject cartJSON = new JSONObject(cartString);
+
+                cartItems = new JSONParser().parseCart(cartString);
+                totalPrice = cartJSON.getDouble("total_price");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             if (cartItems != null) {
                 adapter = new ProductAdapter(this.context, R.layout.search_result, this.cartItems);
                 ListView list = (ListView) view.findViewById(R.id.cart_list);
