@@ -87,6 +87,7 @@ response = function (res_from_server, req, res) {
   var message = JSON.parse(res_from_server.toString());
   var type = message.message_type;
   debug('message is of type: ' + type);
+  if (message.status) debug('... with status: ' + message.status);
 
   switch(type) {
     //////////////////////////////

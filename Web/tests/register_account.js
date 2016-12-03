@@ -24,7 +24,7 @@ module.exports = {
       .setValue('input[name="email_verify"]', email)
       .setValue('input[name="password"]', password)
       .setValue('input[name="password_verify"]', password)
-      .submit('input[type="submit"]')
+      .click('input[type="submit"]')
       .pause(2000)
       .assert.containsText('.greeting', 'Hello, ' + name)
   },
@@ -42,8 +42,8 @@ module.exports = {
   'Delete Account' : function(browser) {
     browser
       .setValue('input[name="password"]', password)
-      .submit('input[type="submit"]')
-      .pause(2000)
+      .click('input[type="submit"]')
+      .pause(4000)
       .assert.elementNotPresent('.greeting')
       .end();
   }
