@@ -29,7 +29,7 @@ module.exports = {
         if (req.session.user) json_request.email = req.session.user.email;
         else json_request.email = '';
         json_request.options = {
-          'stores' : [''],
+          'stores' : [],
           'price' : 'min', 
           'num' : '-1',
           'range_min' : formatter(req.query.range_min),
@@ -48,7 +48,8 @@ module.exports = {
       case constants.DEL_ACC_REQ:
         json_request.email = req.session.user.email;
         json_request.password = req.body.password;
-        
+        break;
+
       case constants.LOGIN_REQ:
         json_request.email = req.body.email;
         json_request.password = req.body.password;

@@ -116,7 +116,7 @@ module.exports = {
    * @return  nothing
    */
   delete_acc_post : function(req, res) {
-    debug('Delete account request for user: ' + req.session.user);
+    debug('Delete account request for user: ' + req.session.user.email);
     messenger.request(constants.DEL_ACC_REQ, req, res);
   },
 

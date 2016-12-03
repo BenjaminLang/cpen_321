@@ -2,7 +2,7 @@
  * End-to-end test for whether a user can visit the website and register for an account
  */
 var name = 'testuser';
-var email = 'testemail8@hotmail.com';
+var email = 'testemail10@hotmail.com';
 var password = 'TESTPASSWORD1';
 
 module.exports = {
