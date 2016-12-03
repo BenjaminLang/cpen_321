@@ -7,6 +7,7 @@ from cache_ops import CacheOps as mdo
 from cat_ops import CatOps as cdo
 from user_ops import UserOps as udo
 from item_ops import ItemOps as ido
+from sendemail import send_email
 
 from pymongo import MongoClient
 
@@ -196,7 +197,7 @@ class RequestHandler:
         response['message_type'] = 'acc_create_response'
         del json_data['message_type']
 
-        num = email(json_data['email'])
+        num = send_email(json_data['email'])
 
         json_data['verify_num'] = num
 
