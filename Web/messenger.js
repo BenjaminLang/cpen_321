@@ -66,7 +66,7 @@ module.exports = {
       case constants.DEL_LIST_REQ:
       case constants.GET_LIST_REQ:
         json_request.list_name = req.body.list_name;
-      case constants.GET_LIST_NAMES:
+      case constants.GET_LIST_NAMES_REQ:
         json_request.email = req.session.user.email;
         break;
 

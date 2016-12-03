@@ -8,14 +8,14 @@ block custom-widget
   
   
 block content
-// SEARCH RESULTS
-ul.products
-  .row
-    .col-sm-6.col-md-4
-    for list in user_lists
-      form.userLists(method='get')
-        a.viewList(href='/item_searched')
-          p #{list}
+  // SEARCH RESULTS
+  ul.products
+    .row
+      .col-sm-6.col-md-4
+      for list in user_lists
+        form.userLists(method='get')
+          a.viewList(href='/item_searched')
+            p #{list}
 
 		
       
