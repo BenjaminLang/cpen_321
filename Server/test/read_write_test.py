@@ -46,8 +46,8 @@ class readWriteTest(unittest.TestCase):
         data['image'] = 'SyrupCostco.jpeg'
 
         write['data'] = data
-
-        rq.handle_crawler(write)
+        json_data = json.dumps(write)
+        rq.handle_crawler(json_data)
 
         # generate read request message
         read = {}
@@ -92,8 +92,8 @@ class readWriteTest(unittest.TestCase):
         data['image'] = 'SyrupWalmart.jpeg'
 
         write['data'] = data
-
-        rq.handle_crawler(write)
+        json_data = json.dumps(write)
+        rq.handle_crawler(json_data)
 
         # attempt to search for syrups
         read = {}

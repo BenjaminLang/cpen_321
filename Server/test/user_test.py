@@ -40,6 +40,22 @@ class userTest(unittest.TestCase):
         self.assertEqual('success', response['status'])
 
         data['message_type'] = 'acc_login'
+        response = self._send(data)
+        self.assertEqual('Not Verified', response['status'])
+
+        verify = {}
+        verify['email'] = data['email']
+        verify['message_type'] = 'acc_verify'
+        verify['verify_num'] = str(111111)
+
+        response = self._send(verify)
+        self.assertEqual('failed', response['status'])
+
+        verify['verify_num'] = str(666666)
+        response = self._send(verify)
+        self.assertEqual('success', response['status'])
+
+        data['message_type'] = 'acc_login'
 
         response = self._send(data)
         self.assertEqual('success', response['status'])
@@ -76,6 +92,18 @@ class userTest(unittest.TestCase):
         data['message_type'] = 'acc_login'
 
         response = self._send(data)
+        self.assertEqual('Not Verified', response['status'])
+
+        verify = {}
+        verify['email'] = data['email']
+        verify['message_type'] = 'acc_verify'
+        verify['verify_num'] = str(111111)
+
+        response = self._send(verify)
+        self.assertEqual('failed', response['status'])
+
+        verify['verify_num'] = str(666666)
+        response = self._send(verify)
         self.assertEqual('success', response['status'])
         
         data['message_type'] = 'acc_delete'
@@ -110,7 +138,29 @@ class userTest(unittest.TestCase):
         data['message_type'] = 'acc_login'
 
         response = self._send(data)
+        self.assertEqual('Not Verified', response['status'])
+
+        verify = {}
+        verify['email'] = data['email']
+        verify['message_type'] = 'acc_verify'
+        verify['verify_num'] = str(111111)
+
+        response = self._send(verify)
+        self.assertEqual('failed', response['status'])
+
+        verify['verify_num'] = str(666666)
+        response = self._send(verify)
         self.assertEqual('success', response['status'])
+
+        data['message_type'] = 'acc_delete'
+
+        response = self._send(data)
+        self.assertEqual('success', response['status'])
+
+        data['message_type'] = 'acc_login'
+
+        response = self._send(data)
+        self.assertEqual('DNE', response['status'])
 
     def test_6(self):
         data = {}
@@ -153,11 +203,10 @@ class userTest(unittest.TestCase):
 
         data['message_type'] = 'acc_login'
         response = self._send(data)
-        self.assertNotEqual('success', response['status'])
         self.assertEqual('Not Verified', response['status'])
 
         verify = {}
-        verify['email'] = 'dioz.rl@gmail.com'
+        verify['email'] = data['email']
         verify['message_type'] = 'acc_verify'
         verify['verify_num'] = str(111111)
 

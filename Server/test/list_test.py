@@ -55,7 +55,7 @@ class ListTest(unittest.TestCase):
         self.assertEqual('success', response['status'])
 
         del data['list']
-        data['message_type'] = 'retrieve_list'
+        data['message_type'] = 'get_list'
         response = self._send(data)
         self.assertEqual('success', response['status'])
         self.assertListEqual(data_list, response['list'])
@@ -78,7 +78,7 @@ class ListTest(unittest.TestCase):
         self.assertEqual('success', response['status'])
 
         del data['list']
-        data['message_type'] = 'retrieve_list'
+        data['message_type'] = 'get_list'
         response = self._send(data)
         self.assertEqual('success', response['status'])
         self.assertListEqual(data_list, response['list'])
@@ -92,7 +92,7 @@ class ListTest(unittest.TestCase):
         response = self._send(data)
         self.assertEqual(response['status'], 'success')
 
-        data['message_type'] = 'retrieve_list'
+        data['message_type'] = 'get_list'
         response = self._send(data)
         self.assertEqual(response['status'], 'failed')
 
