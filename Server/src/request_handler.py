@@ -61,7 +61,7 @@ class RequestHandler:
                 json_response = self.__handle_recommend(json_data)
 
             if req_type != 'read':
-               print(json_response)
+                print(json_response)
 
             json_response = bson.json_util.dumps(json_response)
             connection.send(json_response.encode())

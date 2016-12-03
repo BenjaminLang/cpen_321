@@ -91,6 +91,7 @@ class UserOps:
                 if db_res['password'] == auth:
                     db_res['old_password'] = auth
                     db_res['password'] = json_query['password']
+                    del db_res['old_password']
                     users_db[collection].save(db_res)
                     return 'success'
                 else:
