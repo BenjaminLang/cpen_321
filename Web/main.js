@@ -71,6 +71,7 @@ app.get('/login', require_logout, handler.login);
 app.get('/logout', handler.logout);
 app.get('/item_searched', handler.item_searched);
 app.get('/update', require_login, handler.update);
+app.get('/manage_lists', require_login, handler.manage_lists);
 
 // POST requests
 app.post('/register', handler.register_post);

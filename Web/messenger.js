@@ -191,7 +191,11 @@ response = function (res_from_server, req, res) {
     //////////////////////////////
     case constants.GET_LIST_NAMES_RSP:
       // do something with the list names
-      res.render('lists', {list_names : message.list_names});
+      res.render('manage_lists', {
+        'title' : 'Manage Lists',
+        'logged_in_name' : req.session.user.name,
+        'user_lists' : message.list_names 
+      });
       break;
     //////////////////////////////
     case constants.DEL_LIST_RSP:

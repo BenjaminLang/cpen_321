@@ -63,6 +63,7 @@ module.exports = {
    */
   logout : function(req, res) {
     // delete the session variable and redirect to homepage
+    debug('Logging out...');
     req.session = null;
     res.redirect('/');
   },
@@ -94,6 +95,17 @@ module.exports = {
       'title' : 'Change Password',
       'logged_in_name' : req.session.user.name
     });
+  },
+
+  /**
+   * Handler for displaying the manage lists page
+   * @param  req the HTTP request from the browser 
+   * @param  res the HTTP response to the browser
+   * @return  nothing
+   */
+  manage_lists : function(req, res) {
+    debug('Request to manage lists received.')
+    messenger.request(constants.GET_LIST_NAMES_REQ, req, res);
   },
 
   /**

@@ -7,15 +7,15 @@ block custom-widget
   
   
   
-  block content
-  // SEARCH RESULTS
-  ul.products
-    .row
-      .col-sm-6.col-md-4
-      for (A LIST) in (ALL OF USERS LIST)
-        form.userLists(method='get')
-          a.viewList(href='/item_searched')
-            p $#{LIST NAME}
+block content
+// SEARCH RESULTS
+ul.products
+  .row
+    .col-sm-6.col-md-4
+    for list in user_lists
+      form.userLists(method='get')
+        a.viewList(href='/item_searched')
+          p #{list}
 
 		
       
