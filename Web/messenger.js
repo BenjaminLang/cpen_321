@@ -96,124 +96,124 @@ response = function (res_from_server, req, res) {
   switch(type) {
     //////////////////////////////
     case constants.READ_RSP:
-      for (var i = 0; i < message.items.length; i++) {
-        // replace all instances of '&amp;' in item names with '&'
-        message.items[i].data.name = message.items[i].data.name.replace('&amp;', '&');
-      }
-      var name;
-      if (req.session.user) name = req.session.user.name;
-      res.render('item_searched', {'title' : req.query.item + ' - Search Results',
-                                  'logged_in_name' : name,
-                                  'list_items' : message.items});
-      break;
+        for (var i = 0; i < message.items.length; i++) {
+          // replace all instances of '&amp;' in item names with '&'
+          message.items[i].data.name = message.items[i].data.name.replace('&amp;', '&');
+        }
+        var name;
+        if (req.session.user) name = req.session.user.name;
+        res.render('item_searched', {'title' : req.query.item + ' - Search Results',
+                                    'logged_in_name' : name,
+                                    'list_items' : message.items});
+        break;
     //////////////////////////////
     case constants.CREATE_ACC_RSP:
-      if (message.status == constants.SUCCESS) {
-        // save user info, then redirect to home page
-        req.session.user = {name : req.body.name, email : req.body.email};
-        res.redirect('/');
-      }
-      else {
-        // failure, which means email is already in use
-        res.render('register', {
-          'title' : 'Registration Form',
-          'email_taken' : 'That email is already in use.'
-        });
-      }
-      break;
+        if (message.status == constants.SUCCESS) {
+          // save user info, then redirect to home page
+          req.session.user = {name : req.body.name, email : req.body.email};
+          res.redirect('/');
+        }
+        else {
+          // failure, which means email is already in use
+          res.render('register', {
+            'title' : 'Registration Form',
+            'email_taken' : 'That email is already in use.'
+          });
+        }
+        break;
     //////////////////////////////
     case constants.DEL_ACC_RSP:
-      if (message.status == constants.SUCCESS) {
-        res.redirect('/logout');
-      }
-      else {
-        res.end();
-      }
-      break;
+        if (message.status == constants.SUCCESS) {
+          res.redirect('/logout');
+        }
+        else {
+          res.end();
+        }
+        break;
     //////////////////////////////
     case constants.LOGIN_RSP:
-      if (message.status == constants.SUCCESS) {
-        // login successful
-        // need to get name from message
-        debug('login: successful');
-        req.session.user = {name : message.name, email : req.body.email};
-        res.redirect('/');
-      } 
-      else if (message.status == constants.FAILURE) {
-        // password is incorrect
-        debug('login: failure');
-        res.render('login', {
-          'title' : 'Login',
-          'login_failed' : 'Password is incorrect.'
-        });
-        
-      }
-      else {
-        // email does not exist
-        debug('login: does not exist');
-        res.render('login', {
-          'title' : 'Login',
-          'login_failed' : 'Email does not exist.'
-        });
-      }
-      break;
+        if (message.status == constants.SUCCESS) {
+          // login successful
+          // need to get name from message
+          debug('login: successful');
+          req.session.user = {name : message.name, email : req.body.email};
+          res.redirect('/');
+        } 
+        else if (message.status == constants.FAILURE) {
+          // password is incorrect
+          debug('login: failure');
+          res.render('login', {
+            'title' : 'Login',
+            'login_failed' : 'Password is incorrect.'
+          });
+          
+        }
+        else {
+          // email does not exist
+          debug('login: does not exist');
+          res.render('login', {
+            'title' : 'Login',
+            'login_failed' : 'Email does not exist.'
+          });
+        }
+        break;
     //////////////////////////////
     case constants.ACC_UPDATE_RSP:
-      if (message.status == constants.SUCCESS) {
-        res.render('update', {
-          'title' : 'Change Password',
-          'logged_in_name' : req.session.user.name,
-          'status' : 'Password successfully updated.'
-        });
-      }
-      else if (message.status == constants.FAILURE) {
-        res.render('update', {
-          'title' : 'Change Password',
-          'logged_in_name' : req.session.user.name,
-          'status' : 'Old password is incorrect.'
-        });
-      }
-      // this should never happen
-      else {
-        res.send('<p>Account does not exist.</p>');
-      }
-      break;
+        if (message.status == constants.SUCCESS) {
+          res.render('update', {
+            'title' : 'Change Password',
+            'logged_in_name' : req.session.user.name,
+            'status' : 'Password successfully updated.'
+          });
+        }
+        else if (message.status == constants.FAILURE) {
+          res.render('update', {
+            'title' : 'Change Password',
+            'logged_in_name' : req.session.user.name,
+            'status' : 'Old password is incorrect.'
+          });
+        }
+        // this should never happen
+        else {
+          res.send('<p>Account does not exist.</p>');
+        }
+        break;
     //////////////////////////////
     case constants.ADD_LIST_RSP:
-      // stay on same page
-      res.status(204).end();
-      break;
-    //////////////////////////////
-    case constants.GET_LIST_RSP:
-      // do something with the lists
-      // res.render('list', {list :});
-      break;
+        // stay on same page
+        res.status(204).end();
+        break;
+      //////////////////////////////
+      case constants.GET_LIST_RSP:
+        // do something with the lists
+        // res.render('list', {list :});
+        break;
     //////////////////////////////
     case constants.GET_LIST_NAMES_RSP:
-      // do something with the list names
-      res.render('manage_lists', {
-        'title' : 'Manage Lists',
-        'logged_in_name' : req.session.user.name,
-        'user_lists' : message.list_names 
-      });
-      break;
+        // do something with the list names
+        res.render('manage_lists', {
+          'title' : 'Manage Lists',
+          'logged_in_name' : req.session.user.name,
+          'user_lists' : message.list_names 
+        });
+        break;
     //////////////////////////////
     case constants.DEL_LIST_RSP:
-      // refresh the page the user is on, but with the list deleted
-      if (message.status == constants.SUCCESS) {
+        // refresh the page the user is on, but with the list deleted
+        if (message.status == constants.SUCCESS) {
+          
+        }
         
-      }
-      
-      break;
+        break;
     //////////////////////////////
     case constants.RECOMMEND_RSP:
-      // do something with the recommended list
-      res.render('index', {
-        'title': 'Home', 
-        'logged_in_name': req.session.user.name,
-        'lists' : message.rec_list
-      });
-      break;
+        // do something with the recommended list
+        res.render('index', {
+          'title': 'Home', 
+          'logged_in_name': req.session.user.name,
+          'lists' : message.rec_list
+        });
+        break;
   }
 };
 

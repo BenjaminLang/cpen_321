@@ -23,8 +23,12 @@ module.exports = {
    'Add Item to List': function(browser) {
      browser
        .click('#item0')
-       .pause(1000)
+       .pause(500)
        // need to check if the item was actually added to the list
+       .click('.showCartButton')
+       .pause(500)
+       .assert.containsText('.media-heading', 'Beech-Nut Classics Stage 2 Apple, Mango & Kiwi, 4.0 OZ')
+       .pause(500)
        .end()
    }
 };

@@ -43,7 +43,7 @@ module.exports = {
     browser
       .setValue('input[name="password"]', password)
       .click('input[type="submit"]')
-      .pause(4000)
+      .pause(2000)
       .assert.elementNotPresent('.greeting')
       .end();
   }
