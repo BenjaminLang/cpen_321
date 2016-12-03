@@ -154,8 +154,8 @@ class RequestHandler:
         response = {}
         response['message_type'] = 'get_list_names_response'
         list_names = udo.get_list_names(self.__users_db, json_data)
-        if list_names == 'failed':
-            response['status'] = 'failed'
+        if list_names == 'failed' or list_names == 'exception':
+            response['status'] = list_names
             response['list_names'] = []
         else:
             response['list_names'] = list_names

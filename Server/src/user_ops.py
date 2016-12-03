@@ -95,7 +95,7 @@ class UserOps:
             if len(user_data) == 0:
                 return 'failed'
             else:
-                return list.sort(user_data['list_names'])
+                return sorted(user_data['list_names'])
 
         except Exception :
             traceback.print_exc()
