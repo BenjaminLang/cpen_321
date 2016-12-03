@@ -121,6 +121,9 @@ response = function (res_from_server, req, res) {
       if (message.status == constants.SUCCESS) {
         res.redirect('/logout');
       }
+      else {
+        res.end();
+      }
       break;
     //////////////////////////////
     case constants.LOGIN_RSP:

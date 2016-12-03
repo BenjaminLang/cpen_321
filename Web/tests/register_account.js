@@ -29,11 +29,23 @@ module.exports = {
       .assert.containsText('.greeting', 'Hello, ' + name)
   },
 
-  /*
-  'Delete account' : function(browser) {
+  // Delete account so we can reuse this test
+  'Go to Delete Account' : function(browser) {
     browser
+      .click('#account')
+      .pause(500)
+      .click('#delete_acc')
+      .pause(500)
+      .waitForElementVisible('.Delete_Acc', 1000)
+  },
 
-      .end()
+  'Delete Account' : function(browser) {
+    browser
+      .setValue('input[name="password"]', password)
+      .submit('input[type="submit"]')
+      .pause(2000)
+      .assert.elementNotPresent('.greeting')
+      .end();
   }
-  */
+  
 };

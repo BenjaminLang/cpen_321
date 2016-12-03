@@ -33,14 +33,16 @@ module.exports = {
   },
 
   /**
-   * Handler for deleting account
+   * Handler for delete account page
    * @param  req the HTTP request from the browser 
    * @param  res the HTTP response to the browser
    * @return  nothing
    */
   delete_acc : function(req, res) {
-    debug('Delete account request for user: ' + req.session.user);
-    messenger.request(constants.DEL_ACC_REQ, req, res);
+    res.render('delete_acc', {
+      'title' : 'Delete Account',
+      'logged_in_name' : req.session.user.name
+    });
   },
 
   /**
@@ -95,17 +97,6 @@ module.exports = {
   },
 
   /**
-   * Handler for submitting login information
-   * @param  req the HTTP request from the browser 
-   * @param  res the HTTP response to the browser
-   * @return  nothing
-   */
-  login_post : function(req, res) {
-    debug('Login request received');
-    messenger.request(constants.LOGIN_REQ, req, res);
-  },
-
-  /**
    * Handler for submitting new account information
    * @param  req the HTTP request from the browser 
    * @param  res the HTTP response to the browser
@@ -116,6 +107,28 @@ module.exports = {
     // password, email, 
     debug('Account create request received.');
     messenger.request(constants.CREATE_ACC_REQ, req, res);
+  },
+
+  /**
+   * Handler for deleting account
+   * @param  req the HTTP request from the browser 
+   * @param  res the HTTP response to the browser
+   * @return  nothing
+   */
+  delete_acc_post : function(req, res) {
+    debug('Delete account request for user: ' + req.session.user);
+    messenger.request(constants.DEL_ACC_REQ, req, res);
+  },
+
+  /**
+   * Handler for submitting login information
+   * @param  req the HTTP request from the browser 
+   * @param  res the HTTP response to the browser
+   * @return  nothing
+   */
+  login_post : function(req, res) {
+    debug('Login request received');
+    messenger.request(constants.LOGIN_REQ, req, res);
   },
 
   /**
