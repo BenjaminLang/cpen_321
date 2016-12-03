@@ -181,7 +181,7 @@ response = function (res_from_server, req, res) {
     //////////////////////////////
     case constants.GET_LIST_RSP:
       // do something with the lists
-      res.render('list', {list :});
+      // res.render('list', {list :});
       break;
     //////////////////////////////
     case constants.GET_LIST_NAMES_RSP:
@@ -267,4 +267,9 @@ socket = function(req_to_server, req, res) {
     else debug('Socket closed');
   });
 
+};
+
+formatter = function(value) {
+  if (value) return value;
+  else return '';
 };
