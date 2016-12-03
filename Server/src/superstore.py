@@ -1,4 +1,4 @@
-from src.crawl_lib import *
+from crawl_lib import *
 import traceback
 
 

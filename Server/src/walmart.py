@@ -1,6 +1,6 @@
 import time
 
-from src.crawl_lib import *
+from crawl_lib import *
 
 # Parses starting from the base_url and sends the data to the db
 def parse():

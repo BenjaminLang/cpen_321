@@ -1,4 +1,4 @@
-from src.crawl_lib import *
+from crawl_lib import *
 
 
 # take in a soup, tag_name, class_name and return all "a href" links in that soup
