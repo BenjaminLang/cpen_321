@@ -1,4 +1,3 @@
-import json
 import time
 
 from src.crawl_lib import *

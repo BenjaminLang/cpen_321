@@ -22,8 +22,6 @@ def send_to_db(cat_name, info_object):
     # TODO: replace certain characters which are formatted incorrectly
     # info_object['name'] = info_object['name'].replace('&amp', '&')
     item = {}
-    data = {}
-    sub_data = {}
     item['message_type'] = 'write'
     item['collection'] = cat_name.replace('$', '').replace('-', '').replace('.', '').replace(' ', '').lower()
 

@@ -4,6 +4,7 @@ import socket
 import traceback
 import ssl
 
+
 class DatabaseServer:
     def __init__(self, queue):
         self.__queue = queue

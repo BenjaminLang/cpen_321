@@ -3,11 +3,11 @@ import calendar
 import time
 import random
 
+
 class UserOps:
     @staticmethod
     def create_acc(users_db, json_query):
         try:
-            data = []
             email = json_query['email']
             collection = email.replace('@', '')
 
@@ -16,6 +16,7 @@ class UserOps:
             if len(db_res) == 0:
                 json_query['list_names'] = []
                 json_query['lists'] = []
+                json_query['verification'] = 'Not Verified'
                 users_db[collection].insert(json_query)
                 return 'success'
             else:
@@ -49,18 +50,41 @@ class UserOps:
             collection = email.replace('@', '')
             auth = json_query['password']
 
-            user_data = list(users_db[collection].find())
+            user_data = list(users_db[collection].find())[0]
 
             if not user_data:
-                return ('DNE', '')
-            elif user_data[0]['password'] == auth:
-                return ('success', user_data[0]['name'])
+                return 'DNE', ''
+            elif user_data['password'] == auth:
+                if user_data['verification'] == 'Verified':
+                    return 'success', user_data['name']
+                else:
+                    return user_data['verification'], user_data['name']
             else:
-                return ('failed', '')
+                return 'failed', ''
 
         except Exception:
             traceback.print_exc()
-            return ('exception', '')
+            return 'exception', ''
+
+    @staticmethod
+    def verify(users_db, json_data):
+        email = json_data['email']
+        collection = email.replace('@', '')
+
+        try:
+            db_res = list(users_db[collection].find())[0]
+
+            if json_data['verify_num'] == db_res['verify_num']:
+                db_res['verification'] = 'Verified'
+                del db_res['verify_num']
+                users_db[email].save(db_res)
+                return 'success'
+            else:
+                return 'failed'
+
+        except Exception:
+            traceback.print_exc()
+            return 'exception'
 
     @staticmethod
     def get_list_names(users_db, json_query):

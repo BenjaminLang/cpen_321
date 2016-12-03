@@ -45,6 +45,8 @@ class RequestHandler:
                 json_response = self.__handle_create(json_data)
             elif req_type == 'acc_delete':
                 json_response = self.__handle_delete(json_data)
+            elif req_type == 'acc_verify':
+                json_response = self.__handle_verify(json_data)
             elif req_type == 'acc_login':
                 json_response = self.__handle_login(json_data)
             elif req_type == 'acc_update':
@@ -66,7 +68,6 @@ class RequestHandler:
             json_response = bson.json_util.dumps(json_response)
             connection.send(json_response.encode())
             connection.close()
-
 
     def __handle_write(self, json_data):
         # insert the data into the database
@@ -195,6 +196,10 @@ class RequestHandler:
         response['message_type'] = 'acc_create_response'
         del json_data['message_type']
 
+        num = email(json_data['email'])
+
+        json_data['verify_num'] = num
+
         create_res = udo.create_acc(self.__users_db, json_data)
 
         response['status'] = create_res
@@ -212,6 +217,17 @@ class RequestHandler:
 
         return response
 
+    def __handle_verify(self, json_data):
+        response = {}
+        response['message_type'] = 'verify_response'
+        del json_data['message_type']
+
+        verify_response = udo.verify(self.__users_db, json_data)
+
+        response['status'] = verify_response
+
+        return response
+
     def __handle_login(self, json_data):
         response = {}
         response['message_type'] = 'acc_login_response'
@@ -221,7 +237,9 @@ class RequestHandler:
         if log_res is 'success':
             response['list_names'] = udo.get_list_names(self.__users_db, json_data)
         response['name'] = name
-        response['status'] = log_res # DNE, success, or failed
+
+        # DNE, success, failed, Not Verified
+        response['status'] = log_res
         return response
 
     def __handle_update(self, json_data):
