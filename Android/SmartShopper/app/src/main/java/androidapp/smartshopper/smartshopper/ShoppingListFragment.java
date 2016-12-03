@@ -37,14 +37,15 @@ import java.util.List;
 public class ShoppingListFragment extends Fragment {
     private Context context;
     private ProductAdapter adapter;
-    private List<Product> cartItems;
+    private List<Product> cartItems = new ArrayList<Product>();
     private double totalPrice;
     private String[] listNameOpts = {};
     private String email;
     private boolean loggedIn;
-    private String currList = "default_list";
+    private String currList = "";
 
     private SharedPreferences sharedPref;
+    private SharedPreferences.Editor editor;
 
     public ShoppingListFragment() {
         // Required empty public constructor
@@ -55,12 +56,14 @@ public class ShoppingListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.context = getActivity();
         sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
+        editor = sharedPref.edit();
 
+        currList = sharedPref.getString("curr_list", "");
         email = sharedPref.getString(getString(R.string.curr_user), "");
         loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), false);
 
         if(loggedIn) {
+
             try {
                 String getListsReq = new RequestBuilder().buildGetListNamesJSON(email);
                 String getAllListResp = new SendRequest().execute(getListsReq).get();
@@ -68,16 +71,17 @@ public class ShoppingListFragment extends Fragment {
                 JSONObject respJSON = new JSONObject(getAllListResp);
                 String stat = respJSON.getString("status");
 
-                JSONArray listsArray = respJSON.getJSONArray("list_names");
+                //JSONArray listsArray = respJSON.getJSONArray("list_names");
                 JSONObject listNamesJSON = new JSONObject();
-                listNamesJSON.put("list_names", listsArray);
+                Toast.makeText(getActivity(), stat, Toast.LENGTH_SHORT).show();
 
-                if(stat == "success") {
+
+                if(stat.equals("success")) {
                     List<String> listNames = new JSONParser().parseListNames(getAllListResp);
                     listNames.add("Add New List");
                     listNameOpts = listNames.toArray(new String[0]);
 
-                    editor.putString("list_names", listNamesJSON.toString());
+                    editor.putString("list_names", getAllListResp);
                     editor.commit();
                 }
                 else {
@@ -87,19 +91,8 @@ public class ShoppingListFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        /*
         else {
-            try {
-                String defaultVal = "";
-                final String cartString = sharedPref.getString("default_list", defaultVal);
-                JSONObject cartJSON = new JSONObject(cartString);
-
-                cartItems = new JSONParser().parseCart(cartString);
-                totalPrice = cartJSON.getDouble("total_price");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }*/
+        }
     }
 
     @Override
@@ -109,6 +102,10 @@ public class ShoppingListFragment extends Fragment {
         //LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
 
+        adapter = new ProductAdapter(this.context, R.layout.search_result, new ArrayList<Product>());
+        ListView list = (ListView) view.findViewById(R.id.cart_list);
+        list.setAdapter(adapter);
+
         final TextView total = (TextView) view.findViewById(R.id.cart_summary);
         total.setText("Total: " + Double.toString(round(totalPrice, 2)));
 
@@ -117,20 +114,63 @@ public class ShoppingListFragment extends Fragment {
         listNameSpin.setAdapter(listNamesAdpt);
 
         final Button saveList = (Button) view.findViewById(R.id.new_list_button);
-        /*
-        allShopLists.setOnItemClickListener(new AdapterView.OnItemSelectedListener() {
+
+        listNameSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                numSelected = numItemActual[position];
-                editor.putInt(getString(R.string.num_spin_pos), position);
+                String listSelected = listNameOpts[position];
+                if(listSelected == "Add New List") {
+                    editor.putString("curr_list", "default_list");
+                }
+                else {
+                    editor.putString("curr_list", listSelected);
+                    if(sharedPref.contains(listSelected)) {
+                        String cartString = sharedPref.getString(listSelected, "");
+                        try {
+                            JSONObject cartJSON = new JSONObject(cartString);
+
+                            cartItems = new JSONParser().parseCart(cartString);
+                            totalPrice = cartJSON.getDouble("total_price");
+
+                            adapter.updateProductList(cartItems);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                        String defaultUser = "";
+                        String user = sharedPref.getString(getString(R.string.curr_user), defaultUser);
+                        String defaultList = "";
+                        String list = sharedPref.getString("cart", defaultList);
+                        String request = new RequestBuilder().buildGetListReq(user, listSelected);
+
+                        try {
+                            String jsonResponse = new SendRequest().execute(request).get();
+                            String stat = new JSONObject(jsonResponse).getString("status");
+
+                            if(stat == "success") {
+                                cartItems = new JSONParser().parseCart(jsonResponse);
+                                adapter.updateProductList(cartItems);
+
+                                editor.putString(listSelected, jsonResponse);
+                                editor.commit();
+                            }
+                            else {
+                                //put toast here
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 return;
             }
-        });*/
+        });
 
         saveList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,21 +196,14 @@ public class ShoppingListFragment extends Fragment {
         });
 
         if(loggedIn) {
-            /*
-            String defaultVal = "";
-            final String cartString = sharedPref.getString("default_list", defaultVal);
+            if(currList.equals("")) {
+                currList = "default_list";
+            }
 
-            try {
-                JSONObject cartJSON = new JSONObject(cartString);
-                cartItems = new JSONParser().parseCart(cartString);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
+            
 
             if (cartItems != null) {
-                adapter = new ProductAdapter(this.context, R.layout.search_result, this.cartItems);
-                ListView list = (ListView) view.findViewById(R.id.cart_list);
-                list.setAdapter(adapter);
+                adapter.updateProductList(cartItems);
 
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -191,7 +224,6 @@ public class ShoppingListFragment extends Fragment {
             try {
                 String defaultVal = "";
                 final String cartString = sharedPref.getString("default_list", defaultVal);
-                Toast.makeText(getActivity(), cartString, Toast.LENGTH_LONG).show();
                 JSONObject cartJSON = new JSONObject(cartString);
 
                 cartItems = new JSONParser().parseCart(cartString);
@@ -201,9 +233,7 @@ public class ShoppingListFragment extends Fragment {
             }
 
             if (cartItems != null) {
-                adapter = new ProductAdapter(this.context, R.layout.search_result, this.cartItems);
-                ListView list = (ListView) view.findViewById(R.id.cart_list);
-                list.setAdapter(adapter);
+                adapter.updateProductList(cartItems);
 
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override

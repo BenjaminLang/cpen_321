@@ -23,7 +23,7 @@ public class JSONParser {
     private String URL_TAG = "url";
     private String DATA_TAG = "data";
 
-    private String CART_TAG = "cart_list";
+    private String LIST_TAG = "list";
     private String QUANTITY_TAG = "quantity";
 
     public JSONParser() {}
@@ -71,7 +71,7 @@ public class JSONParser {
 
             try {
                 JSONObject jsonObj = new JSONObject(json);
-                JSONArray items = jsonObj.getJSONArray(CART_TAG);
+                JSONArray items = jsonObj.getJSONArray(LIST_TAG);
 
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject currItem = items.getJSONObject(i);

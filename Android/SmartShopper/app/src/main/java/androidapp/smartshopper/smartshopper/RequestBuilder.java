@@ -149,7 +149,7 @@ public class RequestBuilder {
         }
     }
 
-    public String buildGetListJSON(String email, String list) {
+    public String buildGetListReq(String email, String list) {
         JSONObject request = new JSONObject();
         try{
             request.put("message_type", "get_list");

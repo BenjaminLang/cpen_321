@@ -51,7 +51,7 @@ public class ShopListHandler {
                 }
 
                 JSONObject cartJSON = new JSONObject(cartString);
-                JSONArray cartArray = cartJSON.getJSONArray("cart_list");
+                JSONArray cartArray = cartJSON.getJSONArray("list");
                 if(!alreadyAdded) {
                     jsonAppend.put("quantity", Integer.toString(numToAdd));
                     cartArray.put(jsonAppend);
@@ -91,7 +91,7 @@ public class ShopListHandler {
                 jsonAppend.put("quantity", Integer.toString(numToAdd));
                 jsonArray.put(jsonAppend);
 
-                jsonObj.put("cart_list", jsonArray);
+                jsonObj.put("list", jsonArray);
 
                 double price = Double.parseDouble(toAdd.getPrice());
                 price *= numToAdd;
@@ -117,7 +117,7 @@ public class ShopListHandler {
             SharedPreferences.Editor editor = context.getPreferences(Context.MODE_PRIVATE).edit();
 
             JSONObject cartJSON = new JSONObject(cartString);
-            JSONArray cartArray = cartJSON.getJSONArray("cart_list");
+            JSONArray cartArray = cartJSON.getJSONArray("list");
 
             List<Product> updatedList = new ArrayList<Product>();
             for(int i = 0; i < cartArray.length(); i++) {
