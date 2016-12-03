@@ -21,6 +21,7 @@ class MyThread(threading.Thread):
             handler.handle_request()
 """
 
+
 def main():
     thread_factory = ThreadFactory()
     handler1 = thread_factory.create_thread('req_handle')

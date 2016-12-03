@@ -1,5 +1,6 @@
 from src.crawl_lib import *
 
+
 # take in a soup, tag_name, class_name and return all "a href" links in that soup
 def _get_links(soup, tag_name, class_name):
     links = list()
@@ -7,6 +8,7 @@ def _get_links(soup, tag_name, class_name):
         for tagLink in tag.find_all('a'):
             links.append(tagLink['href'])
     return links
+
 
 # Takes a soup and sends all products to the db (including price, url, name, image)
 def _send_products(soup, cat_name):
@@ -53,6 +55,7 @@ def _send_products(soup, cat_name):
 
             send_to_db(cat_name, data)
     return
+
 
 # Parses starting from the base_url and sends the data to the db
 def parse():

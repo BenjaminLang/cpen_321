@@ -1,5 +1,6 @@
 import traceback
 
+
 class ItemOps:
     @staticmethod
     def insert_items(items_db, json_query):
