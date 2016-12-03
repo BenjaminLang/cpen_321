@@ -3,6 +3,7 @@ import queue
 import socket
 
 import bson.json_util
+
 from cache_ops import CacheOps as mdo
 from cat_ops import CatOps as cdo
 from user_ops import UserOps as udo
@@ -20,7 +21,8 @@ class RequestHandler:
         self.__users_db = client.users_db
         self.__cache_db = client.cache_db
 
-    def handle_crawler(self, json_query):
+    @staticmethod
+    def handle_crawler(json_query):
         json_data = json.loads(json_query)
         req_type = json_data['message_type']
         json_response = {}

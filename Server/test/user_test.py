@@ -27,8 +27,6 @@ class userTest(unittest.TestCase):
         connection.close()
         return response
 
-    '''
-
     def test_1(self):
         data = {}
         data['email'] = 'mablibsking@hotmail.com'
@@ -140,7 +138,6 @@ class userTest(unittest.TestCase):
 
         response = self._send(data)
         self.assertEqual('DNE', response['status'])
-        '''
 
     def test_7(self):
         data = {}

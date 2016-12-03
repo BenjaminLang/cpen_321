@@ -3,6 +3,9 @@ import unittest
 import socket
 import json
 import ssl
+
+import sys
+sys.path.append('/home/ryangroup/cpen_321/Server/src')
 from request_handler import RequestHandler as rq
 
 

@@ -50,15 +50,15 @@ class UserOps:
             collection = email.replace('@', '')
             auth = json_query['password']
 
-            user_data = list(users_db[collection].find())[0]
+            user_data = list(users_db[collection].find())
 
             if not user_data:
                 return 'DNE', ''
-            elif user_data['password'] == auth:
-                if user_data['verification'] == 'Verified':
-                    return 'success', user_data['name']
+            elif user_data[0]['password'] == auth:
+                if user_data[0]['verification'] == 'Verified':
+                    return 'success', user_data[0]['name']
                 else:
-                    return user_data['verification'], user_data['name']
+                    return user_data[0]['verification'], user_data[0]['name']
             else:
                 return 'failed', ''
 
@@ -68,16 +68,15 @@ class UserOps:
 
     @staticmethod
     def verify(users_db, json_data):
-        email = json_data['email']
-        collection = email.replace('@', '')
-
         try:
+            email = json_data['email']
+            collection = email.replace('@', '')
             db_res = list(users_db[collection].find())[0]
 
             if json_data['verify_num'] == db_res['verify_num']:
                 db_res['verification'] = 'Verified'
                 del db_res['verify_num']
-                users_db[email].save(db_res)
+                users_db[collection].save(db_res)
                 return 'success'
             else:
                 return 'failed'
