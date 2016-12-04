@@ -229,6 +229,7 @@ response = function (res_from_server, req, res) {
     case constants.VERIFY_RSP:
         if (message.status == constants.SUCCESS) {
           // tell the user that their email is verified
+          res.send("HELLO WORLD");
         }
         else if (message.status == constants.FAILURE) {
           // tell the user that the verify_num was incorrect

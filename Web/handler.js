@@ -167,4 +167,15 @@ module.exports = {
     messenger.request(constants.ADD_LIST_REQ, req, res);
   }
 
+  /**
+   * Handler for verifying codes
+   * @param  req the HTTP request from the browser
+   * @param  res the HTTP response to the browser
+   * @return  nothing
+   */ 
+  verify_code : function(req, res) {
+    debug('Verify code request received.');
+    messenger.request(constants.VERIFY_REQ, req, res);
+  }
+
 };

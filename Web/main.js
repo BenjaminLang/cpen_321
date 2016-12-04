@@ -79,6 +79,7 @@ app.post('/delete_acc', handler.delete_acc_post);
 app.post('/login', handler.login_post);
 app.post('/update', require_login, handler.update_post);
 app.post('/save_list', handler.save_list);
+app.post('/verify_code', handler.verify_code);
 
 /////////////
 

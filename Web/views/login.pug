@@ -29,7 +29,12 @@ block content
             span(aria-hidden='true') ×
         form(action='/verify_code', method='post')
           h4#myModalLabel.modal-title
-            input(type='text', name='verification_code', required='', placeholder='Verification Code', autocomplete='off')
+            input(type='text', name='email', required='', placeholder='Email')
+            input(type='text', name='verifiy_num', required='', placeholder='Verification Code', autocomplete='off')
           .modal-body
           .modal-footer.list
-            button.btn.btn-primary.saveChanges(type='submit'value='Submit Code', title='Submit Code') Submit Code               
+            button.btn.btn-primary.saveChanges(type='submit', value='Submit Code', title='Submit Code') Submit Code
+
+
+block append footer-scripts                           
+  script(src='js/verification.js', type='text/javascript')
