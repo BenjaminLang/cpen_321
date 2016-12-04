@@ -46,9 +46,9 @@ WRITE:
 CREATE ACCOUNT:
 {
     'message_type' : 'acc_create',
-    'email' : 'email@hotmail.com',
+    'email' : 'email@email.com',
     'password' : 'pass',
-    'name' : 'Andy Schlong'
+    'name' : 'Andy Wong'
 }
 
 CREATE ACCOUNT RESPONSE:
@@ -60,21 +60,34 @@ CREATE ACCOUNT RESPONSE:
 LOGIN:
 {
     'message_type' : 'acc_login',
-    'email' : 'email@hotmail.com',
+    'email' : 'email@email.com',
     'password' : 'pass'
 }
 
 LOGIN RESPONSE:
 {
     'message_type' : 'acc_login_response',
-    'status' : <'success', 'failed', 'DNE', 'exception'>,
-    'name' : 'Andy Schlong'
+    'status' : <'success', 'failed', 'DNE', 'Not Verified', 'exception'>,
+    'name' : 'Andy Wong'
+}
+
+VERIFY:
+{
+    'message_type' : 'acc_verify',
+    'email' : 'email@email.com',
+    'verify_num' : 'num'
+}
+
+VERIFY RESPONSE:
+{
+    'message_type' : 'verify_response',
+    'status' : <'success', 'failed', 'exception'>
 }
 
 UPDATE ACCOUNT:
 {
     'message_type' : 'acc_update',
-    'email' : 'email@hotmail.com',
+    'email' : 'email@email.com',
     'old_password' : 'pass',
     'password' : 'pass123'
 }
@@ -160,7 +173,7 @@ GET LIST NAMES RESPONSE:
 {
     'message_type' : 'get_list_names_response',
     'status' : <'success', 'failed'>,
-    'list_names' : ['list1', 'list2', 'list3']
+    'list_names' : ['list_1', 'list_2', 'list_3']
 }
 
 DELETE LIST:
@@ -176,3 +189,15 @@ DELETE LIST RESPONSE:
     'status' : <'success', 'failed', 'exception'>
 }
 
+RECOMMEND:
+{
+    'message_type' : 'recommend',
+    'email' : 'email@email.com'
+}
+
+RECOMMEND RESPONSE:
+{
+    'message_type' : 'recommend_response',
+    'status' : <'success', 'exception'>,
+    'rec_list' : ['item_1', 'item_2' ... 'item_n']
+}
