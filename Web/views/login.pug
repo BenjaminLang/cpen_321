@@ -8,11 +8,13 @@ block custom-widget
   // Login Form
   #login-page
     form(method='post')
-      h4 Login Information
+      h4 CheckedOut - Login
       if login_failed
         h5 #{login_failed}
       input.email(type='text', name='email', required='', placeholder='Enter Email')
       input.pw(type='password', name='password', required='', placeholder='Enter Password')
+      li
+        a(href='#') Verify Email
       li
         a(href='/register') Register
       input.button(type='submit', value='Log in')   

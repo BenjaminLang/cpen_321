@@ -231,7 +231,7 @@ response = function (res_from_server, req, res) {
           // tell the user that their email is verified
         }
         else if (message.status == constants.FAILURE) {
-          // 
+          // tell the user that the verify_num was incorrect
         }
   }
 };

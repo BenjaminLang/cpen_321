@@ -84,7 +84,7 @@ app.post('/save_list', handler.save_list);
 
 var httpsServer = https.createServer(credentials, app);
 
-// Binds and listens for connections on the webserver port. 
+// Binds and listens for connections on the web server port. 
 httpsServer.listen(constants.WEBSERVER_PORT , function() {
   debug('Web server listening on port ' + constants.WEBSERVER_PORT + '...');
 });
