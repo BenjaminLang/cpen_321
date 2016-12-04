@@ -6,7 +6,7 @@ import ssl
 
 import sys
 sys.path.append('/home/ryangroup/cpen_321/Server/src')
-from request_handler import RequestHandler as rq
+from request_handler import RequestHandler
 
 
 class readWriteTest(unittest.TestCase):
@@ -46,8 +46,9 @@ class readWriteTest(unittest.TestCase):
         data['image'] = 'SyrupCostco.jpeg'
 
         write['data'] = data
-        json_data = json.dumps(write)
-        rq.handle_crawler(json_data)
+        json_data = json.dumps(write, indent=2)
+        service = RequestHandler()
+        service.handle_crawler(json_data)
 
         # generate read request message
         read = {}
@@ -92,8 +93,9 @@ class readWriteTest(unittest.TestCase):
         data['image'] = 'SyrupWalmart.jpeg'
 
         write['data'] = data
-        json_data = json.dumps(write)
-        rq.handle_crawler(json_data)
+        json_data = json.dumps(write, indent=2)
+        service = RequestHandler()
+        service.handle_crawler(json_data)
 
         # attempt to search for syrups
         read = {}

@@ -21,8 +21,7 @@ class RequestHandler:
         self.__users_db = client.users_db
         self.__cache_db = client.cache_db
 
-    @staticmethod
-    def handle_crawler(json_query):
+    def handle_crawler(self, json_query):
         json_data = json.loads(json_query)
         req_type = json_data['message_type']
         json_response = {}

@@ -71,12 +71,12 @@ class UserOps:
         try:
             email = json_data['email']
             collection = email.replace('@', '')
-            db_res = list(users_db[collection].find())[0]
+            db_res = list(users_db[collection].find())
 
-            if json_data['verify_num'] == db_res['verify_num']:
-                db_res['verification'] = 'Verified'
-                del db_res['verify_num']
-                users_db[collection].save(db_res)
+            if json_data['verify_num'] == db_res[0]['verify_num']:
+                db_res[0]['verification'] = 'Verified'
+                del db_res[0]['verify_num']
+                users_db[collection].save(db_res[0])
                 return 'success'
             else:
                 return 'failed'
@@ -108,14 +108,14 @@ class UserOps:
             auth = json_query['old_password']
             collection = email.replace('@', '')
 
-            db_res = list(users_db[collection].find())[0]
+            db_res = list(users_db[collection].find())
 
             if db_res:
-                if db_res['password'] == auth:
-                    db_res['old_password'] = auth
-                    db_res['password'] = json_query['password']
-                    del db_res['old_password']
-                    users_db[collection].save(db_res)
+                if db_res[0]['password'] == auth:
+                    db_res[0]['old_password'] = auth
+                    db_res[0]['password'] = json_query['password']
+                    del db_res[0]['old_password']
+                    users_db[collection].save(db_res[0])
                     return 'success'
                 else:
                     return 'failed'

@@ -152,15 +152,10 @@ class userTest(unittest.TestCase):
         response = self._send(verify)
         self.assertEqual('success', response['status'])
 
-        data['message_type'] = 'acc_delete'
-
-        response = self._send(data)
-        self.assertEqual('success', response['status'])
-
         data['message_type'] = 'acc_login'
 
         response = self._send(data)
-        self.assertEqual('DNE', response['status'])
+        self.assertEqual('success', response['status'])
 
     def test_6(self):
         data = {}
