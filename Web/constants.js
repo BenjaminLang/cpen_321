@@ -37,7 +37,7 @@ const constants = {
 	FAILURE : 'failed',
 	DOES_NOT_EXIST : 'DNE',
 	NOT_VERIFIED : 'Not Verified',
-	EXCEPTION : 'exception'
+	EXCEPTION : 'exception',
 
 	// ERRORS
 	ADDRESS_IN_USE : 'EADDRINUSE',

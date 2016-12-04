@@ -165,7 +165,7 @@ module.exports = {
   save_list : function(req, res) {
     debug('Save list request received.');
     messenger.request(constants.ADD_LIST_REQ, req, res);
-  }
+  },
 
   /**
    * Handler for verifying codes
