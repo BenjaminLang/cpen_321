@@ -1,7 +1,7 @@
 $('form#verify').submit(function(event) {
 	var form_data = { 
 		'verify_num' : $('input[name="verify_num"]').val(),
-		'email' : $('input[name="email"]').val()
+		'email_verify' : $('input[name="email_verify"]').val()
 	};
 
 	console.log(form_data);
