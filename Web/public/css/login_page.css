@@ -64,11 +64,11 @@ body {
 }
 
 #login-page li#verify {
-  bottom:55px;
+  bottom:70px;
 }
 
 #login-page li#register {
-  bottom:58px;
+  bottom:40px;
 }
 
 #login-page a, a:visited {
