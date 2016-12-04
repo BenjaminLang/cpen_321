@@ -75,7 +75,7 @@ module.exports = {
 
       case constants.VERIFY_REQ:
         json_request.email = req.body.email;
-        json_request.verify_num = ;
+        json_request.verify_num = req.body.verify_num;
         break;
     }
     socket(json_request, req, res);
