@@ -14,8 +14,24 @@ block custom-widget
       input.email(type='text', name='email', required='', placeholder='Enter Email')
       input.pw(type='password', name='password', required='', placeholder='Enter Password')
       li#verify
-        a(href='#') Verify Email
+        a(href='#', data-toggle='modal', data-target='#myModal') Verify Email
       li#register
         a(href='/register') Register
       input.button(type='submit', value='Log in')   
                
+block content
+  // Modal
+  #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        form(action='/save_list', method='post')
+          h4#myModalLabel.modal-title
+            input.list(type='text', name='list_name', required='', placeholder='Shopping List Name', autocomplete='off')
+            
+          .modal-body
+          .modal-footer.list
+            input(type='hidden', name='list', value='')
+            button.btn.btn-primary.saveChanges(type='submit', onClick='save_list()') Save Changes               
