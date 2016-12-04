@@ -36,7 +36,6 @@ module.exports = {
           'range_max' : formatter(req.query.range_max)
         };
         json_request.items = [req.query.item];
-        // json_request.name 
         break;
                       
       case constants.CREATE_ACC_REQ:
@@ -72,6 +71,11 @@ module.exports = {
 
       case constants.RECOMMEND_REQ:
         json_request.email = req.session.user.email;
+        break;
+
+      case constants.VERIFY_REQ:
+        json_request.email = req.body.email;
+        json_request.verify_num = ;
         break;
     }
     socket(json_request, req, res);
@@ -110,8 +114,8 @@ response = function (res_from_server, req, res) {
     case constants.CREATE_ACC_RSP:
         if (message.status == constants.SUCCESS) {
           // save user info, then redirect to home page
-          req.session.user = {name : req.body.name, email : req.body.email};
-          res.redirect('/');
+          // req.session.user = {name : req.body.name, email : req.body.email};
+          res.redirect('/login');
         }
         else {
           // failure, which means email is already in use
@@ -140,7 +144,6 @@ response = function (res_from_server, req, res) {
           res.redirect('/');
         } 
         else if (message.status == constants.FAILURE) {
-          // password is incorrect
           debug('login: failure');
           res.render('login', {
             'title' : 'Login',
@@ -148,14 +151,22 @@ response = function (res_from_server, req, res) {
           });
           
         }
-        else {
-          // email does not exist
-          debug('login: does not exist');
+        else if (message.status == constants.DOES_NOT_EXIST) {
+          debug('login: email does not exist');
           res.render('login', {
             'title' : 'Login',
             'login_failed' : 'Email does not exist.'
           });
         }
+        else if (message.status == constants.NOT_VERIFIED) {
+          debug('login: email has not been verified');
+          res.render('login', {
+            'title' : 'Login',
+            'login_failed' : 'Email has not been verified.'
+          });
+        }
+        else // shouldn't get here!
+          res.end();
         break;
     //////////////////////////////
     case constants.ACC_UPDATE_RSP:
@@ -214,6 +225,14 @@ response = function (res_from_server, req, res) {
           'lists' : message.rec_list
         });
         break;
+    //////////////////////////////
+    case constants.VERIFY_RSP:
+        if (message.status == constants.SUCCESS) {
+          // tell the user that their email is verified
+        }
+        else if (message.status == constants.FAILURE) {
+          // 
+        }
   }
 };
 
