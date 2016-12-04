@@ -74,7 +74,7 @@ module.exports = {
         break;
 
       case constants.VERIFY_REQ:
-        json_request.email = req.body.email_verify;
+        json_request.email = req.body.email;
         json_request.verify_num = req.body.verify_num;
         break;
     }
@@ -233,6 +233,7 @@ response = function (res_from_server, req, res) {
         }
         else if (message.status == constants.FAILURE) {
           // tell the user that the verify_num was incorrect
+          res.send("INCORRECT NUM");
         }
   }
 };
