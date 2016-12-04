@@ -55,15 +55,20 @@ body {
   background:#fafafa;
 }
 
-
 #login-page li {
-  margin-right: 10px; 
-  /* position:absolute; */
-  position:relative;
+  margin-right: 10px;
+  position:absolute;
   right:40px;
-  bottom:60px;
   list-style:none;
   font-size:1.2em;
+}
+
+#login-page li#verify {
+  bottom:55px;
+}
+
+#login-page li#register {
+  bottom:58px;
 }
 
 #login-page a, a:visited {
