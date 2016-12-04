@@ -17,7 +17,7 @@ const constants = {
 	GET_LIST_NAMES_REQ : 'get_list_names',
 	DEL_LIST_REQ : 'delete_list',
 	RECOMMEND_REQ : 'recommend',
-	VERIFY_REQ : 'verify',
+	VERIFY_REQ : 'acc_verify',
 
 	// RESPONSES
 	READ_RSP : 'read_response',
@@ -37,6 +37,7 @@ const constants = {
 	FAILURE : 'failed',
 	DOES_NOT_EXIST : 'DNE',
 	NOT_VERIFIED : 'Not Verified',
+	EXCEPTION : 'exception'
 
 	// ERRORS
 	ADDRESS_IN_USE : 'EADDRINUSE',
