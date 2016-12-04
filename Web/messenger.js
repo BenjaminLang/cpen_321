@@ -74,7 +74,7 @@ module.exports = {
         break;
 
       case constants.VERIFY_REQ:
-        json_request.email = req.body.email;
+        json_request.email = req.body.email_verify;
         json_request.verify_num = req.body.verify_num;
         break;
     }

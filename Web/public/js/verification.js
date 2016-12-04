@@ -1,7 +1,7 @@
-$('form').submit(function(event) {
+$('form#verify').submit(function(event) {
 	var form_data = { 
-		'verify_num' : $('input[name=verify_num]').val(),
-		'email' : $('input[name=email]').val()
+		'verify_num' : $('input[name="verify_num"]').val(),
+		'email_verify' : $('input[name="email_verify"]').val()
 	};
 
 	$.ajax({
