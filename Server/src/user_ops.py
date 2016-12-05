@@ -92,12 +92,12 @@ class UserOps:
     def get_list_names(users_db, json_query):
         try:
             collection = json_query['email'].replace('@', '')
-            user_data = list(users_db[collection].find())[0]
+            user_data = list(users_db[collection].find())
 
             if len(user_data) == 0:
                 return 'failed'
             else:
-                return sorted(user_data['list_names'])
+                return sorted(user_data[0]['list_names'])
 
         except Exception :
             traceback.print_exc()
