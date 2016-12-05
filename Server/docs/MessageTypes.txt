@@ -81,7 +81,7 @@ VERIFY:
 VERIFY RESPONSE:
 {
     'message_type' : 'verify_response',
-    'status' : <'success', 'failed', 'exception'>
+    'status' : <'success', 'failed', 'DNE', 'exception'>
 }
 
 UPDATE ACCOUNT:

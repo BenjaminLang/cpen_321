@@ -72,14 +72,17 @@ class UserOps:
             email = json_data['email']
             collection = email.replace('@', '')
             db_res = list(users_db[collection].find())
-
-            if json_data['verify_num'] == db_res[0]['verify_num']:
-                db_res[0]['verification'] = 'Verified'
-                del db_res[0]['verify_num']
-                users_db[collection].save(db_res[0])
-                return 'success'
+            
+            if db_res:
+                if json_data['verify_num'] == db_res[0]['verify_num']:
+                    db_res[0]['verification'] = 'Verified'
+                    del db_res[0]['verify_num']
+                    users_db[collection].save(db_res[0])
+                    return 'success'
+                else:
+                    return 'failed'
             else:
-                return 'failed'
+                return 'DNE'
 
         except Exception:
             traceback.print_exc()
@@ -210,7 +213,7 @@ class UserOps:
                 users_db[email].insert(data)
             else:
                 if len(time_res) >= 5:
-                    updated_item = list(users_db['cache'].find().sort('time', 1).limit(1))[0]
+                    updated_item = list(users_db[email].find().sort('time', 1).limit(1))[0]
                     updated_item['cats'] = list(cat_list)
                     updated_item['query'] = words
                     updated_item['time'] = curr
