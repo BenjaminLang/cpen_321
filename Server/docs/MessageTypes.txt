@@ -101,7 +101,7 @@ UPDATE ACCOUNT RESPONSE:
 DELETE ACCOUNT:
 {
     'message_type' : 'acc_delete',
-    'email' : 'email@hotmail.com',
+    'email' : 'email@email.com',
     'password' : 'pass'
 }
 
@@ -115,7 +115,7 @@ ADD LIST:
 {
     'message_type' : 'add_list',
     'list_name' : 'list1',
-    'email' : 'email@hotmail.com',
+    'email' : 'email@email.com',
     'list': [{
             'name' : 'Green Apples',
             'price' : '1.50',
@@ -140,7 +140,7 @@ ADD LIST RESPONSE:
 GET LIST:
 {
     'message_type' : 'get_list',
-    'email' : 'email@hotmail.com',
+    'email' : 'email@email.com',
     'list_name' : 'list2'
 }
 
@@ -166,7 +166,7 @@ GET LIST RESPONSE:
 GET LIST NAMES:
 {
     'message_type' : 'get_list_names',
-    'email' : 'email@hotmail.com'
+    'email' : 'email@email.com'
 }
 
 GET LIST NAMES RESPONSE:
@@ -179,7 +179,7 @@ GET LIST NAMES RESPONSE:
 DELETE LIST:
 {
     'message_type' : 'delete_list',
-    'email' : 'email@hotmail.com',
+    'email' : 'email@email.com',
     'list_name' : 'list3'
 }
 
