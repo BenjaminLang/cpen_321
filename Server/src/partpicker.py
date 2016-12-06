@@ -28,9 +28,8 @@ def _send_product(link, cat_name, base_url):
                     data['price'] = strip_name(str(a), 'target="_blank">', '</a>')
                     data['url'] = base_url + a['href']
 
-            print(data)
+            send_to_db(cat_name, data)
 
-    #send_to_db(...)
 
     return
 
