@@ -1,3 +1,4 @@
+// Email verification is on new page, so this is no longer needed
 $('form#verify').submit(function(event) {
 	var form_data = { 
 		'verify_num' : $('input[name="verify_num"]').val(),
