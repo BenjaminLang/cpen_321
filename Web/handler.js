@@ -19,7 +19,10 @@ module.exports = {
     if (req.session.user) {
       name = req.session.user.name;
     }
-    res.render('index', {'title': 'Home', 'logged_in_name': name});
+    res.render('index', {
+      'title': 'Home', 
+      'logged_in_name': name
+    });
   },
 
   /**
@@ -29,7 +32,9 @@ module.exports = {
    * @return  nothing
    */
   register : function(req, res) {
-    res.render('register', {'title': 'Registration Form'});
+    res.render('register', {
+      'title': 'Registration Form'
+    });
   },
 
   /**
@@ -52,7 +57,9 @@ module.exports = {
    * @return  nothing
    */
   login : function(req, res) {
-    res.render('login', {'title': 'Login'});
+    res.render('login', {
+      'title': 'Login'
+    });
   },
 
   /**
@@ -104,8 +111,20 @@ module.exports = {
    * @return  nothing
    */
   manage_lists : function(req, res) {
-    debug('Request to manage lists received.')
+    debug('Request to manage lists received.');
     messenger.request(constants.GET_LIST_NAMES_REQ, req, res);
+  },
+
+  /**
+   * Handler for displaying the email verification page
+   * @param  req the HTTP request from the browser 
+   * @param  res the HTTP response to the browser
+   * @return  nothing
+   */
+  verify : function(req, res) {
+    res.render('verify', {
+      'title' : 'Email Verification'
+    });
   },
 
   /**
@@ -115,8 +134,6 @@ module.exports = {
    * @return  nothing
    */
   register_post : function(req, res) {
-    // if successful, redirect to home page. otherwise, redirect to register page with 
-    // password, email, 
     debug('Account create request received.');
     messenger.request(constants.CREATE_ACC_REQ, req, res);
   },
@@ -173,7 +190,7 @@ module.exports = {
    * @param  res the HTTP response to the browser
    * @return  nothing
    */ 
-  verify_code : function(req, res) {
+  verify_post : function(req, res) {
     debug('Verify code request received.');
     messenger.request(constants.VERIFY_REQ, req, res);
   }

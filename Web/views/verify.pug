@@ -1,0 +1,17 @@
+extends layout.pug
+
+block append head-content
+  link(href='css/verify.css' rel='stylesheet')
+  link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro', rel='stylesheet', type='text/css')
+  
+block custom-widget
+  .Verify
+    form(method='post')
+      h5 Verify Your Email
+      if status
+        h4 #{status}
+      input(type='text', name='email', required='', placeholder='Email')
+      input(type='text', name='verify_num', required='', placeholder='Verification Code', autocomplete='off')
+      li
+        a(href='/login') Back to Login
+      input(type='submit', value='Submit Code', title='Submit Code')

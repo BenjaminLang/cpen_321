@@ -72,6 +72,7 @@ app.get('/logout', handler.logout);
 app.get('/item_searched', handler.item_searched);
 app.get('/update', require_login, handler.update);
 app.get('/manage_lists', require_login, handler.manage_lists);
+app.get('/verify', handler.verify)
 
 // POST requests
 app.post('/register', handler.register_post);
@@ -79,7 +80,7 @@ app.post('/delete_acc', handler.delete_acc_post);
 app.post('/login', handler.login_post);
 app.post('/update', require_login, handler.update_post);
 app.post('/save_list', handler.save_list);
-app.post('/verify_code', handler.verify_code);
+app.post('/verify', handler.verify_post);
 
 /////////////
 

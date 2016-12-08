@@ -74,7 +74,7 @@ module.exports = {
         break;
 
       case constants.VERIFY_REQ:
-        json_request.email = req.body.email_verify;
+        json_request.email = req.body.email;
         json_request.verify_num = req.body.verify_num;
         break;
     }
@@ -186,7 +186,11 @@ response = function (res_from_server, req, res) {
         }
         // this should never happen
         else {
-          res.send('<p>Account does not exist.</p>');
+          res.render('update', {
+            'title' : 'Change Password',
+            'logged_in_name' : req.session.user.name,
+            'status' : 'Your email does not exist. What happened?'
+          });
         }
         break;
     //////////////////////////////
@@ -229,15 +233,23 @@ response = function (res_from_server, req, res) {
     case constants.VERIFY_RSP:
         if (message.status == constants.SUCCESS) {
           // tell the user that their email is verified
-          res.send("HELLO WORLD");
+          res.render('verify', {
+            'title': 'Email Verification',
+            'status': 'Email successfully verified.'
+          })
         }
         else if (message.status == constants.FAILURE) {
           // tell the user that the verify_num was incorrect
-          res.send("INCORRECT NUM");
+          res.render('verify', {
+            'title': 'Email Verification',
+            'status': 'Incorrect verification code.'
+          })
         }
         else {
-          debug(message.status);
-          res.end();
+          res.render('verify', {
+            'title': 'Email Verification',
+            'status': 'That email does not exist.'
+          })
         }
   }
 };
