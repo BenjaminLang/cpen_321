@@ -3,7 +3,7 @@
  * Tests if server refuses an attempt to make an account with the same email.
  */
 var name = 'testuser';
-var email = 'testemail12@hotmail.com';
+var email = 'testemail13@hotmail.com';
 var password = 'TESTPASSWORD1';
 var verification_code = 666666;
 
