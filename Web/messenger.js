@@ -92,10 +92,21 @@ module.exports = {
  */
 response = function (res_from_server, req, res) {
   
-  var message = JSON.parse(res_from_server.toString());
+  var message;
+  try {
+    message = JSON.parse(res_from_server.toString());
+  } catch(err) {
+    debug('Error in parsing message from server: ' + err);
+    res.sendStatus(500);
+  }
+
   var type = message.message_type;
   debug('message is of type: ' + type);
-  if (message.status) debug('... with status: ' + message.status);
+  if (message.status) {
+    debug('... with status: ' + message.status);
+    if (message.status == 'exception')
+      res.sendStatus(500);
+  } 
 
   switch(type) {
     //////////////////////////////
@@ -251,6 +262,10 @@ response = function (res_from_server, req, res) {
             'status': 'That email does not exist.'
           })
         }
+        break;
+    default:
+        res.sendStatus(404);
+        break;
   }
 };
 

@@ -82,6 +82,10 @@ app.post('/update', require_login, handler.update_post);
 app.post('/save_list', handler.save_list);
 app.post('/verify', handler.verify_post);
 
+app.use(function (req, res, next) {
+  res.status(404).send('Sorry, cant find that!')
+})
+
 /////////////
 
 var httpsServer = https.createServer(credentials, app);

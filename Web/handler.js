@@ -194,5 +194,4 @@ module.exports = {
     debug('Verify code request received.');
     messenger.request(constants.VERIFY_REQ, req, res);
   }
-
 };
