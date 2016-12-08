@@ -47,7 +47,7 @@ module.exports = {
 
   'Login' : function(browser) {
     browser
-      .click('li') // go back to login page
+      .click('li#login') // go back to login page
       .pause(500)
       .setValue('input[name="email"]', email)
       .setValue('input[name="password"]', password)
