@@ -1,0 +1,16 @@
+s  list sessions
+$  name session
+
+c  create window
+w  list windows
+n  next window
+p  previous window
+f  find window
+,  name window
+&  kill window
+
+d  detach session
+a  attach session
+[  scroll in console (press q to exit scrolling mode)
+
+tmux a -t name_of_session
