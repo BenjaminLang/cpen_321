@@ -3,7 +3,10 @@ package androidapp.smartshopper.smartshopper;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -11,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 /**
@@ -36,6 +42,49 @@ public class CreateListFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 String listName = newListName.getText().toString();
+
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                String listJSON =  sharedPref.getString("default_list", "");
+                editor.putString(listName, listJSON);
+                editor.commit();
+
+                if(listJSON.equals("")) {
+                    try {
+                        JSONObject newListJSON = new JSONObject();
+                        JSONArray emptyArray = new JSONArray();
+                        newListJSON.put("list", emptyArray);
+
+                        listJSON = newListJSON.toString(2);
+                    } catch (Exception e) {
+                        //put toast
+                    }
+                }
+                else {
+                    try {
+                        JSONObject currListJSON = new JSONObject(listJSON);
+                        JSONArray listArray = currListJSON.getJSONArray("list");
+
+                        JSONObject newListJSON = new JSONObject();
+                        newListJSON.put("list", listArray);
+
+                        listJSON = newListJSON.toString(2);
+                    } catch (Exception e) {
+                        //put toast
+                    }
+                }
+
+                String email = sharedPref.getString(getString(R.string.curr_user), "");
+                String request = new RequestBuilder().buildAddListReq(email, listName, listJSON);
+
+                try {
+                    String resp = new SendRequest().execute(request).get();
+                } catch (Exception e) {
+                    //put toast
+                }
+
+                editor.remove("default_list");
+                editor.apply();
             }
         });
 
@@ -49,4 +98,19 @@ public class CreateListFragment extends DialogFragment {
         return builder.create();
     }
 
+    private class SendRequest extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... request) {
+            SmartShopClient client = new SmartShopClient(getActivity());
+            if(client.getStatus())
+                return client.sendRequest(request[0]);
+            else
+                return "Connection Not Established";
+        }
+
+        @Override
+        protected void onPostExecute(String request) {
+            super.onPostExecute(request);
+        }
+    }
 }

@@ -48,12 +48,14 @@ public class ResultFragment extends ListFragment {
             jsonResp = bundle.getString(ARG_KEY);
         }
 
+        /*
         if(jsonResp == null) {
             Toast.makeText(getActivity(), "The Item You Searched For Doesn't Exist :(", Toast.LENGTH_LONG).show();
-        }
+        }*/
 
         if(jsonResp.equals("Connection Not Established")) {
             Toast.makeText(getActivity(), jsonResp, Toast.LENGTH_LONG).show();
+            return;
         }
 
         JSONParser parser = new JSONParser();

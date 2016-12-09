@@ -141,8 +141,6 @@ public class ShoppingListFragment extends Fragment {
                     else {
                         String defaultUser = "";
                         String user = sharedPref.getString(getString(R.string.curr_user), defaultUser);
-                        String defaultList = "";
-                        String list = sharedPref.getString("cart", defaultList);
                         String request = new RequestBuilder().buildGetListReq(user, listSelected);
 
                         try {
@@ -200,7 +198,42 @@ public class ShoppingListFragment extends Fragment {
                 currList = "default_list";
             }
 
-            
+            if(sharedPref.contains(currList)) {
+                String cartString = sharedPref.getString(currList, "");
+                try {
+                    JSONObject cartJSON = new JSONObject(cartString);
+
+                    cartItems = new JSONParser().parseCart(cartString);
+                    totalPrice = cartJSON.getDouble("total_price");
+
+                    adapter.updateProductList(cartItems);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                String defaultUser = "";
+                String user = sharedPref.getString(getString(R.string.curr_user), defaultUser);
+                String request = new RequestBuilder().buildGetListReq(user, currList);
+
+                try {
+                    String jsonResponse = new SendRequest().execute(request).get();
+                    String stat = new JSONObject(jsonResponse).getString("status");
+
+                    if(stat == "success") {
+                        cartItems = new JSONParser().parseCart(jsonResponse);
+                        adapter.updateProductList(cartItems);
+
+                        editor.putString(currList, jsonResponse);
+                        editor.commit();
+                    }
+                    else {
+                        //put toast here
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
 
             if (cartItems != null) {
                 adapter.updateProductList(cartItems);
