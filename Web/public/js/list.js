@@ -100,7 +100,7 @@ $(document).click(function (e){
 $("#ex7").slider();
 
 // Without JQuery
-var slider = new Slider("#ex7");
+//var slider = new Slider("#ex7");
 
 $("#ex7-enabled").click(function() {
 	if(this.checked) {
@@ -108,14 +108,14 @@ $("#ex7-enabled").click(function() {
 		$("#ex7").slider("enable");
 
 		// Without JQuery
-		slider.enable();
+		//slider.enable();
 	}
 	else {
 		// With JQuery
 		$("#ex7").slider("disable");
 
 		// Without JQuery
-		slider.disable();
+		//slider.disable();
 	}
 });
 
