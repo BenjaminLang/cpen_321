@@ -39,22 +39,16 @@ function showCart() {
 } 
     
 function showCartButtonClicked() {
-    console.log("44444");
     showCart();
 }
 
 //addToCart Functions
 function addToLocalStorage(obj) {
- // console.log(obj);
-  //  console.log("3");
   var data = JSON.parse(localStorage.cart);
   
-//  console.log("4");
   data.push(obj);
- // console.log("5");
+
   localStorage.cart = JSON.stringify(data);
- // console.log("6");
-// console.log(localStorage.cart);
 }
 
 function getAllItems() {
@@ -62,7 +56,6 @@ function getAllItems() {
 }
     
 function createObjectForItem(item) {
-   // console.log("2");
   var itemName = item.siblings("h3").text();
   var itemImageURL =  item.parent().siblings("img").attr("src");
   var itemPrice =  item.siblings("p:eq(0)").text();
@@ -81,44 +74,21 @@ function createObjectForItem(item) {
 }
 
 function addToCartButtonClicked(element) {
-   // console.log("addClicked");
     addToLocalStorage(createObjectForItem(element));
 }
 
-/* function itemAlreadyInCart(itemObj){
-  allItems = getAllItems();
-  var i = 0;
-  for (itemObjj in allItems){
-    if(itemOjj.Name==itemObj.Name){
-       return i;
-    } i++;
-} */
 
 $(document).click(function (e){
-  
-  //e.PreventDefault();
   e.stopPropagation();
-  //console.log("something clicked");
+
   var tag  = $(event.target);
-  //console.log(tag);
+
   if(tag.hasClass('addToCartButton')){ 
-  /* //enter if clicked HTML element is Add To Cart Button
-    var newItemObject = createObjectForItem(tag); //create an Cartobject for that item
-    console.log(newItemObject);
-    var index = itemAlreadyInCart(newItemObject.Name); //use that CartObject for comparison with localStorage.cart(array) object items
-    console.log(index);
-    
-    if(index != -1){
-      //item does already exist
-      localStorage.cart[index].Quantity += 1;
-    }
-    else{ */
-      addToCartButtonClicked(tag);
-      /* } */
+    addToCartButtonClicked(tag);
   }
   if(tag.hasClass('showCartButton')){
     showCartButtonClicked();
   }
   var cart = getAllItems();
-  //console.log(cart);
+
 });
