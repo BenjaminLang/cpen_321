@@ -187,3 +187,12 @@ li.greeting {
     margin-top: 103px;
     padding: 12px;
 }
+
+
+.btn-danger {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+    margin-left: 445px;
+    margin-top: -85px;
+}
