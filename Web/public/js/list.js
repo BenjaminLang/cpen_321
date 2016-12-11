@@ -111,6 +111,14 @@ $(document).click(function (e){
   if(tag.hasClass('btn-danger')){
      var data = JSON.parse(localStorage.cart);
      var itemName = tag.siblings("h4").text(); 
+     var removeItemPrice = item.siblings("p:eq(0)").text();
+     var ItemPriceToRemove = removeItemPrice.substring(1);
+     var NumberPriceRemove = Number(ItemPriceToRemove);
+  
+     Price -= NumberPriceRemove; 
+     htmlStringPrice += Price;
+     $('.totalPrice').html(htmlStringPrice);
+     
      for(var i = 0; i < data.length; i++) {
        if (data[i].name === itemName) {
           data.splice(i, 1);
