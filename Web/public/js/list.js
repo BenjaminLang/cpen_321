@@ -93,10 +93,11 @@ $(document).click(function (e){
   if(tag.hasClass('btn-danger')){
      var data = JSON.parse(localStorage.cart);
      var itemName = tag.siblings("h4").text(); 
-     alert(itemName);
      for(var i = 0; i < data.length; i++) {
-       if (data[i].name === itemName)
-         data.splice(i, 1);
+       if (data[i].name === itemName) {
+          data.splice(i, 1);
+          break; 
+       }
      }
      
      localStorage.cart = JSON.stringify(data);
