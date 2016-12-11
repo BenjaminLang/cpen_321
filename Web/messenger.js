@@ -96,16 +96,17 @@ response = function (res_from_server, req, res) {
   try {
     message = JSON.parse(res_from_server.toString());
   } catch(err) {
-    debug('Error in parsing message from server: ' + err);
+    debug('Error in parsing this message from the main server: ' + res_from_server.toString());
     res.sendStatus(500);
+    return;
   }
 
   var type = message.message_type;
   debug('message is of type: ' + type);
   if (message.status) {
     debug('... with status: ' + message.status);
-    if (message.status == 'exception')
-      res.sendStatus(500);
+    //if (message.status == 'exception')
+      //res.sendStatus(500);
   } 
 
   switch(type) {
@@ -206,6 +207,10 @@ response = function (res_from_server, req, res) {
         break;
     //////////////////////////////
     case constants.ADD_LIST_RSP:
+        // exception most likely caused if account is deleted right before sending
+        // the request, so just logout
+        if (message.status == 'exception') res.redirect('/logout');
+
         // stay on same page
         res.status(204).end();
         break;
@@ -321,6 +326,7 @@ socket = function(req_to_server, req, res) {
     debug('Socket error: ' + error.code);
     connection.destroy();
     connection.unref();
+    res.sendStatus(500);
   });
 
   connection.on('close', function(had_error) {
