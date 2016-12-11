@@ -56,7 +56,7 @@ function addToLocalStorage(obj) {
 
 function addToTotalPrice(item) {
   var totalPrice = $('.totalPrice');
-  htmlStringPrice = 'Total Price: ';
+  htmlStringPrice = 'Total Price: $';
   
   var itemPrice = item.siblings("p:eq(0)").text();
   var removeDollarSign = itemPrice.substring(1);
