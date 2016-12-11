@@ -96,27 +96,4 @@ $(document).click(function (e){
 
 
 
-// With JQuery
-$("#ex7").slider();
-
-// Without JQuery
-var slider = new Slider("#ex7");
-
-$("#ex7-enabled").click(function() {
-	if(this.checked) {
-		// With JQuery
-		$("#ex7").slider("enable");
-
-		// Without JQuery
-		slider.enable();
-	}
-	else {
-		// With JQuery
-		$("#ex7").slider("disable");
-
-		// Without JQuery
-		slider.disable();
-	}
-});
-
 
