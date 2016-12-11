@@ -28,12 +28,13 @@ module.exports = {
         // Need to extract actual options from user options
         if (req.session.user) json_request.email = req.session.user.email;
         else json_request.email = '';
+
         json_request.options = {
-          'stores' : [],
+          'stores' : req.query.stores.split(/[ ,]+/),
           'price' : 'min', 
-          'num' : '-1',
-          'range_min' : formatter(req.query.range_min),
-          'range_max' : formatter(req.query.range_max)
+          'num' : req.query.items_per_page,
+          'range_min' : formatter(req.query.min_price),
+          'range_max' : formatter(req.query.max_price)
         };
         json_request.items = [req.query.item];
         break;

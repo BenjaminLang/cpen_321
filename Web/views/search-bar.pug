@@ -4,9 +4,13 @@
   .row.top-buffer
     .col-md-12
       #custom-search-input
-        form#search-bar-form(action='/item_searched', method='get')
+        form#search-bar-form(action='/item_searched', method='get', onsubmit='return enter_options(this);')
           .input-group.col-md-12
             input#search-input.form-control.input-lg(type='text', name='item', placeholder='Search')
+            input(type='hidden', name='stores', value='')
+            input(type='hidden', name='items_per_page', value='-1')
+            input(type='hidden', name='min_price', value='0')
+            input(type='hidden', name='max_price', value='10000')
             span.input-group-btn
               button#search-btn.btn.btn-info.btn-lg(type='submit')
                 i.glyphicon.glyphicon-search

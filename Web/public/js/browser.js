@@ -74,3 +74,10 @@ function checkForm(form) {
 function save_list() {
   $("input[name='list']").val(localStorage.cart);
 }
+
+function enter_options(form) {
+  form.stores.value = $(".selectStore").find(":button").attr("title");
+  form.items_per_page.value = $(".selectNumberItems").find(":button").attr("title");
+  form.min_price.value = $(".selectMinPrice").find("input").val();
+  form.max_price.value = $(".selectMaxPrice").find("input").val();
+}
