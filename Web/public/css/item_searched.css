@@ -110,6 +110,9 @@ button.btn.btn-primary.saveChanges {
     border-top: 1px solid #e5e5e5;
 }
 
+.modal-footer.list h5.totalPrice {
+  
+}
 
 .modal-title {
     text-align: center;
