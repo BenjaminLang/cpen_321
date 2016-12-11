@@ -70,6 +70,11 @@ function addToTotalPrice(item) {
 
 function showTotalPrice() {
   htmlStringPrice = 'Total Price: $';
+  
+  for(var i = 0; i < localStorage.cart.length; i++) {
+    Price += localStorage.cart[i].price;
+  }
+  
   htmlStringPrice += Price;
   $('.totalPrice').html(htmlStringPrice);
 }
