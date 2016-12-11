@@ -100,6 +100,7 @@ $(document).click(function (e){
      }
      
      localStorage.cart = JSON.stringify(data);
+     location.reload();
   }
   var cart = getAllItems();
 
