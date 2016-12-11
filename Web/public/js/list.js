@@ -111,7 +111,7 @@ $(document).click(function (e){
   if(tag.hasClass('btn-danger')){
      var data = JSON.parse(localStorage.cart);
      var itemName = tag.siblings("h4").text(); 
-     var removeItemPrice = item.siblings("p:eq(0)").text();
+     var removeItemPrice = tag.siblings("p:eq(0)").text();
      var ItemPriceToRemove = removeItemPrice.substring(1);
      var NumberPriceRemove = Number(ItemPriceToRemove);
   
