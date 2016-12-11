@@ -98,13 +98,13 @@ li.greeting {
 
 .selectMinPrice {
   position: absolute;
-  margin-top: -49px;
+  margin-top: -24px;
   min-width: 1504px;
 }
 
 .selectMaxPrice {
   position: absolute;
   min-width: 1504px;
-  margin-top: 12px;
+  margin-top: 37px;
 }
 
