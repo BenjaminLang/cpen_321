@@ -3,14 +3,18 @@ extends layout.pug
 block append head-content
   link(href='css/index.css', rel='stylesheet')
   script(src='js/list.js', type='text/javascript') 
+  link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/i18n/defaults-*.min.js')
 
 block custom-widget
   include search-bar.pug
- 
-  select.selectpicker(data-actions-box='true')
-    option Costco
-    option SuperStore
-    option Walmart
+  
+  form.selectStore(method='post')
+    select.selectpicker(multiple data-actions-box='true')
+      option Costco
+      option SuperStore
+      option Walmart
   
   script. 
     onload = resetLocalStorageIndex()
