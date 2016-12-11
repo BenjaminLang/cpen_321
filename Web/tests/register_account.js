@@ -3,9 +3,10 @@
  * Tests if server refuses an attempt to make an account with the same email.
  */
 var name = 'testuser';
-var email = 'testemail13@hotmail.com';
+var email = 'testemail15@hotmail.com';
 var password = 'TESTPASSWORD1';
 var verification_code = 666666;
+var test = 'True';
 
 module.exports = {
   'Go to Registration': function(browser) {
@@ -26,7 +27,9 @@ module.exports = {
       .setValue('input[name="email_verify"]', email)
       .setValue('input[name="password"]', password)
       .setValue('input[name="password_verify"]', password)
-      .setValue('input[name="test"]', 'True')
+      // Need to inject javascript to modify hidden input, since Nightwatch doesn't allow this normally
+      .execute(function() {$('input[name=test]').val('True')}, [])
+      .assert.attributeEquals('input[name="test"]', "value", 'True')
       // Register
       .click('input[type="submit"]')
       .pause(1000)
