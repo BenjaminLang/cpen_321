@@ -116,6 +116,7 @@ $(document).click(function (e){
      var NumberPriceRemove = Number(ItemPriceToRemove);
   
      Price -= NumberPriceRemove; 
+     htmlStringPrice = 'Total Price: $';
      htmlStringPrice += Price;
      $('.totalPrice').html(htmlStringPrice);
      
