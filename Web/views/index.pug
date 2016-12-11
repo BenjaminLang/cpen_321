@@ -6,12 +6,11 @@ block append head-content
 
 block custom-widget
   include search-bar.pug
-  
-  form.selectStore(method='post')
-    select.selectpicker(multiple='', data-actions-box='true')
-      option Costco
-      option SuperStore
-      option Walmart
+ 
+  select.selectpicker(multiple='', data-actions-box='true')
+    option Costco
+    option SuperStore
+    option Walmart
   
   script. 
     onload = resetLocalStorageIndex()
