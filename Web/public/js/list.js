@@ -142,7 +142,7 @@ $(document).click(function (e){
      }
      
      localStorage.cart = JSON.stringify(data);
-     showCart(); 
+     location.reload(); 
   }
   var cart = getAllItems();
 
