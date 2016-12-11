@@ -32,12 +32,17 @@ class UserOps:
             email = json_query['email']
             collection = email.replace('@', '')
 
-            result = users_db[collection].drop()
+            user_data = list(users_db[collection].find())
 
-            if result is None:
-                return 'success'
+            if user_data[0]['password'] == json_query['password']:
+                result = users_db[collection].drop()
+                if result is None:
+                    return 'success'
+                else:
+                    return 'failed'
             else:
                 return 'failed'
+
 
         except Exception:
             traceback.print_exc()
