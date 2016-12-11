@@ -15,15 +15,14 @@ block custom-widget
   include search-bar.pug
   
   form.selectStore(method='post')
-  select.selectpicker(multiple title="Shopping Location Options", data-actions-box='true')
-    option Costco
-    option SuperStore
-    option Walmart
+    select.selectpicker(multiple title="Shopping Location Options", data-actions-box='true')
+      option Costco
+      option SuperStore
+      option Walmart
    
-  form.selectPrice(method='post')
-    input#ex7(type='text', data-slider-min='0', data-slider-max='15000', data-slider-step='1', data-slider-value='5', data-slider-enabled='false')
-    input#ex7-enabled(type='checkbox')
-    |  Enabled
+  input#ex7(type='text', data-slider-min='0', data-slider-max='15000', data-slider-step='1', data-slider-value='5', data-slider-enabled='false')
+  input#ex7-enabled(type='checkbox')
+  |  Enabled
     
     
   
