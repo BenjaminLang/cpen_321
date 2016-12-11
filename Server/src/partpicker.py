@@ -26,11 +26,13 @@ def _send_product(link, cat_name, base_url):
 
             for base in tr.find_all('td', 'base', limit=1):
                 for a in base.find_all('a', limit=1):
-                    data['price'] = strip_name(str(a), 'target="_blank">', '</a>').replace('$', '')
+                    price = strip_name(str(a), 'target="_blank">', '</a>').replace('$', '')
+                    price = '%.2f' % float((price.replace(',', '')))
+                    data['price'] = price
+
                     data['url'] = base_url + a['href']
 
             send_to_db(cat_name, data)
-
 
     return
 
@@ -54,6 +56,7 @@ def _send_products(link, cat_name, base_url):
         a = tdname.find_element_by_tag_name('a')
         prod_link = a.get_attribute('href')
         _send_product(prod_link, cat_name, base_url)
+        time.sleep(5)
 
     return
 
