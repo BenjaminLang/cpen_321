@@ -105,7 +105,6 @@ $(document).click(function (e){
     addToCartButtonClicked(tag);
   }
   if(tag.hasClass('showCartButton')){
-    htmlStringPrice += Price;
     $('.totalPrice').html(htmlStringPrice);
     showCartButtonClicked();
   }
