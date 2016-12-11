@@ -56,11 +56,13 @@ function addToLocalStorage(obj) {
 
 function addToTotalPrice(item) {
   var totalPrice = $('.totalPrice');
-  htmlStringPrice = 'Total Price: ';
+  htmlStringPrice = 'Total Price: $';
   
   var itemPrice = item.siblings("p:eq(0)").text();
-     
-  Price += itemPrice.substring(1); 
+  
+  var NumberPrice = Number(itemPrice);
+  
+  Price += NumberPrice; 
   htmlStringPrice += Price;
   $('.totalPrice').html(htmlStringPrice);
 }
