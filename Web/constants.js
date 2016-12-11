@@ -1,6 +1,7 @@
 const constants = {
 	// HOSTS
 	HOST : 'ryangroup.westus.cloudapp.azure.com',
+	//HOST : '13.88.11.52',
 
 	// PORTS
 	WEBSERVER_PORT : 3000,
