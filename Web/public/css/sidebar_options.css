@@ -1,0 +1,23 @@
+.selectStore {
+  margin-top: -250px;
+  position: absolute;
+  padding: 15px;
+}
+
+.selectNumberItems {
+  position: absolute;
+  margin-top: -200px;
+  padding: 15px;
+}
+
+.selectMinPrice {
+  position: absolute;
+  margin-top: -136px;
+  min-width: 1504px;
+}
+
+.selectMaxPrice {
+  position: absolute;
+  min-width: 1504px;
+  margin-top: -87px;
+}
