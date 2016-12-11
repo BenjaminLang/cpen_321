@@ -91,7 +91,9 @@ $(document).click(function (e){
     showCartButtonClicked();
   }
   if(tag.hasClass('btn-danger')){
-    alert("Item Removed"); 
+     var data = JSON.parse(localStorage.cart);
+     delete data[tag];
+     localStorage.cart = JSON.stringify(data);
   }
   var cart = getAllItems();
 
