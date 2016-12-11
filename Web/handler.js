@@ -128,10 +128,8 @@ module.exports = {
   },
 
   get_list : function(req, res) {
-    debug(req.query);
-    res.send('Hello World');
-    /*debug('Request to get list received.');
-    messenger.request(constants.GET_LIST_REQ, req, res);*/
+    debug('Request to get list received.');
+    messenger.request(constants.GET_LIST_REQ, req, res);
   },
 
   /**
