@@ -32,6 +32,7 @@ function showCart() {
       '<h4 class="media-heading">' + item.name + '</h4>' + 
       '<p class="itemPrice">' + item.price + '</p>' + 
       '<p class="itemStore">' + item.store + '</p>' +
+      '<button type="button" class="btn btn-danger removeItemButton">' + Remove Item + '</button>' +
     '</div>' + 
     '</div>';
     render();
