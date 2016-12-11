@@ -1,0 +1,39 @@
+.selectStore {
+  margin-top: 0px;
+  margin-left: 58px;
+  position: absolute;
+  padding: 15px;
+}
+
+.selectStore .btn.btn-default {
+  background-color: #fff;
+  border-color: #ccc;
+  color: #333;
+}
+
+.selectNumberItems {
+  position: absolute;
+  margin-top: 45px;
+  margin-left: 58px;
+  padding: 15px;
+}
+
+.selectNumberItems .btn.btn-default {
+  background-color: #fff;
+  border-color: #ccc;
+  color: #333;
+}
+
+.selectMinPrice {
+  position: absolute;
+  margin-top: 106px;
+  margin-left: 57px;
+  min-width: 1504px;
+}
+
+.selectMaxPrice {
+  position: absolute;
+  min-width: 1504px;
+  margin-top: 152px;
+  margin-left: 57px;
+}
