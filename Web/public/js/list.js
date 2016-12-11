@@ -1,4 +1,5 @@
 var htmlString;
+var Price = 0; 
 
 function render() {
   $('.modal-body').html(htmlString);
@@ -52,6 +53,16 @@ function addToLocalStorage(obj) {
   localStorage.cart = JSON.stringify(data);
 }
 
+function addToTotalPrice(item) {
+  var totalPrice = $('.totalPrice');
+  htmlString = 'Total Price: ';
+  
+  var itemPrice = item.siblings("p:eq(0)").text();
+     
+  Price += itemPrice; 
+  htmlString += Price;
+}
+
 function getAllItems() {
   return JSON.parse(localStorage.cart);
 }
@@ -84,7 +95,8 @@ $(document).click(function (e){
 
   var tag  = $(event.target);
 
-  if(tag.hasClass('addToCartButton')){ 
+  if(tag.hasClass('addToCartButton')){
+    addToTotalPrice(tag);     
     addToCartButtonClicked(tag);
   }
   if(tag.hasClass('showCartButton')){

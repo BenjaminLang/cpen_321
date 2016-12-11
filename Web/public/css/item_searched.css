@@ -113,6 +113,7 @@ button.btn.btn-primary.saveChanges {
 h5.totalPrice {
   float: left;
   font: 14px; 
+  margin-right: -70px; 
 }
 
 .modal-title {
