@@ -45,7 +45,9 @@ block content
             input(type='hidden', name='list', value='')
             button.btn.btn-primary.saveChanges(type='submit', onClick='save_list()') Save Changes
             h5.totalPrice
-      
+              script.
+                onload = showTotalPrice(); 
+                
         
 
         

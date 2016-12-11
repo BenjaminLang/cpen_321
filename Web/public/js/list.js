@@ -68,6 +68,12 @@ function addToTotalPrice(item) {
   $('.totalPrice').html(htmlStringPrice);
 }
 
+function showTotalPrice() {
+  htmlStringPrice = 'Total Price: $';
+  htmlStringPrice += Price;
+  $('.totalPrice').html(htmlStringPrice);
+}
+
 function getAllItems() {
   return JSON.parse(localStorage.cart);
 }
