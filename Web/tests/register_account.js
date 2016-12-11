@@ -26,6 +26,7 @@ module.exports = {
       .setValue('input[name="email_verify"]', email)
       .setValue('input[name="password"]', password)
       .setValue('input[name="password_verify"]', password)
+      .setValue('input[name="test"]', 'True')
       // Register
       .click('input[type="submit"]')
       .pause(1000)

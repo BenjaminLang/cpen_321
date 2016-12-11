@@ -127,6 +127,13 @@ module.exports = {
     });
   },
 
+  get_list : function(req, res) {
+    debug(req.query);
+    res.send('Hello World');
+    /*debug('Request to get list received.');
+    messenger.request(constants.GET_LIST_REQ, req, res);*/
+  },
+
   /**
    * Handler for submitting new account information
    * @param  req the HTTP request from the browser 

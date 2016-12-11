@@ -42,6 +42,7 @@ module.exports = {
         json_request.name = req.body.name;
         json_request.email = req.body.email;
         json_request.password = req.body.password;
+        json_request.test = req.body.test;
         break;
 
       case constants.DEL_ACC_REQ:
