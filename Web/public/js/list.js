@@ -91,11 +91,14 @@ $(document).click(function (e){
     showCartButtonClicked();
   }
   if(tag.hasClass('btn-danger')){
-     var data = JSON.parse(localStorage.cart);
+     //var data = JSON.parse(localStorage.cart);
      var itemName = tag.siblings("h4").text(); 
      alert(itemName);
-     delete data["itemName"];
-     localStorage.cart = JSON.stringify(data);
+     for(var i = 0; i < localStorage.cart.length; i++) {
+       delete localStorage.cart[i]['itemName'];
+     }
+     
+     //localStorage.cart = JSON.stringify(data);
   }
   var cart = getAllItems();
 
