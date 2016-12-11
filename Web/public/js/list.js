@@ -90,6 +90,9 @@ $(document).click(function (e){
   if(tag.hasClass('showCartButton')){
     showCartButtonClicked();
   }
+  if(tag.hasClass('.btn-danger')){
+    alert("Item Removed"); 
+  }
   var cart = getAllItems();
 
 });

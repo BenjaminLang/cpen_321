@@ -3,7 +3,8 @@ extends layout.pug
 block append head-content
   link(href='css/register_page.css' rel='stylesheet')
   link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro', rel='stylesheet', type='text/css')
-
+  script(src='js/browser.js', type='text/javascript')
+  
 block custom-widget
   .Register
     form(onsubmit='return checkForm(this);' method='post')
