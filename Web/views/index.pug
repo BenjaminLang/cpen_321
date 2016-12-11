@@ -1,11 +1,11 @@
 extends layout.pug
 
 block append head-content
-  link(href='css/index.css', rel='stylesheet')
   script(src='js/list.js', type='text/javascript') 
   link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/i18n/defaults-*.min.js')
+  link(href='css/index.css', rel='stylesheet')
 
 block custom-widget
   include search-bar.pug
@@ -26,14 +26,12 @@ block custom-widget
   form.selectMinPrice(method='post')
     .col-xs-2
       .form-group
-        label(for='minPrice') Minimum Price:
-        input#minPrice.form-control(type='text')
+        input#minPrice.form-control(type='text', placeholder='Enter a Minimum Price Range)
   
   form.selectMaxPrice(method='post')  
     .col-xs-2  
       .form-group
-        label(for='maxPrice') Maximum Price:
-        input#maxPrice.form-control(type='text')
+        input#maxPrice.form-control(type='text', placeholder='Enter a Maximum Price Range)
   
   script. 
     onload = resetLocalStorageIndex()

@@ -85,18 +85,26 @@ li.greeting {
 
 
 .selectStore {
-    margin-top: 2px;
+  margin-top: -160px;
+  position: absolute;
+  padding: 15px;
 }
 
 .selectNumberItems {
-  
+  position: absolute;
+  margin-top: -100px;
+  padding: 15px;
 }
 
 .selectMinPrice {
-  
+  position: absolute;
+  margin-top: -49px;
+  min-width: 1504px;
 }
 
 .selectMaxPrice {
-  
+  position: absolute;
+  min-width: 1504px;
+  margin-top: 12px;
 }
 
