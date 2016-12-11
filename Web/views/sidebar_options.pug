@@ -1,0 +1,23 @@
+  form.selectStore(method='post')
+    select.selectpicker(multiple title="Shopping Location Options", data-actions-box='true')
+      option Costco
+      option SuperStore
+      option Walmart
+      
+  form.selectNumberItems(method='post')
+    select.selectpicker(title='Items Per Page')
+      option 10
+      option 25 
+      option 50
+      option 100
+      
+  form.selectMinPrice(method='post')
+    .col-xs-2
+      .form-group
+        input#minPrice.form-control(type='text', placeholder='Enter a Minimum Price Range')
+  
+  form.selectMaxPrice(method='post')  
+    .col-xs-2  
+      .form-group
+        input#maxPrice.form-control(type='text', placeholder='Enter a Maximum Price Range')
+  
