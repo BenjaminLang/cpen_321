@@ -1,6 +1,7 @@
 from crawl_lib import *
 
 from selenium import webdriver
+import time
 
 def _send_product(link, cat_name, base_url):
     soup = get_soup(link)
