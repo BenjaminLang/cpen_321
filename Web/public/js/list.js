@@ -92,7 +92,7 @@ $(document).click(function (e){
   }
   if(tag.hasClass('btn-danger')){
      var data = JSON.parse(localStorage.cart);
-     var itemName = tag.siblings("h3").text(); 
+     var itemName = tag.siblings("h4").text(); 
      delete data[itemName];
      localStorage.cart = JSON.stringify(data);
   }
