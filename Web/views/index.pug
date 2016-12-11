@@ -24,12 +24,14 @@ block custom-widget
       option 100
       
   form.selectMinPrice(method='post')
-    .form-group
-      label(for='minPrice') Minimum Price:
-      input#minPrice.form-control(type='text')
-    .form-group
-      label(for='maxPrice') Maximum Price:
-      input#maxPrice.form-control(type='text')
+    .col-xs-2
+      .form-group
+        label(for='minPrice') Minimum Price:
+        input#minPrice.form-control(type='text')
+    .col-xs-2  
+      .form-group
+        label(for='maxPrice') Maximum Price:
+        input#maxPrice.form-control(type='text')
   
   script. 
     onload = resetLocalStorageIndex()
