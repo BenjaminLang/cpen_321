@@ -6,39 +6,30 @@ block append head-content
   link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/i18n/defaults-*.min.js')
-  link(rel='stylesheet', href='//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css')
-  link(rel='stylesheet', href='/resources/demos/style.css')
-  script(src='https://code.jquery.com/jquery-1.12.4.js')
-  script(src='https://code.jquery.com/ui/1.12.1/jquery-ui.js')
 
 block custom-widget
   include search-bar.pug
-  
-  script.
-    $( function() {
-      $( "#slider-range" ).slider({
-        range: true,
-        min: 0,
-        max: 15000,
-        values: [ 0, 100 ],
-        slide: function( event, ui ) {
-          $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-        }
-      });
-      $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-        " - $" + $( "#slider-range" ).slider( "values", 1 ) );
-    } );
-
-  p
-    label(for='amount') Price range:
-    input#amount(type='text', readonly='', style='border:0; color:#f6931f; font-weight:bold;')
-  #slider-range
   
   form.selectStore(method='post')
     select.selectpicker(multiple title="Shopping Location Options", data-actions-box='true')
       option Costco
       option SuperStore
       option Walmart
+      
+  form.selectNumberItems(method='post')
+    select.selectpicker(title='Items Per Page')
+      option 10
+      option 25 
+      option 50
+      option 100
+      
+  form.selectMinPrice(method='post')
+    .form-group
+      label(for='minPrice') Minimum Price:
+      input#minPrice.form-control(type='text')
+    .form-group
+      label(for='maxPrice') Maximum Price:
+      input#maxPrice.form-control(type='text')
   
   script. 
     onload = resetLocalStorageIndex()
