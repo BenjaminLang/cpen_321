@@ -6,6 +6,7 @@ def _send_product(link, cat_name, base_url):
     soup = get_soup(link)
 
     data = {}
+    data['image'] = ''
 
     for name in soup.find_all('h1', 'name', limit=1):
         data['name'] = strip_name(str(name), '<h1 class="name">', '</h1>')
@@ -39,7 +40,7 @@ def _send_products(link, cat_name, base_url):
 
     data = {} # player, quality, stuff
 
-    browser = webdriver.PhantomJS()
+    browser = webdriver.PhantomJS(executable_path=r'/home/akooner/node_modules/phantomjs-prebuilt/bin/phantomjs')
     browser.set_window_size(112, 55)
     browser.set_page_load_timeout(60)
     browser.get(link)
