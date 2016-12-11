@@ -72,7 +72,7 @@ function showTotalPrice() {
   htmlStringPrice = 'Total Price: $';
   
   for(var i = 0; i < localStorage.cart.length; i++) {
-    Price += localStorage.cart[i].price;
+    Price += Number(localStorage.cart[i].price.substring(1));
   }
   
   htmlStringPrice += Price;
