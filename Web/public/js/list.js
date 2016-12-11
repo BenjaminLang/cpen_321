@@ -60,7 +60,7 @@ function addToTotalPrice(item) {
   
   var itemPrice = item.siblings("p:eq(0)").text();
      
-  Price += itemPrice; 
+  Price += itemPrice.substring(1); 
   htmlStringPrice += Price;
   $('.totalPrice').html(htmlStringPrice);
 }
