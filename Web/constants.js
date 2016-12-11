@@ -14,7 +14,7 @@ const constants = {
 	LOGIN_REQ : 'acc_login',
 	ACC_UPDATE_REQ: 'acc_update',
 	ADD_LIST_REQ : 'add_list',
-	GET_LIST_REQ : 'retrieve_list',
+	GET_LIST_REQ : 'get_list',
 	GET_LIST_NAMES_REQ : 'get_list_names',
 	DEL_LIST_REQ : 'delete_list',
 	RECOMMEND_REQ : 'recommend',

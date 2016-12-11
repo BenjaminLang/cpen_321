@@ -14,13 +14,11 @@ block content
     .row
       .col-sm-6.col-md-4
       for list in user_lists
-        form.userLists(method='get', action='get_list')
-          a.viewList(href='#') #{list}
-          p#results TEST
+        a.viewList(href='#') #{list}
 
 block append footer-scripts
   script(src='js/get_list.js', type='text/javascript')            
-
+  script(src='js/list.js', type='text/javascript')
 		
       
         

@@ -64,9 +64,13 @@ module.exports = {
       case constants.ADD_LIST_REQ:
         json_request.list = req.body.list;
       case constants.DEL_LIST_REQ:
-      case constants.GET_LIST_REQ:
         json_request.list_name = req.body.list_name;
       case constants.GET_LIST_NAMES_REQ:
+        json_request.email = req.session.user.email;
+        break;
+
+      case constants.GET_LIST_REQ:
+        json_request.list_name = req.query.list_name;
         json_request.email = req.session.user.email;
         break;
 
@@ -143,8 +147,11 @@ response = function (res_from_server, req, res) {
         if (message.status == constants.SUCCESS) {
           res.redirect('/logout');
         }
-        else {
-          res.end();
+        else if (message.status == constants.FAILURE) {
+          res.render('/delete_acc', {
+            'title' : 'Delete Account',
+            'status' : 'Incorrect Password'
+          });
         }
         break;
     //////////////////////////////
@@ -219,6 +226,7 @@ response = function (res_from_server, req, res) {
       case constants.GET_LIST_RSP:
         // do something with the lists
         // res.render('list', {list :});
+        res.send(message.list);
         break;
     //////////////////////////////
     case constants.GET_LIST_NAMES_RSP:
