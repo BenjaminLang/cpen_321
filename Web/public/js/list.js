@@ -96,6 +96,7 @@ $(document).click(function (e){
 
 
 
+// With JQuery
 $("#ex7").slider();
 
 // Without JQuery
@@ -117,4 +118,5 @@ $("#ex7-enabled").click(function() {
 		slider.disable();
 	}
 });
+
 
