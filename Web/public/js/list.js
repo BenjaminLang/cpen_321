@@ -69,10 +69,13 @@ function addToTotalPrice(item) {
 }
 
 function showTotalPrice() {
+  var data = JSON.parse(localStorage.cart);
   htmlStringPrice = 'Total Price: $';
   
-  for(var i = 0; i < localStorage.cart.length; i++) {
-    Price += Number(localStorage.cart[i].price.substring(1));
+  for(var i = 0; i < data.length; i++) {
+    var noDollarSign = data[i].price.substring(1);
+    
+    Price += Number(noDollarSign); 
   }
   
   htmlStringPrice += Price;
