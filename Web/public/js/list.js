@@ -94,7 +94,7 @@ $(document).click(function (e){
      var data = JSON.parse(localStorage.cart);
      var itemName = tag.siblings("h4").text(); 
      alert(itemName);
-     delete data.itemName;
+     delete data["itemName"];
      localStorage.cart = JSON.stringify(data);
   }
   var cart = getAllItems();
