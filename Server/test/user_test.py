@@ -29,10 +29,11 @@ class userTest(unittest.TestCase):
 
     def test_1(self):
         data = {}
-        data['email'] = 'mablibsking@hotmail.com'
+        data['email'] = 'mablibsking2@hotmail.com'
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Ryan Liu'
-        data['list'] = []
+        data['test'] = 'True'
+        data['lists'] = []
         data['list_names'] = []
         data['message_type'] = 'acc_create'
 
@@ -72,10 +73,11 @@ class userTest(unittest.TestCase):
 
     def test_2(self):
         data = {}
-        data['email'] = 'leobelanger1996@gmail.com'
+        data['email'] = 'leobelanger1994@gmail.com'
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Leo Belanger'
-        data['list'] = []
+        data['test'] = 'True'
+        data['lists'] = []
         data['list_names'] = []
         data['message_type'] = 'acc_create'
 
@@ -84,10 +86,10 @@ class userTest(unittest.TestCase):
 
     def test_3(self):
         data = {}
-        data['email'] = 'leobelanger1996@gmail.com'
+        data['email'] = 'leobelanger1994@gmail.com'
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Leo Belanger'
-        data['list'] = []
+        data['lists'] = []
         data['list_names'] = []
         data['message_type'] = 'acc_login'
 
@@ -118,10 +120,11 @@ class userTest(unittest.TestCase):
 
     def test_4(self):
         data = {}
-        data['email'] = 'benjaminlang@hotmail.com'
+        data['email'] = 'benjaminlang1@hotmail.com'
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Benjamin Lang'
-        data['list'] = []
+        data['test'] = 'True'
+        data['lists'] = []
         data['list_names'] = []
         data['message_type'] = 'acc_create'
 
@@ -130,10 +133,10 @@ class userTest(unittest.TestCase):
 
     def test_5(self):
         data = {}
-        data['email'] = 'benjaminlang@hotmail.com'
+        data['email'] = 'benjaminlang1@hotmail.com'
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Benjamin Lang'
-        data['list'] = []
+        data['lists'] = []
         data['list_names'] = []
         data['message_type'] = 'acc_login'
 
@@ -159,11 +162,11 @@ class userTest(unittest.TestCase):
 
     def test_6(self):
         data = {}
-        data['email'] = 'benjaminlang@hotmail.com'
+        data['email'] = 'benjaminlang1@hotmail.com'
         data['password'] = 'New_Password'
         data['old_password'] = 'UBC_student_2016'
         data['name'] = 'Benjamin Lang'
-        data['list'] = []
+        data['lists'] = []
         data['list_names'] = []
         data['message_type'] = 'acc_update'
 
@@ -186,10 +189,11 @@ class userTest(unittest.TestCase):
 
     def test_7(self):
         data = {}
-        data['email'] = 'dioz.rl@gmail.com'
+        data['email'] = 'dioz.rl1@gmail.com'
         data['password'] = 'Test_account'
         data['name'] = 'Ryan Liu'
-        data['list'] = []
+        data['test'] = 'True'
+        data['lists'] = []
         data['list_names'] = []
         data['message_type'] = 'acc_create'
 

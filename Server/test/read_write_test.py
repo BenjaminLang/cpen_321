@@ -8,6 +8,10 @@ import sys
 sys.path.append('/home/ryangroup/cpen_321/Server/src')
 from request_handler import RequestHandler
 
+url1 = 'https://www.facebook.com/mango475?fref=ts'
+img1 = 'https://scontent-sea1-1.xx.fbcdn.net/v/t1.0-9/576480_10151292510184882_466120745_n.jpg?oh=aae37bb574a6be178491d9100d3a3e7a&oe=58EB7F5C'
+url2 = 'https://www.facebook.com/shaurya.sharad?fref=ts'
+img2 = 'https://scontent-sea1-1.xx.fbcdn.net/v/t1.0-9/1422608_945426875497408_1455403238629541686_n.jpg?oh=8bb1d42baa526bd2432074e7f62b0fd9&oe=58AF1F09'
 
 class readWriteTest(unittest.TestCase):
     @staticmethod
@@ -26,6 +30,7 @@ class readWriteTest(unittest.TestCase):
         connection.connect((host, port))
         connection.send(json_data.encode())
         json_response = connection.recv(1024).decode()
+        #print(json_response)
         response = json.loads(json_response)
         connection.close()
         return response
@@ -37,13 +42,13 @@ class readWriteTest(unittest.TestCase):
         write = {}
         data = {}
         write['message_type'] = 'write'
-        write['collection'] = 'food'
+        write['collection'] = 'animalfeet'
 
-        data['name'] = 'syrup'
-        data['store'] = 'costco'
+        data['name'] = 'RyanPigFeet'
+        data['store'] = 'Costco'
         data['price'] = '12.99'
-        data['url'] = 'SyrupCostco.com'
-        data['image'] = 'SyrupCostco.jpeg'
+        data['url'] = url1
+        data['image'] = img1
 
         write['data'] = data
         json_data = json.dumps(write, indent=2)
@@ -53,7 +58,7 @@ class readWriteTest(unittest.TestCase):
         # generate read request message
         read = {}
         read['message_type'] = 'read'
-        read['items'] = ['syrup']
+        read['items'] = ['RyanPigFeet']
         read['email'] = ''
 
         options = {}
@@ -84,13 +89,13 @@ class readWriteTest(unittest.TestCase):
         write = {}
         data = {}
         write['message_type'] = 'write'
-        write['collection'] = 'food'
+        write['collection'] = 'animalfeet'
 
-        data['name'] = 'syrup'
-        data['store'] = 'walmart'
+        data['name'] = 'RyanPigFeet'
+        data['store'] = 'Walmart'
         data['price'] = '34.99'
-        data['url'] = 'SyrupWalmart.com'
-        data['image'] = 'SyrupWalmart.jpeg'
+        data['url'] = url2
+        data['image'] = img2
 
         write['data'] = data
         json_data = json.dumps(write, indent=2)
@@ -100,7 +105,7 @@ class readWriteTest(unittest.TestCase):
         # attempt to search for syrups
         read = {}
         read['message_type'] = 'read'
-        read['items'] = ['syrup']
+        read['items'] = ['RyanPigFeet']
         read['email'] = ''
 
         options = {}
@@ -114,10 +119,10 @@ class readWriteTest(unittest.TestCase):
 
         response = self._send(read)
         self.assertTrue(len(response) == 3)
-        self.assertTrue((response['items'][0]['data']['url'] == 'SyrupWalmart.com' and
-                        (response['items'][1]['data']['url'] == 'SyrupCostco.com')) or
-                        ((response['items'][0]['data']['url'] == 'SyrupCostco.com' and
-                        (response['items'][1]['data']['url'] == 'SyrupWalmart.com'))))
+        self.assertTrue((response['items'][0]['data']['url'] == url2 and
+                        (response['items'][1]['data']['url'] == url1)) or
+                        ((response['items'][0]['data']['url'] == url1 and
+                        (response['items'][1]['data']['url'] == url2))))
         self.assertEqual(response['status'], 'No Email')
 
         self.client.close()
@@ -128,8 +133,8 @@ class readWriteTest(unittest.TestCase):
         # read as a user, and look at recommended items
         read = {}
         read['message_type'] = 'read'
-        read['items'] = ['syrup']
-        read['email'] = 'mablibsking@hotmail.com'
+        read['items'] = ['RyanPigFeet']
+        read['email'] = 'mablibsking2@hotmail.com'
 
         options = {}
         options['price'] = 'min'
@@ -168,13 +173,13 @@ class readWriteTest(unittest.TestCase):
         # read as a user, and look at recommended items
         read = {}
         read['message_type'] = 'read'
-        read['items'] = ['syrup']
+        read['items'] = ['RyanPigFeet']
         read['email'] = ''
 
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
-        options['stores'] = ['walmart']
+        options['stores'] = ['Walmart']
         options['range_max'] = ''
         options['range_min'] = ''
 
@@ -199,13 +204,13 @@ class readWriteTest(unittest.TestCase):
         # read as a user, and look at recommended items
         read = {}
         read['message_type'] = 'read'
-        read['items'] = ['syrup']
+        read['items'] = ['RyanPigFeet']
         read['email'] = ''
 
         options = {}
         options['price'] = 'min'
         options['num'] = '-1'
-        options['stores'] = ''
+        options['stores'] = []
         options['range_min'] = '1.00'
         options['range_max'] = '34.00'
 
@@ -220,7 +225,7 @@ class readWriteTest(unittest.TestCase):
         for item in ret_list:
             self.assertTrue(options['range_min'] <= item['data']['price'] <= options['range_max'])
 
-        print(response['items'])
+        #print(response['items'])
         self.client.close()
 
 if __name__ == "__main__":

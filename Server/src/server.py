@@ -27,7 +27,7 @@ class DatabaseServer:
         try:
             while True:
                 connection, addr = self._server_socket.accept()
-
+                print('attempted connection')
                 try:  
                     secure_conn = self._context.wrap_socket(connection, server_side=True)
                 except ssl.SSLError:

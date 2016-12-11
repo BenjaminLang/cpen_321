@@ -27,7 +27,7 @@ class ListTest(unittest.TestCase):
 
     def test_1(self):
         data = {}
-        data['email'] = 'mablibsking@hotmail.com'
+        data['email'] = 'mablibsking2@hotmail.com'
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Ryan Liu'
         data['list'] = []
@@ -41,7 +41,7 @@ class ListTest(unittest.TestCase):
         data = {}
         data['message_type'] = 'add_list'
         data['list_name'] = 'list_1'
-        data['email'] = 'mablibsking@hotmail.com'
+        data['email'] = 'mablibsking2@hotmail.com'
 
         data_list = []
         data_list.append({'name': 'syrup',
@@ -64,7 +64,7 @@ class ListTest(unittest.TestCase):
         data = {}
         data['message_type'] = 'add_list'
         data['list_name'] = 'list_2'
-        data['email'] = 'mablibsking@hotmail.com'
+        data['email'] = 'mablibsking2@hotmail.com'
 
         data_list = []
         data_list.append({'name': 'cereal',
@@ -87,7 +87,7 @@ class ListTest(unittest.TestCase):
         data = {}
         data['message_type'] = 'delete_list'
         data['list_name'] = 'list_1'
-        data['email'] = 'mablibsking@hotmail.com'
+        data['email'] = 'mablibsking2@hotmail.com'
 
         response = self._send(data)
         self.assertEqual(response['status'], 'success')
@@ -100,19 +100,19 @@ class ListTest(unittest.TestCase):
         data = {}
         data['message_type'] = 'delete_list'
         data['list_name'] = 'list_3'
-        data['email'] = 'mablibsking@hotmail.com'
+        data['email'] = 'mablibsking2@hotmail.com'
 
         response = self._send(data)
         self.assertEqual(response['status'], 'failed')
 
     def test_6(self):
         data = {}
-        data['email'] = 'mablibsking@hotmail.com'
+        data['email'] = 'mablibsking2@hotmail.com'
         data['password'] = 'UBC_student_2016'
         data['name'] = 'Ryan Liu'
         data['list'] = []
         data['list_names'] = []
-        data['message_type'] = 'acc_del'
+        data['message_type'] = 'acc_delete'
 
         response = self._send(data)
         self.assertEqual('success', response['status'])

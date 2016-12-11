@@ -68,8 +68,11 @@ class RequestHandler:
                 print(json_response)
 
             json_response = bson.json_util.dumps(json_response)
-            connection.send(json_response.encode())
-            connection.close()
+            try:
+                connection.send(json_response.encode())
+                connection.close()
+            except BrokenPipeError:
+                print('caught broken pipe error!')
 
     def __handle_write(self, json_data):
         # insert the data into the database
@@ -198,7 +201,10 @@ class RequestHandler:
         response['message_type'] = 'acc_create_response'
         del json_data['message_type']
 
-        num = send_email(json_data['email'])
+        if 'test' in json_data and json_data['test'] == 'True':
+            num = '666666'
+        else:
+            num = send_email(json_data['email'])
 
         json_data['verify_num'] = num
 
