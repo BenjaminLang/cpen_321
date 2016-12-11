@@ -142,7 +142,7 @@ $(document).click(function (e){
      }
      
      localStorage.cart = JSON.stringify(data);
-     
+     $('.modal-body').html(htmlString);
   }
   var cart = getAllItems();
 
