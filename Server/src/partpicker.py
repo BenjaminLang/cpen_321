@@ -40,7 +40,7 @@ def _send_products(link, cat_name, base_url):
 
     data = {} # player, quality, stuff
 
-    browser = webdriver.PhantomJS(executable_path=r'/home/akooner/node_modules/phantomjs-prebuilt/bin/phantomjs')
+    browser = webdriver.PhantomJS(executable_path=r'/home/ryangroup/node_modules/phantomjs-prebuilt/bin/phantomjs')
     browser.set_window_size(112, 55)
     browser.set_page_load_timeout(60)
     browser.get(link)
