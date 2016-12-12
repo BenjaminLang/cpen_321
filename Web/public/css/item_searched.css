@@ -201,3 +201,8 @@ li.greeting {
     margin-left: 445px;
     margin-top: -85px;
 }
+
+
+.col-xs-2 {
+    width: 111.666667%;
+}
