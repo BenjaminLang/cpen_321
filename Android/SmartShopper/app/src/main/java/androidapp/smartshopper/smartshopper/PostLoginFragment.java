@@ -75,7 +75,7 @@ public class PostLoginFragment extends Fragment {
                     String changePwReq = new RequestBuilder().buildChangePass(currId, currPwString, newPwString);
 
                     try {
-                        String jsonResponse = new SendRequest().execute(changePwReq).get();
+                        String jsonResponse = new SendRequest(getActivity()).execute(changePwReq).get();
 
                         JSONObject respJSON = new JSONObject(jsonResponse);
                         String status = respJSON.getString("status");
@@ -99,21 +99,5 @@ public class PostLoginFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private class SendRequest extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... request) {
-            SmartShopClient client = new SmartShopClient(getActivity());
-            if(client.getStatus())
-                return client.sendRequest(request[0]);
-            else
-                return "Connection Not Established";
-        }
-
-        @Override
-        protected void onPostExecute(String request) {
-            super.onPostExecute(request);
-        }
     }
 }

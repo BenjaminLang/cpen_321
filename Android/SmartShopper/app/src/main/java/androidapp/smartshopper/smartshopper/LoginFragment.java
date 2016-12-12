@@ -55,7 +55,7 @@ public class LoginFragment extends Fragment {
                 String loginReq = new RequestBuilder().buildLoginReq(id, pw);
                 //loginReq = new RequestBuilder().modAccReq(id, pw);
                 try {
-                    String jsonResponse = new SendLoginRequest().execute(loginReq).get();
+                    String jsonResponse = new SendRequest(getActivity()).execute(loginReq).get();
 
                     JSONObject respJSON = new JSONObject(jsonResponse);
                     String status = respJSON.getString("status");
@@ -115,21 +115,5 @@ public class LoginFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private class SendLoginRequest extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... request) {
-            SmartShopClient client = new SmartShopClient(getActivity());
-            if(client.getStatus())
-                return client.sendRequest(request[0]);
-            else
-                return "Connection Not Established";
-        }
-
-        @Override
-        protected void onPostExecute(String request) {
-            super.onPostExecute(request);
-        }
     }
 }

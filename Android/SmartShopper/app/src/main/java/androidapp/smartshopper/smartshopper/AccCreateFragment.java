@@ -58,7 +58,7 @@ public class AccCreateFragment extends Fragment {
                     String accCreateReq = new RequestBuilder().buildAccountCreateReq(newId, newEmail, newPw);
                     try {
                         //send request and get response
-                        String jsonResponse = new SendAccCreateRequest().execute(accCreateReq).get();
+                        String jsonResponse = new SendRequest(getActivity()).execute(accCreateReq).get();
 
                         //parse response json and obtain status field
                         JSONObject respJSON = new JSONObject(jsonResponse);
@@ -85,21 +85,5 @@ public class AccCreateFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private class SendAccCreateRequest extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... request) {
-            SmartShopClient client = new SmartShopClient(getActivity());
-            if(client.getStatus())
-                return client.sendRequest(request[0]);
-            else
-                return "Connection Not Established";
-        }
-
-        @Override
-        protected void onPostExecute(String request) {
-            super.onPostExecute(request);
-        }
     }
 }

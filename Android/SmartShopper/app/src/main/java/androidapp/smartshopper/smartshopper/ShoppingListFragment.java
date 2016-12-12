@@ -355,10 +355,6 @@ public class ShoppingListFragment extends Fragment{
         return view;
     }
 
-    public void saveList() {
-
-    }
-
     private static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 

@@ -45,7 +45,7 @@ public class AccVerifyFragment extends Fragment {
                 String req = new RequestBuilder().buildAccVerifyReq(email, code);
 
                 try {
-                    String resp = new SendRequest().execute(req).get();
+                    String resp = new SendRequest(getActivity()).execute(req).get();
 
                     JSONObject respJSON = new JSONObject(resp);
                     String status = respJSON.getString("status");
@@ -67,21 +67,5 @@ public class AccVerifyFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private class SendRequest extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... request) {
-            SmartShopClient client = new SmartShopClient(getActivity());
-            if(client.getStatus())
-                return client.sendRequest(request[0]);
-            else
-                return "Connection Not Established";
-        }
-
-        @Override
-        protected void onPostExecute(String request) {
-            super.onPostExecute(request);
-        }
     }
 }
