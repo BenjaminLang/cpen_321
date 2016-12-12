@@ -47,7 +47,11 @@ const constants = {
 
 	// FILE PATHS
 	PRIVATE_KEY_LOCATION : '/etc/letsencrypt/live/checkedout.ca/privkey.pem',
-	CERTIFICATE_LOCATION : '/etc/letsencrypt/live/checkedout.ca/fullchain.pem'
+	CERTIFICATE_LOCATION : '/etc/letsencrypt/live/checkedout.ca/fullchain.pem',
+
+	// DEFAULTS VALUES
+	DEFAULT_STORES : 'Shopping Location Options',
+	DEFAULT_ITEMS_PER_PAGE : 'Items Per Page'
 };
 
 module.exports = constants;
