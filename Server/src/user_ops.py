@@ -142,6 +142,17 @@ class UserOps:
             collection = email.replace('@', '')
 
             user_data = list(users_db[collection].find())[0]
+
+            if list_name in user_data['list_names']:
+                updated_list = user_data['lists']
+                updated_names = user_data['list_names']
+                list_index = updated_names.index(list_name)
+                del updated_names[list_index]
+                del updated_list[list_index]
+
+                user_data['lists'] = updated_list
+                user_data['list_names'] = updated_names
+
             user_data['list_names'].append(list_name)
             user_data['lists'].append(json_query['list'])
             users_db[collection].save(user_data)
