@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="androidapp.smartshopper.smartshopper.LoginFragment">
+    tools:context="androidapp.smartshopper.smartshopper.LoginFragment"
+    android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
             android:layout_alignEnd="@+id/id" />
 
         <TextView
-            android:text="Username"
+            android:text="E-mail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/id_indicator"
@@ -70,9 +71,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/createAcc"
+            android:layout_marginTop="17dp"
             android:layout_below="@+id/login_button"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="11dp" />
+            android:layout_toEndOf="@+id/pw_indicator" />
+
+        <TextView
+            android:text="Verify Account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/verifyAcc"
+            android:layout_marginTop="19dp"
+            android:layout_below="@+id/createAcc"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 

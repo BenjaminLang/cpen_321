@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -84,6 +86,28 @@ public class ProductAdapter extends ArrayAdapter<Product>{
             holder.quantity.setText("x" + currProduct.getQuantity());
 
         return view;
+    }
+
+    public double getTotalPrc() {
+        double total = 0;
+
+        for(Product curr : products) {
+            String quantity = curr.getQuantity();
+            if(quantity != null)
+                total += Integer.parseInt(quantity) * Double.parseDouble(curr.getPrice());
+            else
+                total += Double.parseDouble(curr.getPrice());
+        }
+
+        return round(total, 2);
+    }
+
+    private static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     static class ProductHolder{

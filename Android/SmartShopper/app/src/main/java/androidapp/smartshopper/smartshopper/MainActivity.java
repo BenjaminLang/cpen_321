@@ -15,10 +15,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,22 +31,29 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
+    private Boolean loggedIn;
+    private TextView recommendTitle;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Initializing toolbar and set the title
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("CheckedOut");
         setSupportActionBar(toolbar);
 
+        //initialize floating button on bottom right
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //initialize shopping list fragment
                 ShoppingListFragment cartFrag = new ShoppingListFragment();
 
+                //launch shopping list fragment and adding it to the back stack
                 FragmentManager fragMan = getSupportFragmentManager();
                 fragMan.beginTransaction()
                         .replace(R.id.result_frame, cartFrag)
@@ -49,9 +61,18 @@ public class MainActivity extends AppCompatActivity {
                         .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                         .commit();
 
+                //set toolbar title to indicate user in shopping list
                 toolbar.setTitle("Shopping List");
             }
         });
+
+        //get current login status
+        sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        boolean defaultVal = false;
+        loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), defaultVal);
+
+        recommendTitle = (TextView) findViewById(R.id.recommend_title);
+        getRecommend();
     }
 
     @Override
@@ -64,8 +85,10 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         final Menu myMenu = menu;
 
+        //fill toolbar with menu items such as search, etc.
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
 
+        //setup search view
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
@@ -73,30 +96,48 @@ public class MainActivity extends AppCompatActivity {
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
 
+        //search view query listener
         searchView.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
+                    //user confirms the search
                     @Override
                     public boolean onQueryTextSubmit(String s) {
+                        //get search options from shared preference
                         final SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
                         String sortDefault = "min";
                         int numDefault = -1;
-                        String sortOpt = sharedPref.getString(getString(R.string.sort_opt), sortDefault);
-                        String numOpt = Integer.toString(sharedPref.getInt(getString(R.string.num_item), numDefault));
+                        String sortOpt = sharedPref.getString(getString(R.string.sort_opt), sortDefault);   //get sorting option
+                        String numOpt = Integer.toString(sharedPref.getInt(getString(R.string.num_item), numDefault));  //get number of items to display
 
+                        //set search options using options obtained above
                         String[] dummyArray = {};
                         SearchOptions options = new SearchOptions(dummyArray, sortOpt, "", "", numOpt);
 
+                        //build search request
                         RequestBuilder rb = new RequestBuilder();
-                        String dbRequest = rb.buildReadReq(s, "", options, "");
+
+                        boolean defaultVal = false;
+                        loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), defaultVal);
+                        String readRequest = "";
+                        if(loggedIn) {
+                            final String email = sharedPref.getString(getString(R.string.curr_user), "");
+                            readRequest = rb.buildReadReq(s, email, options, "");
+                        }
+                        else {
+                            readRequest = rb.buildReadReq(s, "", options, "");
+                        }
 
                         try {
-                            String jsonResponse = new SendRequest().execute(dbRequest).get();
+                            //obtain response from request sent
+                            String jsonResponse = new SendRequest(MainActivity.this).execute(readRequest).get();
 
+                            //put response string in bundle and pass on to fragment as argument
                             Bundle bundle = new Bundle();
                             bundle.putString("json_response", jsonResponse);
                             ResultFragment newResFrag = new ResultFragment();
                             newResFrag.setArguments(bundle);
 
+                            //launch search results fragment and push to back stack
                             FragmentManager fragMan = getSupportFragmentManager();
                             fragMan.beginTransaction()
                                     .replace(R.id.result_frame, newResFrag)
@@ -104,7 +145,9 @@ public class MainActivity extends AppCompatActivity {
                                     .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                                     .commit();
 
+                            //set toolbar title to item that user searched for
                             toolbar.setTitle(s);
+                            //close search view
                             (myMenu.findItem(R.id.search)).collapseActionView();
                         } catch(Exception e){
                             e.printStackTrace();
@@ -115,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        //Do the auto-correct suggestions here
+                        //Do nothing
                         return false;
                     }
                 }
@@ -126,14 +169,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
+        //Check which menu item in the toolbar has been selected
         switch (item.getItemId()) {
             case R.id.login:
-                SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
                 boolean defaultVal = false;
-                boolean loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), defaultVal);
+                loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), defaultVal);
 
                 if(!loggedIn) {
+                    //launch login fragment if not logged in
                     LoginFragment loginFrag = new LoginFragment();
 
                     FragmentManager fragMan = getSupportFragmentManager();
@@ -145,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
                 else {
+                    //launch post login fragment(allows for logout and account modifications) if there is a user logged in
                     PostLoginFragment postLoginFrag = new PostLoginFragment();
 
                     FragmentManager fragMan = getSupportFragmentManager();
@@ -156,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             case R.id.search_filter:
+                //bring up search options dialog
                 FragmentManager fm = getSupportFragmentManager();
                 SearchFilterFragment editNameDialog = new SearchFilterFragment();
                 editNameDialog.show(fm, "fragment_edit_name");
@@ -168,25 +213,70 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         FragmentManager fragMan = getSupportFragmentManager();
-        if(fragMan.getBackStackEntryCount() > 0)
+        //check if there is still fragment in backstack
+        if(fragMan.getBackStackEntryCount() > 1) {
             fragMan.popBackStack();
-        else
+        }
+        else if(fragMan.getBackStackEntryCount() == 1) {
+            getRecommend();
+            fragMan.popBackStack();
+        }
+        else {
             super.onBackPressed();
+        }
     }
 
-    private class SendRequest extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... request) {
-            SmartShopClient client = new SmartShopClient(MainActivity.this);
-            if(client.getStatus())
-                return client.sendRequest(request[0]);
-            else
-                return "Connection Not Established";
-        }
+    private void getRecommend() {
+        boolean defaultVal = false;
+        loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), defaultVal);
 
-        @Override
-        protected void onPostExecute(String request) {
-            super.onPostExecute(request);
+        if(loggedIn) {
+            recommendTitle.setText("Here are Your Recommended Products:");
+            String currUser = sharedPref.getString(getString(R.string.curr_user), "");
+
+            String request = new RequestBuilder().buildGetRecommend(currUser);
+
+            try {
+                String response = new SendRequest(MainActivity.this).execute(request).get();
+                JSONObject respJSON = new JSONObject(response);
+                String status = respJSON.getString("status");
+
+                if(status.equals("success")) {
+                    final List<Product> recommend = new JSONParser().parseRecommend(response);
+
+                    ProductAdapter adapter = new ProductAdapter(MainActivity.this, R.layout.search_result, recommend);
+                    ListView recommendList = (ListView) findViewById(R.id.recommend_list);
+                    recommendList.setAdapter(adapter);
+
+                    recommendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Product selected = recommend.get(position);
+                            String productJSON = selected.toJSON();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("product_json", productJSON);
+                            DetailFragment newDetailFrag = new DetailFragment();
+                            newDetailFrag.setArguments(bundle);
+
+                            FragmentManager fragMan = getSupportFragmentManager();
+                            fragMan.beginTransaction()
+                                    .replace(R.id.result_frame, newDetailFrag)
+                                    .addToBackStack("product_detail")
+                                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                    .commit();
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Failed to Retrieve Recommendations", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            recommendTitle.setText("Please Create an Account/Login to Receive Product Recommendations!");
         }
     }
 }

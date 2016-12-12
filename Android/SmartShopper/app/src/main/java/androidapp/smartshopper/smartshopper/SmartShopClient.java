@@ -25,6 +25,7 @@ import javax.net.ssl.TrustManagerFactory;
 public class SmartShopClient {
     private int port = 6969;
     private String addr = "ryangroup.westus.cloudapp.azure.com";
+    //private String addr = "13.88.11.52/ryangroup.westus.cloudapp.azure.com";
     private String server_hostname = "checkedout";
     private Socket connection;
     private BufferedWriter outputStream;
@@ -37,8 +38,7 @@ public class SmartShopClient {
         try {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
-            InputStream certIn =  context.getResources().openRawResource(R.raw.server);
-            InputStream keyIn = context.getResources().openRawResource(R.raw.client_key);
+            InputStream certIn =  context.getResources().openRawResource(R.raw.ca);
             Certificate ca;
             try {
                 ca = cf.generateCertificate(certIn);
@@ -54,13 +54,6 @@ public class SmartShopClient {
             String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
             TrustManagerFactory trustMan = TrustManagerFactory.getInstance(tmfAlgorithm);
             trustMan.init(ks);
-
-            /*
-            KeyStore keyStore = KeyStore.getInstance("BKS");
-            keyStore.load(keyIn, keyPass);
-            String kmfAlgorithm = KeyManagerFactory.getDefaultAlgorithm();
-            KeyManagerFactory keyMan = KeyManagerFactory.getInstance(kmfAlgorithm);
-            keyMan.init(keyStore, keyPass);*/
 
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, trustMan.getTrustManagers(), null);
@@ -86,7 +79,7 @@ public class SmartShopClient {
             outputStream.write(request);//
             outputStream.flush();
             String response = inputStream.readLine();
-            System.out.println(response);
+            //System.out.println(response);
             return response;
         } catch (IOException e){
             e.printStackTrace();

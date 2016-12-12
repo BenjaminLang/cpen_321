@@ -56,9 +56,10 @@ public class ShopListHandler {
                     jsonAppend.put("quantity", Integer.toString(numToAdd));
                     cartArray.put(jsonAppend);
 
+                    /*
                     double totalPrice = cartJSON.getDouble("total_price");
                     totalPrice += numToAdd * Double.parseDouble(toAdd.getPrice());
-                    cartJSON.put("total_price", Double.toString(totalPrice));
+                    cartJSON.put("total_price", Double.toString(totalPrice));*/
 
                     String newCartString = cartJSON.toString(2);
                     editor.putString(listName, newCartString);
@@ -72,9 +73,10 @@ public class ShopListHandler {
                             quantity += numToAdd;
                             currItem.put("quantity", Integer.toString(quantity));
 
+                            /*
                             double totalPrice = cartJSON.getDouble("total_price");
                             totalPrice += numToAdd * Double.parseDouble(toAdd.getPrice());
-                            cartJSON.put("total_price", Double.toString(totalPrice));
+                            cartJSON.put("total_price", Double.toString(totalPrice));*/
 
                             String newCartString = cartJSON.toString(2);
                             editor.putString(listName, newCartString);
@@ -93,9 +95,10 @@ public class ShopListHandler {
 
                 jsonObj.put("list", jsonArray);
 
+                /*
                 double price = Double.parseDouble(toAdd.getPrice());
                 price *= numToAdd;
-                jsonObj.put("total_price", Double.toString(price));
+                jsonObj.put("total_price", Double.toString(price));*/
 
                 String newCartString = jsonObj.toString();
                 editor.putString(listName, newCartString);
@@ -123,11 +126,12 @@ public class ShopListHandler {
             for(int i = 0; i < cartArray.length(); i++) {
                 JSONObject currObj = cartArray.getJSONObject(i);
                 if(currObj.getString("image").equals(product.getImg())) {
+                    /*
                     double newTotal = cartJSON.getDouble("total_price");
                     int quantity = currObj.getInt("quantity");
                     double price = currObj.getDouble("price");
                     newTotal -= (quantity * price);
-                    cartJSON.put("total_price", Double.toString(round(newTotal, 2)));
+                    cartJSON.put("total_price", Double.toString(round(newTotal, 2)));*/
 
                     cartArray.remove(i);
 
@@ -148,6 +152,7 @@ public class ShopListHandler {
         }
     }
 
+    /*
     public double getListTotal() {
         try {
             SharedPreferences sharedPref = context.getPreferences(Context.MODE_PRIVATE);
@@ -160,7 +165,7 @@ public class ShopListHandler {
             e.printStackTrace();
             return -1;
         }
-    }
+    }*/
 
     private static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();

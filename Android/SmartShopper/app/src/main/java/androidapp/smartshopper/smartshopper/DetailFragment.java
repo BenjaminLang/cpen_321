@@ -84,7 +84,7 @@ public class DetailFragment extends Fragment {
 
                 String currListName;
                 if(loggedIn) {
-                    currListName = "default_list";
+                    currListName = sharedPref.getString("curr_list", "default_list");
                 }
                 else {
                     currListName = "default_list";

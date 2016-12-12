@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="androidapp.smartshopper.smartshopper.ProductWebFragment">
+    tools:context="androidapp.smartshopper.smartshopper.ProductWebFragment"
+    android:background="@color/white">
 
     <WebView
         xmlns:android="http://schemas.android.com/apk/res/android"

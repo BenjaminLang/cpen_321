@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="androidapp.smartshopper.smartshopper.MainActivity">
+    tools:context="androidapp.smartshopper.smartshopper.MainActivity"
+    android:background="@color/white">
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,8 +36,31 @@
         <FrameLayout
             android:id="@+id/result_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar_layout">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar_layout">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/cart_wrapper">
+
+                <TextView
+                    android:id="@+id/recommend_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold"
+                    android:layout_margin="10dp"
+                    android:text="Here Are Your Recommended Items" />
+
+                <ListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recommend_list"
+                    android:layout_below="@id/recommend_title" />
+
+            </RelativeLayout>
+
         </FrameLayout>
 
     </RelativeLayout>

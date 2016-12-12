@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context="androidapp.smartshopper.smartshopper.SearchFilterFragment">
+    tools:context="androidapp.smartshopper.smartshopper.SearchFilterFragment"
+    android:background="@color/white">
 
     <TextView
         android:text="Sort by"
@@ -51,4 +52,5 @@
         android:layout_marginRight="4dp"
         android:layout_alignTop="@+id/sort_by"
         android:layout_toEndOf="@+id/num_item" />
+
 </RelativeLayout>

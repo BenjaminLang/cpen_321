@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
  * A simple {@link Fragment} subclass.
  */
 public class CreateListFragment extends DialogFragment {
+    private String request = "";
 
     public CreateListFragment() {
         // Required empty public constructor
@@ -38,7 +40,7 @@ public class CreateListFragment extends DialogFragment {
 
         final EditText newListName = (EditText) view.findViewById(R.id.new_list_name);
 
-        builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 String listName = newListName.getText().toString();
@@ -46,8 +48,6 @@ public class CreateListFragment extends DialogFragment {
                 SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 String listJSON =  sharedPref.getString("default_list", "");
-                editor.putString(listName, listJSON);
-                editor.commit();
 
                 if(listJSON.equals("")) {
                     try {
@@ -75,16 +75,13 @@ public class CreateListFragment extends DialogFragment {
                 }
 
                 String email = sharedPref.getString(getString(R.string.curr_user), "");
-                String request = new RequestBuilder().buildAddListReq(email, listName, listJSON);
+                request = new RequestBuilder().buildAddListReq(email, listName, listJSON);
 
-                try {
-                    String resp = new SendRequest().execute(request).get();
-                } catch (Exception e) {
-                    //put toast
-                }
+                editor.putString(listName, listJSON);
+                editor.commit();
 
-                editor.remove("default_list");
-                editor.apply();
+                editor.putString("default_list", "");
+                editor.commit();
             }
         });
 
@@ -98,19 +95,10 @@ public class CreateListFragment extends DialogFragment {
         return builder.create();
     }
 
-    private class SendRequest extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... request) {
-            SmartShopClient client = new SmartShopClient(getActivity());
-            if(client.getStatus())
-                return client.sendRequest(request[0]);
-            else
-                return "Connection Not Established";
-        }
-
-        @Override
-        protected void onPostExecute(String request) {
-            super.onPostExecute(request);
-        }
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        SendRequest reqSender = new SendRequest(getActivity());
+        reqSender.execute(request);
     }
 }

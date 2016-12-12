@@ -54,13 +54,26 @@ public class RequestBuilder {
         }
     }
 
-    public String buildAccountCreatReq(String id, String pw) {
+    public String buildAccountCreateReq(String id, String email, String pw) {
         JSONObject request = new JSONObject();
         try{
             request.put("message_type", "acc_create");
-            request.put("name", "kooner");
-            request.put("email", id);
+            request.put("name", id);
+            request.put("email", email);
             request.put("password", pw);
+
+            return request.toString(2);
+        } catch(JSONException e){
+            return "cannot generate message";
+        }
+    }
+
+    public String buildAccVerifyReq(String email, String verCode) {
+        JSONObject request = new JSONObject();
+        try{
+            request.put("message_type", "acc_verify");
+            request.put("email", email);
+            request.put("verify_num", verCode);
 
             return request.toString(2);
         } catch(JSONException e){
@@ -115,7 +128,7 @@ public class RequestBuilder {
             request.put("email", email);
             request.put("list_name", listName);
             JSONObject cartJSON = new JSONObject(cartItems);
-            JSONArray cartArray = cartJSON.getJSONArray("cart_list");
+            JSONArray cartArray = cartJSON.getJSONArray("list");
             request.put("list", cartArray);
 
             return request.toString(2);
@@ -155,6 +168,18 @@ public class RequestBuilder {
             request.put("message_type", "get_list");
             request.put("email", email);
             request.put("list_name", list);
+
+            return request.toString(2);
+        } catch(JSONException e){
+            return "cannot generate message";
+        }
+    }
+
+    public String buildGetRecommend(String email) {
+        JSONObject request = new JSONObject();
+        try{
+            request.put("message_type", "recommend");
+            request.put("email", email);
 
             return request.toString(2);
         } catch(JSONException e){

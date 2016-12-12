@@ -2,20 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="androidapp.smartshopper.smartshopper.PostLoginFragment">
+    tools:context="androidapp.smartshopper.smartshopper.PostLoginFragment"
+    android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <Button
-            android:text="Logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/logout_button"
-            android:layout_marginTop="13dp"
-            android:layout_below="@+id/curr_user"
-            android:layout_centerHorizontal="true" />
 
         <TextView
             android:text="Current Password"
@@ -69,16 +61,6 @@
             android:layout_alignStart="@+id/textView4"
             android:id="@+id/confirm_new_pw" />
 
-        <TextView
-            android:text="Change Password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:id="@+id/change_pw"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_below="@+id/logout_button"
-            android:layout_alignStart="@+id/curr_user" />
-
         <Button
             android:text="Change Password"
             android:layout_width="wrap_content"
@@ -96,6 +78,25 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
+
+        <Button
+            android:text="Logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logout_button"
+            android:layout_below="@+id/curr_user"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:text="Change Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:id="@+id/change_pw"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/logout_button"
+            android:layout_alignEnd="@+id/logout_button" />
 
     </RelativeLayout>
 

@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="androidapp.smartshopper.smartshopper.AccVerifyFragment"
+    android:background="@color/white">
+
+    <TextView
+        android:text="Verify Account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/email_to_ver"
+        android:id="@+id/verify_title"
+        android:layout_alignEnd="@+id/email_to_ver" />
+
+    <TextView
+        android:text="E-mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/email_ver_indicator"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/verify_title"
+        android:layout_alignStart="@+id/verify_title" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/email_to_ver"
+        android:layout_below="@+id/email_ver_indicator"
+        android:layout_alignStart="@+id/ver_code"
+        android:layout_alignEnd="@+id/ver_code" />
+
+    <TextView
+        android:text="Verification Code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_to_ver"
+        android:layout_alignStart="@+id/email_to_ver"
+        android:id="@+id/ver_code_indicator" />
+
+    <EditText
+        android:layout_width="250dip"
+        android:layout_height="wrap_content"
+        android:inputType="text|number"
+        android:ems="10"
+        android:id="@+id/ver_code"
+        android:selectAllOnFocus="false"
+        android:maxLines="1"
+        android:layout_below="@+id/ver_code_indicator"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Verify"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/verify_button"
+        android:layout_below="@+id/ver_code"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp" />
+
+</RelativeLayout>

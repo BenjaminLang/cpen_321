@@ -24,11 +24,16 @@ public class JSONParser {
     private String DATA_TAG = "data";
 
     private String LIST_TAG = "list";
+    private String RECOMMEND_TAG = "rec_list";
     private String QUANTITY_TAG = "quantity";
 
     public JSONParser() {}
 
     public List<Product> parseJSON(String json) {
+        if(json.equals("")) {
+            return new ArrayList<Product>();
+        }
+
         if(json != null) {
             List<Product> parseList = new ArrayList<Product>();
 
@@ -65,7 +70,47 @@ public class JSONParser {
         }
     }
 
+    public List<Product> parseRecommend(String json) {
+        if(json.equals("")) {
+            return new ArrayList<Product>();
+        }
+
+        if(json != null) {
+            List<Product> parseList = new ArrayList<Product>();
+
+            try{
+                JSONObject jsonObj = new JSONObject(json);
+                JSONArray items = jsonObj.getJSONArray(RECOMMEND_TAG);
+
+                for(int i = 0; i < items.length(); i++) {
+                    JSONObject currItem = items.getJSONObject(i);
+                    JSONObject currData = currItem.getJSONObject(DATA_TAG);
+
+                    String name = currData.getString(NAME_TAG);
+                    String price = currData.getString(PRICE_TAG);
+                    String store = currData.getString(STORE_TAG);
+                    String img = currData.getString(IMG_TAG);
+                    String url = currData.getString(URL_TAG);
+
+                    Product currProduct = new Product(name, price, store, img, url, null);
+                    parseList.add(currProduct);
+                }
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return parseList;
+        }
+        else {
+            return null;
+        }
+    }
+
     public List<Product> parseCart(String json) {
+        if(json.equals("")) {
+            return new ArrayList<Product>();
+        }
+
         if (json != null) {
             List<Product> parseList = new ArrayList<Product>();
 
@@ -98,6 +143,10 @@ public class JSONParser {
     }
 
     public List<String> parseListNames(String json) {
+        if(json.equals("")) {
+            return new ArrayList<String>();
+        }
+
         if(json != null) {
             List<String> shopLists = new ArrayList<String>();
 

@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="androidapp.smartshopper.smartshopper.ShoppingListFragment">
+    tools:context="androidapp.smartshopper.smartshopper.ShoppingListFragment"
+    android:background="@color/white">
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
@@ -13,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/cart_wrapper"
-            android:layout_below="@+id/new_list_button">
+            android:layout_below="@+id/list_control">
 
             <TextView
                 android:id="@+id/cart_summary"
@@ -22,7 +23,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold"
                 android:layout_margin="10dp"
-                android:text="Total: $xx.xx" />
+                android:text="Total: $0.00" />
 
             <ListView
                 android:layout_width="wrap_content"
@@ -32,21 +33,27 @@
 
         </RelativeLayout>
 
-        <Button
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/new_list_button"
-            android:text="New List"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:id="@+id/list_control">
 
-        <Spinner
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/all_usr_list"
-            android:layout_above="@+id/cart_wrapper" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/new_list_button"
+                android:text="New List"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true" />
+
+            <Spinner
+                android:layout_width="250dp"
+                android:layout_height="47dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/all_usr_list" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

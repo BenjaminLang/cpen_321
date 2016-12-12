@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShoppingListFragment extends Fragment {
+public class ShoppingListFragment extends Fragment{
     private Context context;
     private ProductAdapter adapter;
     private List<Product> cartItems = new ArrayList<Product>();
@@ -58,7 +58,7 @@ public class ShoppingListFragment extends Fragment {
         sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         editor = sharedPref.edit();
 
-        currList = sharedPref.getString("curr_list", "");
+        currList = sharedPref.getString("curr_list", "default_list");
         email = sharedPref.getString(getString(R.string.curr_user), "");
         loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), false);
 
@@ -66,23 +66,21 @@ public class ShoppingListFragment extends Fragment {
 
             try {
                 String getListsReq = new RequestBuilder().buildGetListNamesJSON(email);
-                String getAllListResp = new SendRequest().execute(getListsReq).get();
+                String getAllListResp = new SendRequest(getActivity()).execute(getListsReq).get();
 
                 JSONObject respJSON = new JSONObject(getAllListResp);
                 String stat = respJSON.getString("status");
 
                 //JSONArray listsArray = respJSON.getJSONArray("list_names");
                 JSONObject listNamesJSON = new JSONObject();
-                Toast.makeText(getActivity(), stat, Toast.LENGTH_SHORT).show();
-
 
                 if(stat.equals("success")) {
                     List<String> listNames = new JSONParser().parseListNames(getAllListResp);
-                    listNames.add("Add New List");
+                    listNames.add("Add New List...");
                     listNameOpts = listNames.toArray(new String[0]);
 
-                    editor.putString("list_names", getAllListResp);
-                    editor.commit();
+                    //editor.putString("list_names", getAllListResp);
+                    //editor.commit();
                 }
                 else {
                     Toast.makeText(getActivity(), "Shopping Lists Cannot be Retrieved", Toast.LENGTH_SHORT).show();
@@ -107,33 +105,63 @@ public class ShoppingListFragment extends Fragment {
         list.setAdapter(adapter);
 
         final TextView total = (TextView) view.findViewById(R.id.cart_summary);
-        total.setText("Total: " + Double.toString(round(totalPrice, 2)));
 
         final Spinner listNameSpin = (Spinner) view.findViewById(R.id.all_usr_list);
         ArrayAdapter<String> listNamesAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, listNameOpts);
         listNameSpin.setAdapter(listNamesAdpt);
+        if(currList.equals("default_list"))
+            listNameSpin.setSelection(listNamesAdpt.getPosition("Add New List..."));
+        else
+            listNameSpin.setSelection(listNamesAdpt.getPosition(currList));
 
-        final Button saveList = (Button) view.findViewById(R.id.new_list_button);
+        final Button modList = (Button) view.findViewById(R.id.new_list_button);
+        if(currList.equals("default_list"))
+            modList.setText("Save List");
+        else
+            modList.setText("Update List");
 
         listNameSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String listSelected = listNameOpts[position];
-                if(listSelected == "Add New List") {
-                    editor.putString("curr_list", "default_list");
+                if(listSelected.equals("Add New List...")) {
+                    modList.setText("Save List");
+
+                    currList = "default_list";
+                    editor.putString("curr_list", currList);
+                    editor.commit();
+
+                    String cartString = sharedPref.getString(currList, "");
+
+                    try {
+                        JSONObject cartJSON = new JSONObject(cartString);
+
+                        List<Product> updatedList = new JSONParser().parseCart(cartString);
+
+                        adapter.updateProductList(updatedList);
+                        total.setText("Total: " + Double.toString(adapter.getTotalPrc()));
+                        cartItems = updatedList;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
+                    modList.setText("Update List");
+
                     editor.putString("curr_list", listSelected);
+                    editor.commit();
+
                     if(sharedPref.contains(listSelected)) {
                         String cartString = sharedPref.getString(listSelected, "");
                         try {
                             JSONObject cartJSON = new JSONObject(cartString);
 
-                            cartItems = new JSONParser().parseCart(cartString);
-                            totalPrice = cartJSON.getDouble("total_price");
+                            List<Product> updatedList = new JSONParser().parseCart(cartString);
 
-                            adapter.updateProductList(cartItems);
+                            adapter.updateProductList(updatedList);
+                            total.setText("Total: " + Double.toString(adapter.getTotalPrc()));
+                            cartItems = updatedList;
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -144,12 +172,14 @@ public class ShoppingListFragment extends Fragment {
                         String request = new RequestBuilder().buildGetListReq(user, listSelected);
 
                         try {
-                            String jsonResponse = new SendRequest().execute(request).get();
+                            String jsonResponse = new SendRequest(getActivity()).execute(request).get();
                             String stat = new JSONObject(jsonResponse).getString("status");
 
-                            if(stat == "success") {
-                                cartItems = new JSONParser().parseCart(jsonResponse);
-                                adapter.updateProductList(cartItems);
+                            if(stat.equals("success")) {
+                                List<Product> updatedList = new JSONParser().parseCart(jsonResponse);
+                                System.out.println(updatedList);
+                                adapter.updateProductList(updatedList);
+                                cartItems = updatedList;
 
                                 editor.putString(listSelected, jsonResponse);
                                 editor.commit();
@@ -170,26 +200,59 @@ public class ShoppingListFragment extends Fragment {
             }
         });
 
-        saveList.setOnClickListener(new View.OnClickListener() {
+        modList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                String newListName = listNameEntry.getText().toString();
-                String defaultUser = "";
-                String user = sharedPref.getString(getString(R.string.curr_user), defaultUser);
-                String defaultList = "";
-                String list = sharedPref.getString("cart", defaultList);
-                String request = new RequestBuilder().buildSaveListReq(user, newListName, list);
-
-                try {
-                    String jsonResponse = new SendRequest().execute(request).get();
-                } catch (Exception e) {
-                    Toast.makeText(getActivity(), "Something Went Wrong", Toast.LENGTH_SHORT).show();
+                if(modList.getText().toString().equals("Save List")) {
+                    FragmentManager fm = getFragmentManager();
+                    CreateListFragment newListDialog = new CreateListFragment();
+                    newListDialog.show(fm, "fragment_new_list");
                 }
-                */
-                FragmentManager fm = getFragmentManager();
-                CreateListFragment newListDialog = new CreateListFragment();
-                newListDialog.show(fm, "fragment_new_list");
+                else {
+                    String listJSON =  sharedPref.getString("default_list", "");
+
+                    if(listJSON.equals("")) {
+                        try {
+                            JSONObject newListJSON = new JSONObject();
+                            JSONArray emptyArray = new JSONArray();
+                            newListJSON.put("list", emptyArray);
+
+                            listJSON = newListJSON.toString(2);
+                        } catch (Exception e) {
+                            //put toast
+                        }
+                    }
+                    else {
+                        try {
+                            JSONObject currListJSON = new JSONObject(listJSON);
+                            JSONArray listArray = currListJSON.getJSONArray("list");
+
+                            JSONObject newListJSON = new JSONObject();
+                            newListJSON.put("list", listArray);
+
+                            listJSON = newListJSON.toString(2);
+                        } catch (Exception e) {
+                            //put toast
+                        }
+                    }
+
+                    String updateReq = new RequestBuilder().buildAddListReq(email, currList, listJSON);
+
+                    try {
+                        String updateResp = new SendRequest(getActivity()).execute(updateReq).get();
+                        JSONObject updateRespJSON = new JSONObject(updateResp);
+
+                        String status = updateRespJSON.getString("status");
+                        if(status.equals("success")) {
+                            Toast.makeText(getActivity(), "List Updated!", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(getActivity(), "List Update Failed!", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
@@ -203,10 +266,11 @@ public class ShoppingListFragment extends Fragment {
                 try {
                     JSONObject cartJSON = new JSONObject(cartString);
 
-                    cartItems = new JSONParser().parseCart(cartString);
-                    totalPrice = cartJSON.getDouble("total_price");
+                    List<Product> updatedList = new JSONParser().parseCart(cartString);
+                    //totalPrice = cartJSON.getDouble("total_price");
 
-                    adapter.updateProductList(cartItems);
+                    cartItems = updatedList;
+                    adapter.updateProductList(updatedList);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -217,12 +281,13 @@ public class ShoppingListFragment extends Fragment {
                 String request = new RequestBuilder().buildGetListReq(user, currList);
 
                 try {
-                    String jsonResponse = new SendRequest().execute(request).get();
+                    String jsonResponse = new SendRequest(getActivity()).execute(request).get();
                     String stat = new JSONObject(jsonResponse).getString("status");
 
-                    if(stat == "success") {
-                        cartItems = new JSONParser().parseCart(jsonResponse);
-                        adapter.updateProductList(cartItems);
+                    if(stat.equals("success")) {
+                        List<Product> updatedList = new JSONParser().parseCart(jsonResponse);
+                        cartItems = updatedList;
+                        adapter.updateProductList(updatedList);
 
                         editor.putString(currList, jsonResponse);
                         editor.commit();
@@ -243,17 +308,20 @@ public class ShoppingListFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Product selected = cartItems.get(position);
 
-                        ShopListHandler listHandler = new ShopListHandler(getActivity(), "default_list");
+                        ShopListHandler listHandler = new ShopListHandler(getActivity(), currList);
                         List<Product> updatedList = listHandler.deleteFromList(selected);
-                        double newTotal = listHandler.getListTotal();
 
                         adapter.updateProductList(updatedList);
-                        total.setText("Total: " + Double.toString(round(newTotal, 2)));
+                        cartItems = updatedList;
+                        total.setText("Total: " + Double.toString(adapter.getTotalPrc()));
                     }
                 });
             }
         }
         else {
+            listNameSpin.setVisibility(View.INVISIBLE);
+            modList.setEnabled(false);
+
             try {
                 String defaultVal = "";
                 final String cartString = sharedPref.getString("default_list", defaultVal);
@@ -275,10 +343,10 @@ public class ShoppingListFragment extends Fragment {
 
                         ShopListHandler listHandler = new ShopListHandler(getActivity(), "default_list");
                         List<Product> updatedList = listHandler.deleteFromList(selected);
-                        double newTotal = listHandler.getListTotal();
 
                         adapter.updateProductList(updatedList);
-                        total.setText("Total: " + Double.toString(round(newTotal, 2)));
+                        cartItems = updatedList;
+                        total.setText("Total: " + Double.toString(adapter.getTotalPrc()));
                     }
                 });
             }
@@ -287,27 +355,15 @@ public class ShoppingListFragment extends Fragment {
         return view;
     }
 
+    public void saveList() {
+
+    }
+
     private static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
-    }
-
-    private class SendRequest extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... request) {
-            SmartShopClient client = new SmartShopClient(getActivity());
-            if(client.getStatus())
-                return client.sendRequest(request[0]);
-            else
-                return "Connection Not Established";
-        }
-
-        @Override
-        protected void onPostExecute(String request) {
-            super.onPostExecute(request);
-        }
     }
 }

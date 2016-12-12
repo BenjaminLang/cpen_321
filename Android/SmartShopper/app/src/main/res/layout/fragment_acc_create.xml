@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="androidapp.smartshopper.smartshopper.AccCreateFragment">
+    tools:context="androidapp.smartshopper.smartshopper.AccCreateFragment"
+    android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,15 +19,6 @@
             android:id="@+id/curr_user"
             android:layout_alignEnd="@+id/id" />
 
-        <TextView
-            android:text="Username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/id_indicator"
-            android:layout_marginTop="13dp"
-            android:layout_below="@+id/curr_user"
-            android:layout_alignStart="@+id/curr_user" />
-
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,14 +28,6 @@
             android:layout_below="@+id/id_indicator"
             android:layout_alignStart="@+id/pw"
             android:layout_alignEnd="@+id/pw" />
-
-        <TextView
-            android:text="Password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/id"
-            android:layout_alignStart="@+id/id"
-            android:id="@+id/pw_indicator" />
 
         <EditText
             android:layout_width="250dip"
@@ -74,15 +58,50 @@
             android:id="@+id/new_pw_confirm"
             android:layout_alignEnd="@+id/pw" />
 
+        <TextView
+            android:text="E-mail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/email_indicator"
+            android:layout_below="@+id/id"
+            android:layout_alignStart="@+id/pw_indicator" />
+
+        <TextView
+            android:text="Username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_indicator"
+            android:layout_marginTop="12dp"
+            android:layout_below="@+id/curr_user"
+            android:layout_alignStart="@+id/id" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/new_email"
+            android:layout_below="@+id/email_indicator"
+            android:layout_alignStart="@+id/email_indicator"
+            android:layout_alignEnd="@+id/id" />
+
+        <TextView
+            android:text="Password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pw_indicator"
+            android:layout_below="@+id/new_email"
+            android:layout_alignStart="@+id/pw" />
+
         <Button
             android:text="Create Account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:id="@+id/create_button"
             android:layout_below="@+id/new_pw_confirm"
-            android:layout_marginTop="25dip"
-            android:id="@+id/create_button" />
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
+
 </FrameLayout>

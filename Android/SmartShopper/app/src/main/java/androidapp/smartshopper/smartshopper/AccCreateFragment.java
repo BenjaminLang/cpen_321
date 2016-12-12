@@ -21,13 +21,10 @@ import org.json.JSONObject;
 public class AccCreateFragment extends Fragment {
     private Context context;
     private EditText idField;
+    private EditText emailField;
     private EditText passField;
     private EditText passConfirmField;
     private Button create;
-
-    private String newId;
-    private String newPw;
-    private String pwConf;
 
     public AccCreateFragment() {
         // Required empty public constructor
@@ -37,9 +34,12 @@ public class AccCreateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //fill view with that defined in xml
         View view = inflater.inflate(R.layout.fragment_acc_create, container, false);
 
+        //associate UI elements defined in xml with Java objects
         idField = (EditText) view.findViewById(R.id.id);
+        emailField = (EditText) view.findViewById(R.id.new_email);
         passField = (EditText) view.findViewById(R.id.pw);
         passConfirmField = (EditText) view.findViewById(R.id.new_pw_confirm);
         create = (Button) view.findViewById(R.id.create_button);
@@ -47,22 +47,29 @@ public class AccCreateFragment extends Fragment {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newId = idField.getText().toString();
-                newPw = passField.getText().toString();
-                pwConf = passConfirmField.getText().toString();
+                String newId = idField.getText().toString();    //get user name
+                String newEmail = emailField.getText().toString();      //get email
+                String newPw = passField.getText().toString();      //get password
+                String pwConf = passConfirmField.getText().toString();      //get password confirmation
 
+                //check if password and password confirmation are the same
                 if(newPw.equals(pwConf)) {
-                    String accCreateReq = new RequestBuilder().buildAccountCreatReq(newId, newPw);
+                    //build account creation request
+                    String accCreateReq = new RequestBuilder().buildAccountCreateReq(newId, newEmail, newPw);
                     try {
+                        //send request and get response
                         String jsonResponse = new SendAccCreateRequest().execute(accCreateReq).get();
 
+                        //parse response json and obtain status field
                         JSONObject respJSON = new JSONObject(jsonResponse);
                         String created = respJSON.getString("status");
 
+                        //check if account creation has succeeded and print corresponding message
                         if(created.equals("failed"))
                             Toast.makeText(getActivity(), "Account Already Exists", Toast.LENGTH_SHORT).show();
                         else {
                             Toast.makeText(getActivity(), "Accoutn Has Been Created", Toast.LENGTH_SHORT).show();
+                            //close fragment
                             getActivity().onBackPressed();
                         }
                     } catch (Exception e) {
