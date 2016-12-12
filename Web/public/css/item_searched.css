@@ -6,6 +6,7 @@ body {
     background: url(http://liondocs.com/wp-content/uploads/2014/12/Website-Background.jpg) , linear-gradient(to top, #ffee75 3%,#ffb06b 27%,#e86f97 50%,#b08cff 75%,#5477af 100%);
     background-blend-mode: luminosity;  
     background-size: cover;  
+    min-height: 974px; 
 }
 
 
