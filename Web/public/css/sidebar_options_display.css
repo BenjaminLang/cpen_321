@@ -28,12 +28,14 @@
   position: absolute;
   margin-top: 106px;
   margin-left: 57px;
-  min-width: 1504px;
 }
 
 .selectMaxPrice {
   position: absolute;
-  min-width: 1504px;
   margin-top: 152px;
   margin-left: 57px;
+}
+
+.col-xs-2 {
+    width: 111.666667%;
 }
