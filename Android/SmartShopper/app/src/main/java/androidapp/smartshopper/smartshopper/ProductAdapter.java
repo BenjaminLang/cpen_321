@@ -11,9 +11,13 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by JohnS on 2016-10-23.
@@ -100,6 +104,29 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         }
 
         return round(total, 2);
+    }
+
+    public String getStores() {
+        JSONArray stores = new JSONArray();
+
+        if(products.isEmpty())
+            return stores.toString();
+
+        try {
+            Set<String> storeSet = new HashSet<String>();
+            for(Product curr : products) {
+                storeSet.add(curr.getStore());
+            }
+
+            for(String currStore : storeSet) {
+                stores.put(currStore);
+            }
+
+            return stores.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return stores.toString();
+        }
     }
 
     private static double round(double value, int places) {

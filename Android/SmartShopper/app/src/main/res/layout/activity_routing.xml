@@ -1,0 +1,49 @@
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/search_wrapper">
+
+        <fragment
+            android:id="@+id/place_autocomplete_fragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".70"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_weight=".30"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/place_autocomplete_fragment"
+            android:layout_marginTop="3dp"
+            android:text="Search"
+            android:id="@+id/button"
+            android:onClick="onSearch" />
+    </LinearLayout>
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".80"
+            android:id="@+id/map"
+            tools:context="androidapp.smartshopper.smartshopper.RoutingActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
+            android:id="@+id/store_list" />
+
+</LinearLayout>

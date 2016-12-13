@@ -3,6 +3,7 @@ package androidapp.smartshopper.smartshopper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -342,6 +343,23 @@ public class ShoppingListFragment extends Fragment{
                 });
             }
         }
+
+        Button getRoute = (Button) view.findViewById(R.id.get_route);
+
+        getRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String storeList = adapter.getStores();
+
+                System.out.println("something");
+                Intent intent = new Intent(getActivity(), RoutingActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("stores", storeList);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                System.out.println("fuk");
+            }
+        });
 
         return view;
     }
