@@ -127,9 +127,20 @@ class readWriteTest(unittest.TestCase):
 
         self.client.close()
 
-    '''
     def test_3(self):
         self.client = MongoClient()
+
+        data = {}
+        data['email'] = 'mablibsking2@hotmail.com'
+        data['password'] = 'UBC_student_2016'
+        data['name'] = 'Ryan Liu'
+        data['test'] = 'True'
+        data['lists'] = []
+        data['list_names'] = []
+        data['message_type'] = 'acc_create'
+
+        response = self._send(data)
+        self.assertEqual('success', response['status'])
 
         # read as a user, and look at recommended items
         read = {}
@@ -161,13 +172,13 @@ class readWriteTest(unittest.TestCase):
 
         data = {}
         data['email'] = read['email']
+        data['password'] = 'UBC_student_2016'
         data['message_type'] = 'acc_delete'
-        
+
         response = self._send(data)
         self.assertEqual('success', response['status'])
 
         self.client.close()
-    '''
 
     def test_4(self):
         self.client = MongoClient()
