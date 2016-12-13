@@ -127,6 +127,7 @@ class readWriteTest(unittest.TestCase):
 
         self.client.close()
 
+    '''
     def test_3(self):
         self.client = MongoClient()
 
@@ -166,6 +167,7 @@ class readWriteTest(unittest.TestCase):
         self.assertEqual('success', response['status'])
 
         self.client.close()
+    '''
 
     def test_4(self):
         self.client = MongoClient()
