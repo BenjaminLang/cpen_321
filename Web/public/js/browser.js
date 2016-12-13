@@ -28,7 +28,7 @@ function checkForm(form) {
     return false;
   }
 
-  if(form.password.value != "" && form.password.value == form.pwd2.value) {
+  if(form.password.value != "" && form.password.value == form.password_verify.value) {
     if(form.password.value.length < 6) {
       alert("Error: Password must contain at least six characters!");
       form.password.focus();
@@ -81,3 +81,8 @@ function enter_options(form) {
   form.min_price.value = $(".selectMinPrice").find("input").val();
   form.max_price.value = $(".selectMaxPrice").find("input").val();
 }
+/*
+function display_alert() {
+  $('.alert').show();
+}
+*/

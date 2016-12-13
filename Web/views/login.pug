@@ -6,11 +6,12 @@ block append head-content
 
 block custom-widget
   // Login Form
+  include alert.pug
   #login-page
     form(method='post')
       h4 CheckedOut - Login
-      if login_failed
-        h5 #{login_failed}
+      //if status
+        h5 #{status}
       input.email(type='text', name='email', required='', placeholder='Enter Email')
       input.pw(type='password', name='password', required='', placeholder='Enter Password')
       li#verify

@@ -51,7 +51,13 @@ const constants = {
 
 	// DEFAULTS VALUES
 	DEFAULT_STORES : 'Shopping Location Options',
-	DEFAULT_ITEMS_PER_PAGE : 'Items Per Page'
+	DEFAULT_ITEMS_PER_PAGE : 'Items Per Page',
+
+	// ALERT TYPES
+	ALERT_SUCCESS : ['alert', 'alert-success', 'alert-dismissable', 'fade', 'in'],
+	ALERT_INFO : 	['alert', 'alert-info', 'alert-dismissable', 'fade', 'in'],
+	ALERT_WARNING : ['alert', 'alert-warning', 'alert-dismissable', 'fade', 'in'],
+	ALERT_DANGER : 	['alert', 'alert-danger', 'alert-dismissable', 'fade', 'in']
 };
 
 module.exports = constants;

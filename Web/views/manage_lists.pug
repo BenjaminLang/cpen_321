@@ -1,16 +1,12 @@
 extends layout.pug
 
 block append head-content
-  link(href='css/manage_lists.css', rel='stylesheet', type='text/css')
-                
-//- 
-block custom-widget
-  
-  
+  link(href='css/manage_lists.css', rel='stylesheet', type='text/css')                
   
 block content
+  include alert.pug
   // SEARCH RESULTS
-  ul.products
+  li
     .row
       .col-sm-6.col-md-4
       for list in user_lists

@@ -24,8 +24,8 @@ module.exports = {
     json_request.message_type = type;
 
     switch(type) {
+      // user searches for an item
       case constants.SEARCH_REQ:
-        // Need to extract actual options from user options
         if (req.session.user) json_request.email = req.session.user.email;
         else json_request.email = '';
         var list_of_stores = [];
@@ -33,6 +33,7 @@ module.exports = {
 
         debug(req.query);
 
+        // extract options if they exist
         if (req.query.stores)
           if (req.query.stores != constants.DEFAULT_STORES)
             list_of_stores = req.query.stores.split(/[ ,]+/);
@@ -144,15 +145,18 @@ response = function (res_from_server, req, res) {
     //////////////////////////////
     case constants.CREATE_ACC_RSP:
         if (message.status == constants.SUCCESS) {
-          // save user info, then redirect to home page
-          // req.session.user = {name : req.body.name, email : req.body.email};
-          res.redirect('/login');
+          res.render('login', {
+            'title' : 'Login',
+            'status' : 'Verify your email to complete registration.',
+            'alert_type' : constants.ALERT_INFO
+          });
         }
         else {
           // failure, which means email is already in use
           res.render('register', {
             'title' : 'Registration Form',
-            'email_taken' : 'That email is already in use.'
+            'status' : 'That email is already in use.',
+            'alert_type' : constants.ALERT_WARNING
           });
         }
         break;
@@ -162,9 +166,10 @@ response = function (res_from_server, req, res) {
           res.redirect('/logout');
         }
         else if (message.status == constants.FAILURE) {
-          res.render('/delete_acc', {
+          res.render('delete_acc', {
             'title' : 'Delete Account',
-            'status' : 'Incorrect Password'
+            'status' : 'Incorrect password.',
+            'alert_type' : constants.ALERT_WARNING
           });
         }
         break;
@@ -181,7 +186,8 @@ response = function (res_from_server, req, res) {
           debug('login: failure');
           res.render('login', {
             'title' : 'Login',
-            'login_failed' : 'Password is incorrect.'
+            'status' : 'Incorrect password.',
+            'alert_type' : constants.ALERT_WARNING
           });
           
         }
@@ -189,14 +195,16 @@ response = function (res_from_server, req, res) {
           debug('login: email does not exist');
           res.render('login', {
             'title' : 'Login',
-            'login_failed' : 'Email does not exist.'
+            'status' : 'Email does not exist.',
+            'alert_type' : constants.ALERT_WARNING
           });
         }
         else if (message.status == constants.NOT_VERIFIED) {
           debug('login: email has not been verified');
           res.render('login', {
             'title' : 'Login',
-            'login_failed' : 'Email has not been verified.'
+            'status' : 'Email has not been verified.',
+            'alert_type' : constants.ALERT_WARNING
           });
         }
         else // shouldn't get here!
@@ -208,14 +216,16 @@ response = function (res_from_server, req, res) {
           res.render('update', {
             'title' : 'Change Password',
             'logged_in_name' : req.session.user.name,
-            'status' : 'Password successfully updated.'
+            'status' : 'Password successfully updated.',
+            'alert_type' : constants.ALERT_SUCCESS
           });
         }
         else if (message.status == constants.FAILURE) {
           res.render('update', {
             'title' : 'Change Password',
             'logged_in_name' : req.session.user.name,
-            'status' : 'Old password is incorrect.'
+            'status' : 'Old password is incorrect.',
+            'alert_type' : constants.ALERT_WARNING
           });
         }
         // this should never happen
@@ -274,20 +284,23 @@ response = function (res_from_server, req, res) {
           // tell the user that their email is verified
           res.render('verify', {
             'title': 'Email Verification',
-            'status': 'Email successfully verified.'
+            'status': 'Email successfully verified.',
+            'alert_type' : constants.ALERT_SUCCESS
           })
         }
         else if (message.status == constants.FAILURE) {
           // tell the user that the verify_num was incorrect
           res.render('verify', {
             'title': 'Email Verification',
-            'status': 'Incorrect verification code.'
+            'status': 'Incorrect verification code.',
+            'alert_type' : constants.ALERT_WARNING
           })
         }
         else {
           res.render('verify', {
             'title': 'Email Verification',
-            'status': 'That email does not exist.'
+            'status': 'That email does not exist.',
+            'alert_type' : constants.ALERT_WARNING
           })
         }
         break;
