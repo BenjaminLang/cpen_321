@@ -2,6 +2,7 @@ import traceback
 import calendar
 import time
 import random
+import hashlib
 
 
 class UserOps:
@@ -17,6 +18,7 @@ class UserOps:
                 json_query['list_names'] = []
                 json_query['lists'] = []
                 json_query['verification'] = 'Not Verified'
+                json_query['password'] = hashlib.sha256(json_query['password'].encode('utf-8')).hexdigest()
                 users_db[collection].insert(json_query)
                 return 'success'
             else:
@@ -31,6 +33,7 @@ class UserOps:
         try:
             email = json_query['email']
             collection = email.replace('@', '')
+            json_query['password'] = hashlib.sha256(json_query['password'].encode('utf-8')).hexdigest()
 
             user_data = list(users_db[collection].find())
 
@@ -53,6 +56,7 @@ class UserOps:
         try:
             email = json_query['email']
             collection = email.replace('@', '')
+            json_query['password'] = hashlib.sha256(json_query['password'].encode('utf-8')).hexdigest()
             auth = json_query['password']
 
             user_data = list(users_db[collection].find())
@@ -113,6 +117,7 @@ class UserOps:
         try:
             data = []
             email = json_query['email']
+            json_query['old_password'] = hashlib.sha256(json_query['old_password'].encode('utf-8')).hexdigest()
             auth = json_query['old_password']
             collection = email.replace('@', '')
 
@@ -121,7 +126,7 @@ class UserOps:
             if db_res:
                 if db_res[0]['password'] == auth:
                     db_res[0]['old_password'] = auth
-                    db_res[0]['password'] = json_query['password']
+                    db_res[0]['password'] = hashlib.sha256(json_query['password'].encode('utf-8')).hexdigest()
                     del db_res[0]['old_password']
                     users_db[collection].save(db_res[0])
                     return 'success'

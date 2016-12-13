@@ -5,6 +5,7 @@ import time
 
 def _send_product(link, cat_name, base_url):
     soup = get_soup(link)
+    print(link)
 
     data = {}
     data['image'] = ''
