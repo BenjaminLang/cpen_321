@@ -21,9 +21,7 @@ public class RequestBuilder {
 
             //insert options
             JSONObject opt = new JSONObject();
-            JSONArray stores = new JSONArray();
-            for(String currStore : options.getStores())
-                stores.put(currStore);
+            JSONArray stores = new JSONArray(options.getStores());
             opt.put("stores", stores);
             opt.put("price", options.getPrice());
             opt.put("num", options.getNum());

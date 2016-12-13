@@ -22,6 +22,7 @@ import android.widget.Toast;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Boolean loggedIn;
     private TextView recommendTitle;
-    private SharedPreferences sharedPref;
+    private SharedPrefSingle sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //get current login status
-        sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        sharedPref = SharedPrefSingle.getInstance(MainActivity.this);
         boolean defaultVal = false;
-        loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), defaultVal);
+        loggedIn = sharedPref.getBoolean(SharedPrefSingle.prefKey.LOGIN_STAT, defaultVal);
 
         recommendTitle = (TextView) findViewById(R.id.recommend_title);
         getRecommend();
@@ -103,24 +104,25 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onQueryTextSubmit(String s) {
                         //get search options from shared preference
-                        final SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
                         String sortDefault = "min";
                         int numDefault = -1;
-                        String sortOpt = sharedPref.getString(getString(R.string.sort_opt), sortDefault);   //get sorting option
-                        String numOpt = Integer.toString(sharedPref.getInt(getString(R.string.num_item), numDefault));  //get number of items to display
+                        String sortOpt = sharedPref.getString(SharedPrefSingle.prefKey.SORT_OPT, sortDefault);   //get sorting option
+                        String numOpt = Integer.toString(sharedPref.getInt(SharedPrefSingle.prefKey.NUM_ITEM, numDefault));  //get number of items to display
+                        String prc_max = sharedPref.getString(SharedPrefSingle.prefKey.CURR_MAX, "");
+                        String prc_min = sharedPref.getString(SharedPrefSingle.prefKey.CURR_MIN, "");
+                        String store_opt = sharedPref.getString(SharedPrefSingle.prefKey.STORE_OPT, new JSONArray().toString());
 
                         //set search options using options obtained above
-                        String[] dummyArray = {};
-                        SearchOptions options = new SearchOptions(dummyArray, sortOpt, "", "", numOpt);
+                        SearchOptions options = new SearchOptions(store_opt, sortOpt, prc_min, prc_max, numOpt);
 
                         //build search request
                         RequestBuilder rb = new RequestBuilder();
 
                         boolean defaultVal = false;
-                        loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), defaultVal);
+                        loggedIn = sharedPref.getBoolean(SharedPrefSingle.prefKey.LOGIN_STAT, defaultVal);
                         String readRequest = "";
                         if(loggedIn) {
-                            final String email = sharedPref.getString(getString(R.string.curr_user), "");
+                            final String email = sharedPref.getString(SharedPrefSingle.prefKey.CURR_EMAIL, "");
                             readRequest = rb.buildReadReq(s, email, options, "");
                         }
                         else {
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.login:
                 boolean defaultVal = false;
-                loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), defaultVal);
+                loggedIn = sharedPref.getBoolean(SharedPrefSingle.prefKey.LOGIN_STAT, defaultVal);
 
                 if(!loggedIn) {
                     //launch login fragment if not logged in
@@ -228,11 +230,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void getRecommend() {
         boolean defaultVal = false;
-        loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), defaultVal);
+        loggedIn = sharedPref.getBoolean(SharedPrefSingle.prefKey.LOGIN_STAT, defaultVal);
 
         if(loggedIn) {
             recommendTitle.setText("Here are Your Recommended Products:");
-            String currUser = sharedPref.getString(getString(R.string.curr_user), "");
+            String currUser = sharedPref.getString(SharedPrefSingle.prefKey.CURR_EMAIL, "");
 
             String request = new RequestBuilder().buildGetRecommend(currUser);
 

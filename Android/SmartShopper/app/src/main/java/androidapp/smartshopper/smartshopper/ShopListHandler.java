@@ -35,10 +35,9 @@ public class ShopListHandler {
             jsonAppend.put("image", toAdd.getImg());
             jsonAppend.put("url", toAdd.getURL());
 
-            SharedPreferences sharedPref = context.getPreferences(Context.MODE_PRIVATE);
+            SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(context);
             String defaultVal = "";
             final String cartString = sharedPref.getString(listName, defaultVal);
-            SharedPreferences.Editor editor = context.getPreferences(Context.MODE_PRIVATE).edit();
 
             if(cartString != "") {
                 boolean alreadyAdded = false;
@@ -62,8 +61,7 @@ public class ShopListHandler {
                     cartJSON.put("total_price", Double.toString(totalPrice));*/
 
                     String newCartString = cartJSON.toString(2);
-                    editor.putString(listName, newCartString);
-                    editor.commit();
+                    sharedPref.put(listName, newCartString);
                 }
                 else {
                     for(int i = 0; i < cartArray.length(); i++) {
@@ -79,8 +77,7 @@ public class ShopListHandler {
                             cartJSON.put("total_price", Double.toString(totalPrice));*/
 
                             String newCartString = cartJSON.toString(2);
-                            editor.putString(listName, newCartString);
-                            editor.commit();
+                            sharedPref.put(listName, newCartString);
 
                             break;
                         }
@@ -101,8 +98,7 @@ public class ShopListHandler {
                 jsonObj.put("total_price", Double.toString(price));*/
 
                 String newCartString = jsonObj.toString();
-                editor.putString(listName, newCartString);
-                editor.commit();
+                sharedPref.put(listName, newCartString);
             }
 
             return true;
@@ -114,10 +110,9 @@ public class ShopListHandler {
 
     public List<Product> deleteFromList(Product product) {
         try {
-            SharedPreferences sharedPref = context.getPreferences(Context.MODE_PRIVATE);
+            SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(context);
             String defaultVal = "";
             final String cartString = sharedPref.getString(listName, defaultVal);
-            SharedPreferences.Editor editor = context.getPreferences(Context.MODE_PRIVATE).edit();
 
             JSONObject cartJSON = new JSONObject(cartString);
             JSONArray cartArray = cartJSON.getJSONArray("list");
@@ -138,9 +133,7 @@ public class ShopListHandler {
                     String newCartString = cartJSON.toString(2);
                     updatedList = new JSONParser().parseCart(newCartString);
 
-                    editor.putString(listName, newCartString);
-                    editor.commit();
-
+                    sharedPref.put(listName, newCartString);
                     break;
                 }
             }

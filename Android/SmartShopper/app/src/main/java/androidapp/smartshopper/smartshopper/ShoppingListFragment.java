@@ -44,8 +44,7 @@ public class ShoppingListFragment extends Fragment{
     private boolean loggedIn;
     private String currList = "";
 
-    private SharedPreferences sharedPref;
-    private SharedPreferences.Editor editor;
+    private SharedPrefSingle sharedPref;
 
     public ShoppingListFragment() {
         // Required empty public constructor
@@ -55,12 +54,11 @@ public class ShoppingListFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         this.context = getActivity();
-        sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        editor = sharedPref.edit();
+        sharedPref = SharedPrefSingle.getInstance(getActivity());
 
-        currList = sharedPref.getString("curr_list", "default_list");
-        email = sharedPref.getString(getString(R.string.curr_user), "");
-        loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), false);
+        currList = sharedPref.getString(SharedPrefSingle.prefKey.CURR_LIST, "default_list");
+        email = sharedPref.getString(SharedPrefSingle.prefKey.CURR_EMAIL, "");
+        loggedIn = sharedPref.getBoolean(SharedPrefSingle.prefKey.LOGIN_STAT, false);
 
         if(loggedIn) {
 
@@ -78,6 +76,7 @@ public class ShoppingListFragment extends Fragment{
                     List<String> listNames = new JSONParser().parseListNames(getAllListResp);
                     listNames.add("Add New List...");
                     listNameOpts = listNames.toArray(new String[0]);
+                    System.out.println(getAllListResp);
 
                     //editor.putString("list_names", getAllListResp);
                     //editor.commit();
@@ -129,13 +128,12 @@ public class ShoppingListFragment extends Fragment{
                     modList.setText("Save List");
 
                     currList = "default_list";
-                    editor.putString("curr_list", currList);
-                    editor.commit();
+                    sharedPref.put(SharedPrefSingle.prefKey.CURR_LIST, currList);
 
                     String cartString = sharedPref.getString(currList, "");
 
                     try {
-                        JSONObject cartJSON = new JSONObject(cartString);
+                        //JSONObject cartJSON = new JSONObject(cartString);
 
                         List<Product> updatedList = new JSONParser().parseCart(cartString);
 
@@ -149,8 +147,7 @@ public class ShoppingListFragment extends Fragment{
                 else {
                     modList.setText("Update List");
 
-                    editor.putString("curr_list", listSelected);
-                    editor.commit();
+                    sharedPref.put(SharedPrefSingle.prefKey.CURR_LIST, listSelected);
 
                     if(sharedPref.contains(listSelected)) {
                         String cartString = sharedPref.getString(listSelected, "");
@@ -167,9 +164,7 @@ public class ShoppingListFragment extends Fragment{
                         }
                     }
                     else {
-                        String defaultUser = "";
-                        String user = sharedPref.getString(getString(R.string.curr_user), defaultUser);
-                        String request = new RequestBuilder().buildGetListReq(user, listSelected);
+                        String request = new RequestBuilder().buildGetListReq(email, listSelected);
 
                         try {
                             String jsonResponse = new SendRequest(getActivity()).execute(request).get();
@@ -181,8 +176,7 @@ public class ShoppingListFragment extends Fragment{
                                 adapter.updateProductList(updatedList);
                                 cartItems = updatedList;
 
-                                editor.putString(listSelected, jsonResponse);
-                                editor.commit();
+                                sharedPref.put(listSelected, jsonResponse);
                             }
                             else {
                                 //put toast here
@@ -264,7 +258,7 @@ public class ShoppingListFragment extends Fragment{
             if(sharedPref.contains(currList)) {
                 String cartString = sharedPref.getString(currList, "");
                 try {
-                    JSONObject cartJSON = new JSONObject(cartString);
+                    //JSONObject cartJSON = new JSONObject(cartString);
 
                     List<Product> updatedList = new JSONParser().parseCart(cartString);
                     //totalPrice = cartJSON.getDouble("total_price");
@@ -276,9 +270,7 @@ public class ShoppingListFragment extends Fragment{
                 }
             }
             else {
-                String defaultUser = "";
-                String user = sharedPref.getString(getString(R.string.curr_user), defaultUser);
-                String request = new RequestBuilder().buildGetListReq(user, currList);
+                String request = new RequestBuilder().buildGetListReq(email, currList);
 
                 try {
                     String jsonResponse = new SendRequest(getActivity()).execute(request).get();
@@ -289,8 +281,7 @@ public class ShoppingListFragment extends Fragment{
                         cartItems = updatedList;
                         adapter.updateProductList(updatedList);
 
-                        editor.putString(currList, jsonResponse);
-                        editor.commit();
+                        sharedPref.put(currList, jsonResponse);
                     }
                     else {
                         //put toast here
@@ -325,10 +316,10 @@ public class ShoppingListFragment extends Fragment{
             try {
                 String defaultVal = "";
                 final String cartString = sharedPref.getString("default_list", defaultVal);
-                JSONObject cartJSON = new JSONObject(cartString);
+                //JSONObject cartJSON = new JSONObject(cartString);
 
                 cartItems = new JSONParser().parseCart(cartString);
-                totalPrice = cartJSON.getDouble("total_price");
+                //totalPrice = cartJSON.getDouble("total_price");
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -53,4 +53,69 @@
         android:layout_alignTop="@+id/sort_by"
         android:layout_toEndOf="@+id/num_item" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:layout_alignEnd="@+id/max_prc_field"
+        android:id="@+id/min_prc_field"
+        android:layout_alignStart="@+id/max_prc_field"
+        android:layout_below="@+id/max_prc_field"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/prc_min" />
+
+    <TextView
+        android:text="Max Price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/prc_max"
+        android:layout_marginTop="33dp"
+        android:layout_below="@+id/num_spinner"
+        android:layout_alignStart="@+id/num_item" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/max_prc_field"
+        android:layout_alignBottom="@+id/prc_max"
+        android:layout_alignStart="@+id/num_spinner"
+        android:layout_alignEnd="@+id/num_spinner" />
+
+    <TextView
+        android:text="Minimum Price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/prc_min"
+        android:layout_alignBottom="@+id/min_prc_field"
+        android:layout_alignStart="@+id/prc_max" />
+
+    <CheckBox
+        android:text="Walmart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/walmart_chk"
+        android:layout_below="@+id/prc_min"
+        android:layout_alignEnd="@+id/prc_min"
+        android:layout_marginTop="21dp" />
+
+    <CheckBox
+        android:text="Costco"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/walmart_chk"
+        android:layout_alignStart="@+id/min_prc_field"
+        android:id="@+id/costco_chk" />
+
+    <CheckBox
+        android:text="Superstore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/costco_chk"
+        android:layout_alignEnd="@+id/num_spinner"
+        android:layout_marginEnd="10dp"
+        android:id="@+id/superstore_chk" />
+
 </RelativeLayout>

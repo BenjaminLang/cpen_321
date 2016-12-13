@@ -59,6 +59,7 @@ public class LoginFragment extends Fragment {
 
                     JSONObject respJSON = new JSONObject(jsonResponse);
                     String status = respJSON.getString("status");
+                    String name = respJSON.getString("name");
 
                     if(status.equals("DNE"))
                         Toast.makeText(getActivity(), "Wrong Username", Toast.LENGTH_SHORT).show();
@@ -70,10 +71,11 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getActivity(), "Please Check Email for Verification", Toast.LENGTH_SHORT).show();
                     else {
                         Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
-                        SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
-                        editor.putString(getString(R.string.curr_user), id);
-                        editor.putBoolean(getString(R.string.login_stat), true);
-                        editor.commit();
+
+                        SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(getActivity());
+                        sharedPref.put(SharedPrefSingle.prefKey.CURR_EMAIL, id);
+                        sharedPref.put(SharedPrefSingle.prefKey.CURR_NAME, name);
+                        sharedPref.put(SharedPrefSingle.prefKey.LOGIN_STAT, true);
                         getActivity().onBackPressed();
                     }
                 } catch (Exception e) {

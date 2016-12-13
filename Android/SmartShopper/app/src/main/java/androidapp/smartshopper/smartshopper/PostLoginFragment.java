@@ -35,9 +35,9 @@ public class PostLoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_login, container, false);
 
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        final SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(getActivity());
         String defaultVal = "";
-        final String currId = sharedPref.getString(getString(R.string.curr_user), defaultVal);
+        final String currId = sharedPref.getString(SharedPrefSingle.prefKey.CURR_NAME, defaultVal);
 
         TextView userGreeting = (TextView) view.findViewById(R.id.curr_user);
         userGreeting.setText("Welcome, " + currId);
@@ -53,9 +53,7 @@ public class PostLoginFragment extends Fragment {
             public void onClick(View v) {
                 if(currId != "") {
                     Toast.makeText(getActivity(), "Logged Out", Toast.LENGTH_SHORT).show();
-                    SharedPreferences.Editor editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
-                    editor.putBoolean(getString(R.string.login_stat), false);
-                    editor.commit();
+                    sharedPref.put(SharedPrefSingle.prefKey.LOGIN_STAT, false);
                     getActivity().onBackPressed();
                 }
                 else {

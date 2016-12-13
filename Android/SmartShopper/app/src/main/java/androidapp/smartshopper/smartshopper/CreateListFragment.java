@@ -45,8 +45,7 @@ public class CreateListFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int id) {
                 String listName = newListName.getText().toString();
 
-                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
+                SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(getActivity());
                 String listJSON =  sharedPref.getString("default_list", "");
 
                 if(listJSON.equals("")) {
@@ -77,11 +76,8 @@ public class CreateListFragment extends DialogFragment {
                 String email = sharedPref.getString(getString(R.string.curr_user), "");
                 request = new RequestBuilder().buildAddListReq(email, listName, listJSON);
 
-                editor.putString(listName, listJSON);
-                editor.commit();
-
-                editor.putString("default_list", "");
-                editor.commit();
+                sharedPref.put(listName, listJSON);
+                sharedPref.put("default_list", "");
             }
         });
 

@@ -79,12 +79,12 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                boolean loggedIn = sharedPref.getBoolean(getString(R.string.login_stat), false);
+                final SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(getActivity());
+                boolean loggedIn = sharedPref.getBoolean(SharedPrefSingle.prefKey.LOGIN_STAT, false);
 
                 String currListName;
                 if(loggedIn) {
-                    currListName = sharedPref.getString("curr_list", "default_list");
+                    currListName = sharedPref.getString(SharedPrefSingle.prefKey.CURR_LIST, "default_list");
                 }
                 else {
                     currListName = "default_list";
