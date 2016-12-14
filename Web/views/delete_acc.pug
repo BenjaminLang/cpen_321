@@ -2,13 +2,15 @@ extends layout.pug
 
 block append head-content
   link(href='css/delete_acc.css' rel='stylesheet')
+  link(href='css/alert.css', rel='stylesheet', type='text/css')      
   link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro', rel='stylesheet', type='text/css')
   
 block custom-widget
+  include alert.pug
   .Delete_Acc
     form(method='post')
       h5 Delete your account
-      if status
+      //if status
         h4 #{status}
       input(type='password', name='password', required='', placeholder='Password', autocomplete='off')
       input(type='submit', value='Delete Account', title='Delete Account')

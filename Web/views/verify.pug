@@ -2,13 +2,15 @@ extends layout.pug
 
 block append head-content
   link(href='css/verify.css' rel='stylesheet')
+  link(href='css/alert.css', rel='stylesheet', type='text/css')    
   link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro', rel='stylesheet', type='text/css')
   
 block custom-widget
+  include alert.pug
   .Verify
     form(method='post')
       h5 Verify Your Email
-      if status
+      //if status
         h4 #{status}
       input(type='text', name='email', required='', placeholder='Email')
       input(type='text', name='verify_num', required='', placeholder='Verification Code', autocomplete='off')

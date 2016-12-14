@@ -3,7 +3,7 @@ extends layout.pug
 block append head-content
   link(href='css/item_searched.css', rel='stylesheet', type='text/css')
   link(href='css/sidebar_options_display.css', rel='stylesheet')
-  script(src='js/list.js', type='text/javascript') 
+  script(src='js/list.js', type='text/javascript')   
                 
 block custom-widget
   include search-bar.pug
@@ -27,8 +27,13 @@ block content
             h3.ellipsis #{item.data.name}
             p $#{item.data.price}
             p #{item.data.store}
-            a.btn.btn-primary.addToCartButton(href='#', role='button', id='item' + item_id) Add to List
+            a.btn.btn-primary.addToCartButton(href='javascript:void(0)', role='button', id='item' + item_id) Add to List
             a.btn.btn-default.visitWebsiteButton(href=item.data.url, role='button', target='_blank') Visit Website
+            .alert.alert-success.alert-dismissable.fade.in(id='item' + item_id)
+              a.close(href='javascript:void(0)', data-dismiss='alert', aria-label='close')
+                | ×
+              .text-center
+                | Added to list!
         - item_id++;
 		
   // Modal
@@ -49,7 +54,7 @@ block content
             h5.totalPrice
               script.
                 onload = showTotalPrice(); 
-                
+
         
 
         

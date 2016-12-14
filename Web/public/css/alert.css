@@ -1,0 +1,8 @@
+.alert {
+	/* by default, alert does not display */
+	display: none; 
+	position: fixed;
+	left: 50%;
+	width: 15%;
+	transform: translate(-50%);
+}

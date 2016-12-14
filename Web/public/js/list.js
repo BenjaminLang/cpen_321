@@ -117,6 +117,12 @@ $(document).click(function (e){
   if(tag.hasClass('addToCartButton')){
     addToTotalPrice(tag);     
     addToCartButtonClicked(tag);
+
+    var alert = '#' + tag.attr('id') + '.alert';
+    $(alert).show();
+    $(alert).fadeTo(2000, 500).slideUp(500, function(){
+      $(alert).slideUp(500);
+    });
   }
   if(tag.hasClass('showCartButton')){
     $('.totalPrice').html(htmlStringPrice);

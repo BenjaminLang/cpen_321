@@ -2,15 +2,17 @@ extends layout.pug
 
 block append head-content
   link(href='css/login_page.css', rel='stylesheet')
+  link(href='css/alert.css', rel='stylesheet', type='text/css')  
   link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro', rel='stylesheet', type='text/css')
 
 block custom-widget
   // Login Form
+  include alert.pug
   #login-page
     form(method='post')
       h4 CheckedOut - Login
-      if login_failed
-        h5 #{login_failed}
+      //if status
+        h5 #{status}
       input.email(type='text', name='email', required='', placeholder='Enter Email')
       input.pw(type='password', name='password', required='', placeholder='Enter Password')
       li#verify
