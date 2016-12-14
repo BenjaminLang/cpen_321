@@ -14,10 +14,8 @@ body {
     background-attachment: fixed;
     background-size: 100% auto;
     /*min-height: 974px; */
+    overflow-x: scroll;
 }
-
-
-
 
 ul.products {
     margin: 0 auto;
@@ -25,10 +23,9 @@ ul.products {
     margin-top: -20px;  
 }
 
-
 .row {
-    margin-right: -15px;
-    margin-left: -15px;
+    margin-right: 15%;
+    margin-left: 15%;
     margin-top: 60px;
 }
 

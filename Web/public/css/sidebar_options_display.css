@@ -1,6 +1,6 @@
 .selectStore {
   margin-top: 0px;
-  margin-left: 58px;
+  margin-left: 1%;
   position: absolute;
   padding: 15px;
 }
@@ -14,7 +14,7 @@
 .selectNumberItems {
   position: absolute;
   margin-top: 45px;
-  margin-left: 58px;
+  margin-left: 1%;
   padding: 15px;
 }
 
@@ -27,13 +27,13 @@
 .selectMinPrice {
   position: absolute;
   margin-top: 106px;
-  margin-left: 57px;
+  margin-left: 1%;
 }
 
 .selectMaxPrice {
   position: absolute;
   margin-top: 152px;
-  margin-left: 57px;
+  margin-left: 1%;
 }
 
 .col-xs-2 {

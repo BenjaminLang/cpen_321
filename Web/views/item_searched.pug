@@ -2,9 +2,11 @@ extends layout.pug
 
 block append head-content
   link(href='css/item_searched.css', rel='stylesheet', type='text/css')
+  link(href='css/search_bar.css', rel='stylesheet')
   link(href='css/sidebar_options_display.css', rel='stylesheet')
   script(src='js/list.js', type='text/javascript')   
-                
+       
+
 block custom-widget
   include search-bar.pug
   include sidebar_options.pug

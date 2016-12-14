@@ -1,8 +1,16 @@
 #custom-search-input{
+    margin: auto;
+    width: 80%;
+}
+
+
+/*
+#custom-search-input{
     padding: 2px;
     border: solid 1px #000;
     border-radius: 6px;
     background-color: #fff;
+    width: 80%;
 }
 
 #custom-search-input input{
@@ -30,3 +38,5 @@
     font-size: 23px;
 }
 
+
+*/
