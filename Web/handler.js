@@ -145,6 +145,7 @@ module.exports = {
    * @return  nothing
    */
   register_post : function(req, res) {
+    // Let's do the verification here?
     debug('Account create request received.');
     messenger.request(constants.CREATE_ACC_REQ, req, res);
   },

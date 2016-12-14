@@ -1,9 +1,11 @@
-div(class=alert_type)
-  a.close(href='#', data-dismiss='alert', aria-label='close')
-    | ×
-  .text-center
-    | #{status}
+div(class="alert_class")
+  div(class=alert_type)
+    a.close(href='javascript:void(0)', onclick="$('.alert').hide()", aria-label='close')
+      | x
+    .text-center
+      | #{status}
 
 if status
   script.
     $('.alert').show();
+    $('a.close').show();

@@ -30,7 +30,7 @@ block content
             a.btn.btn-primary.addToCartButton(href='javascript:void(0)', role='button', id='item' + item_id) Add to List
             a.btn.btn-default.visitWebsiteButton(href=item.data.url, role='button', target='_blank') Visit Website
             .alert.alert-success.alert-dismissable.fade.in(id='item' + item_id)
-              a.close(href='javascript:void(0)', data-dismiss='alert', aria-label='close')
+              a.close(href='javascript:void(0)', onclick="$('.alert').hide()", aria-label='close')
                 | ×
               .text-center
                 | Added to list!

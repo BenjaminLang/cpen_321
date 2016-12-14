@@ -19,7 +19,7 @@ $(function(){
         }
         $('#save_list_status').show();
 
-        $('#save_list_status').fadeTo(3000, 500).fadeOut(500, function(){
+        $('#save_list_status').fadeTo(2000, 500).fadeOut(500, function(){
           $('#save_list_status').fadeOut(500);
         });
     });

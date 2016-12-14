@@ -6,3 +6,6 @@
 	width: 15%;
 	transform: translate(-50%);
 }
+a.close {
+	display: none;
+}
