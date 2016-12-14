@@ -92,7 +92,7 @@ public class PostLoginFragment extends Fragment {
                         else if (status.equals("failed"))
                             Toast.makeText(getActivity(), "Wrong Current Password", Toast.LENGTH_SHORT).show();
                         else if (status.equals("exception"))
-                            Toast.makeText(getActivity(), "Kooner's Fault", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Server Side Error", Toast.LENGTH_SHORT).show();
                         else {
                             Toast.makeText(getActivity(), "Password Has Been Changed", Toast.LENGTH_SHORT).show();
                         }

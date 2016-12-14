@@ -35,13 +35,6 @@ public class ShopListHandler {
     public boolean addToList(Product toAdd, int numToAdd) {
         try{
             JSONObject jsonAppend = new JSONObject(toAdd.toJSON());
-            /*
-            jsonAppend.put("name", toAdd.getName());
-            jsonAppend.put("price", toAdd.getPrice());
-            jsonAppend.put("store", toAdd.getStore());
-            jsonAppend.put("image", toAdd.getImg());
-            jsonAppend.put("url", toAdd.getURL());
-            */
 
             //get the list string associated with the current list name
             SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(context);

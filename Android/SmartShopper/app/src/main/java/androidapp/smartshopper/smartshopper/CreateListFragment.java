@@ -106,6 +106,19 @@ public class CreateListFragment extends DialogFragment {
         super.onDismiss(dialog);
         //execute the request created above
         SendRequest reqSender = new SendRequest(getActivity());
-        reqSender.execute(request);
+        try {
+            String resp = reqSender.execute(request).get();
+            JSONObject respJSON = new JSONObject(resp);
+            String status = respJSON.getString("status");
+
+            if(status.equals("success"))
+                Toast.makeText(getActivity(), "List Saved, Please Restart Lists for Updates!", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getActivity(), "List Hasn't Been Saved!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Exception!", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 }

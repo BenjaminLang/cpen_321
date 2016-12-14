@@ -98,7 +98,6 @@ public class RequestBuilder {
         try{
             request.put("message_type", "acc_login");
             request.put("email", email);
-            request.put("name", "kooner");
             request.put("password", pw);
 
             return request.toString(2);

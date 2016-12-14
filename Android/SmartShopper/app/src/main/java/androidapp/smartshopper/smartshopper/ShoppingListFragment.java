@@ -83,8 +83,6 @@ public class ShoppingListFragment extends Fragment{
                 e.printStackTrace();
             }
         }
-        else {
-        }
     }
 
     @Override
@@ -102,7 +100,8 @@ public class ShoppingListFragment extends Fragment{
 
         //Initialize the list dropdown with string array containing list names
         final Spinner listNameSpin = (Spinner) view.findViewById(R.id.all_usr_list);
-        ArrayAdapter<String> listNamesAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, listNameOpts);
+        final ArrayAdapter<String> listNamesAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, listNameOpts);
+        listNamesAdpt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         listNameSpin.setAdapter(listNamesAdpt);
         //set the position of the dropdown to be on the current selected list
         if(currList.equals("default_list"))
