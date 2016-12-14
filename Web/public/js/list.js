@@ -77,7 +77,7 @@ function showTotalPrice() {
     
     Price += Number(noDollarSign); 
   }
-  
+  Math.round(Price * 100) / 100
   htmlStringPrice += Price;
   $('.totalPrice').html(htmlStringPrice);
 }
