@@ -77,7 +77,6 @@ public class ShoppingListFragment extends Fragment{
                     List<String> listNames = new JSONParser().parseListNames(getAllListResp);
                     listNames.add("Add New List...");
                     listNameOpts = listNames.toArray(new String[0]);
-                    System.out.println(getAllListResp);
 
                     //editor.putString("list_names", getAllListResp);
                     //editor.commit();
@@ -148,6 +147,7 @@ public class ShoppingListFragment extends Fragment{
                 else {
                     modList.setText("Update List");
 
+                    currList = listSelected;
                     sharedPref.put(SharedPrefSingle.prefKey.CURR_LIST, listSelected);
 
                     if(sharedPref.contains(listSelected)) {
@@ -198,13 +198,14 @@ public class ShoppingListFragment extends Fragment{
         modList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(modList.getText().toString().equals("Save List")) {
+                if(currList.equals("default_list")) {
                     FragmentManager fm = getFragmentManager();
                     CreateListFragment newListDialog = new CreateListFragment();
                     newListDialog.show(fm, "fragment_new_list");
                 }
                 else {
-                    String listJSON =  sharedPref.getString("default_list", "");
+                    String listJSON =  sharedPref.getString(currList, "");
+                    String listJSONFinal = "";
 
                     if(listJSON.equals("")) {
                         try {
@@ -212,7 +213,7 @@ public class ShoppingListFragment extends Fragment{
                             JSONArray emptyArray = new JSONArray();
                             newListJSON.put("list", emptyArray);
 
-                            listJSON = newListJSON.toString(2);
+                            listJSONFinal = newListJSON.toString();
                         } catch (Exception e) {
                             //put toast
                         }
@@ -225,13 +226,14 @@ public class ShoppingListFragment extends Fragment{
                             JSONObject newListJSON = new JSONObject();
                             newListJSON.put("list", listArray);
 
-                            listJSON = newListJSON.toString(2);
+                            listJSONFinal = newListJSON.toString();
                         } catch (Exception e) {
                             //put toast
                         }
                     }
 
-                    String updateReq = new RequestBuilder().buildAddListReq(email, currList, listJSON);
+                    String updateReq = new RequestBuilder().buildAddListReq(email, currList, listJSONFinal);
+                    System.out.println(updateReq);
 
                     try {
                         String updateResp = new SendRequest(getActivity()).execute(updateReq).get();
@@ -252,7 +254,7 @@ public class ShoppingListFragment extends Fragment{
         });
 
         if(loggedIn) {
-            if(currList.equals("")) {
+            if(currList.isEmpty() || currList == null || currList.equals("")) {
                 currList = "default_list";
             }
 

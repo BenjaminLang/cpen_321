@@ -73,8 +73,9 @@ public class CreateListFragment extends DialogFragment {
                     }
                 }
 
-                String email = sharedPref.getString(getString(R.string.curr_user), "");
+                String email = sharedPref.getString(SharedPrefSingle.prefKey.CURR_EMAIL, "");
                 request = new RequestBuilder().buildAddListReq(email, listName, listJSON);
+                System.out.println(request);
 
                 sharedPref.put(listName, listJSON);
                 sharedPref.put("default_list", "");
