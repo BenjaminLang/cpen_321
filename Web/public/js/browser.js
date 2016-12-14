@@ -28,20 +28,28 @@ function checkForm(form) {
     return false;
   }
 
+  if(form.password.value == form.name.value) {
+      add_alert('alert-warning', 'Password must be different from your name!');
+      form.password.focus();
+      return false;
+  }
+
+  return check_password(form);
+}
+
+function checkUpdateForm(form) {
+  return check_password(form);
+}
+
+function check_password(form) {
   if(form.password.value != "" && form.password.value == form.password_verify.value) {
     if(form.password.value.length < 6) {
       add_alert('alert-warning', 'Password must contain at least six characters!');
       form.password.focus();
       return false;
-    }
+    }    
 
-    if(form.password.value == form.name.value) {
-      add_alert('alert-warning', 'Password must be different from your name!');
-      form.password.focus();
-      return false;
-    }
-
-	re = /[0-9]/;
+  re = /[0-9]/;
     if(!re.test(form.password.value)) {
       add_alert('alert-warning', 'Password must contain at least one number (0-9)!');
       form.password.focus();
@@ -68,15 +76,6 @@ function checkForm(form) {
       return false;
     }
 
-    return true;
-}
-
-function checkUpdateForm(form) {
-  if(form.password.value != form.password_verify.value) {
-    add_alert('alert-warning', 'Please check that the passwords match!');
-    form.password.focus();
-    return false;
-  }
   return true;
 }
 
