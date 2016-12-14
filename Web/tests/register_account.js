@@ -4,7 +4,7 @@
  */
 var name = 'testuser';
 var email = 'testemail15@hotmail.com';
-var password = 'TESTPASSWORD1';
+var password = 'tESTPASSWORD1';
 var verification_code = 666666;
 
 module.exports = {
