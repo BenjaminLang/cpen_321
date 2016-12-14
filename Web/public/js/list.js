@@ -64,7 +64,7 @@ function addToTotalPrice(item) {
   
   Price += NumberPrice; 
   
-  htmlStringPrice += Price;
+  htmlStringPrice += round(Price,2);
   $('.totalPrice').html(htmlStringPrice);
 }
 
@@ -78,7 +78,7 @@ function showTotalPrice() {
     Price += Number(noDollarSign); 
   }
 
-  htmlStringPrice += Price;
+  htmlStringPrice += round(Price, 2);
   $('.totalPrice').html(htmlStringPrice);
 }
 
@@ -137,7 +137,7 @@ $(document).click(function (e){
   
      Price -= NumberPriceRemove; 
      htmlStringPrice = 'Total Price: $';
-     htmlStringPrice += Price;
+     htmlStringPrice += round(Price, 2);
      $('.totalPrice').html(htmlStringPrice);
      
      for(var i = 0; i < data.length; i++) {
@@ -154,5 +154,7 @@ $(document).click(function (e){
 
 });
 
-
+function round(value, decimals) {
+  return Number(Math.round(value+'e'+decimals)+'e-'+decimals).toFixed(decimals);
+}
 

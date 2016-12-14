@@ -195,7 +195,12 @@ module.exports = {
     debug('Save list request received.');
     // can only save lists if logged in
     if (req.session.user) {
-      messenger.request(constants.ADD_LIST_REQ, req, res);
+      if (req.body.list_name == '') {
+        res.send("Please name your list.");
+      }
+      else {
+        messenger.request(constants.ADD_LIST_REQ, req, res);
+      }
     }
     else {
       res.send("Please login to save lists.");

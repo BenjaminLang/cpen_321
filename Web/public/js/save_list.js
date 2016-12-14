@@ -2,7 +2,7 @@ $(function(){
   $('.saveChanges').click(function(){
    
    var parameters = { 
-      list_name: $("input[name='list_name']").text(),
+      list_name: $("input[name='list_name']").val(),
       list : localStorage.cart
     };
     // Send a request to the server to save list information

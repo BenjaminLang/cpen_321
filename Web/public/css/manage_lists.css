@@ -1,4 +1,40 @@
+.Manage *{
+    margin:0;
+    padding:0;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
 body {
 	background-image: url('../CheckedOutBackgroundTest.png');
   background-size: cover; 
+}
+
+.Manage form {
+    position:relative;
+    width:400px;
+    height:380px;
+    margin:150px auto;
+    text-align:center;
+    background:#ecf0f1;
+    padding:40px;
+    -webkit-border-radius:20px 0 0 0;
+       -moz-border-radius:20px 0 0 0;
+            border-radius:20px 0 0 0;
+    -webkit-box-shadow: 0px 1px 0px #ad392d, inset 0px 1px 0px white;
+       -moz-box-shadow: 0px 1px 0px #ad392d, inset 0px 1px 0px white;
+            box-shadow: 0px 1px 0px #ad392d, inset 0px 1px 0px white;
+    box-shadow: 20px 20px 20px;
+}
+
+.Manage h5 {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size:2em;
+    font-weight:300; 
+    margin-bottom:25px;
+    color:#7f8c8d;
+    text-shadow:1px 1px 0px white;
+}
+
+.Manage .list-group-item {
+	padding: 10px 20px;
 }
