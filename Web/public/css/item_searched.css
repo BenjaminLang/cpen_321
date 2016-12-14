@@ -104,7 +104,7 @@ button.btn.btn-primary.saveChanges {
     border-color: #2e6da4;
     margin-left: -43px;
     margin-top: 0px; 
-    position: relative;
+    position: fixed;
 }
 
 .modal-footer.list {
@@ -212,5 +212,15 @@ li.greeting {
     /* left: 50%; */
     width: 15%;
     transform: translate(-50%);
+}
+
+#save_list_status {
+    display: none;
+    width: 35%;
+    /*display: none; */
+    float: right;
+    margin-right: -100px;
+    margin-bottom: 5px;
+    padding: 4px 5px 4px 5px;
 }
 

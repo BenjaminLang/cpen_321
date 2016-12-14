@@ -127,6 +127,12 @@ module.exports = {
     });
   },
 
+  /**
+   * Handler for getting lists to display on the manage lists page
+   * @param  req the HTTP request from the browser 
+   * @param  res the HTTP response to the browser
+   * @return  nothing
+   */
   get_list : function(req, res) {
     debug('Request to get list received.');
     messenger.request(constants.GET_LIST_REQ, req, res);
@@ -186,7 +192,13 @@ module.exports = {
    */ 
   save_list : function(req, res) {
     debug('Save list request received.');
-    messenger.request(constants.ADD_LIST_REQ, req, res);
+    // can only save lists if logged in
+    if (req.session.user) {
+      messenger.request(constants.ADD_LIST_REQ, req, res);
+    }
+    else {
+      res.send("Please login to save lists.");
+    }
   },
 
   /**

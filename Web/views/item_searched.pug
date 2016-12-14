@@ -43,18 +43,20 @@ block content
         .modal-header
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') ×
-        form(action='/save_list', method='post')
-          h4#myModalLabel.modal-title
-            input.list(type='text', name='list_name', required='', placeholder='Shopping List Name', autocomplete='off')
-            
-          .modal-body
-          .modal-footer.list
-            input(type='hidden', name='list', value='')
-            button.btn.btn-primary.saveChanges(type='submit', onClick='save_list()') Save Changes
-            h5.totalPrice
-              script.
-                onload = showTotalPrice(); 
+        h4#myModalLabel.modal-title
+          input.list(type='text', name='list_name', required='', placeholder='Shopping List Name', autocomplete='off')
+        .modal-body
+        .modal-footer.list
+          button.btn.btn-primary.saveChanges Save Changes
+          .alert.alert-dismissable.fade.in(id='save_list_status')
+            .text-center#status_message
+              | Status
+          h5.totalPrice
+            script.
+              onload = showTotalPrice(); 
 
+block append footer-scripts
+  script(src='js/save_list.js', type='text/javascript')
         
 
         

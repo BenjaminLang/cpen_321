@@ -244,7 +244,8 @@ response = function (res_from_server, req, res) {
         if (message.status == 'exception') res.redirect('/logout');
 
         // stay on same page
-        res.status(204).end();
+        // res.status(204).end();
+        res.send("List saved.");
         break;
       //////////////////////////////
       case constants.GET_LIST_RSP:
