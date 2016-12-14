@@ -123,10 +123,10 @@ public class MainActivity extends AppCompatActivity {
                         String readRequest = "";
                         if(loggedIn) {
                             final String email = sharedPref.getString(SharedPrefSingle.prefKey.CURR_EMAIL, "");
-                            readRequest = rb.buildReadReq(s, email, options, "");
+                            readRequest = rb.buildReadReq(s, email, options);
                         }
                         else {
-                            readRequest = rb.buildReadReq(s, "", options, "");
+                            readRequest = rb.buildReadReq(s, "", options);
                         }
 
                         try {
@@ -228,28 +228,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    Get user recommendations and display it
+     */
     private void getRecommend() {
+        //get login status
         boolean defaultVal = false;
         loggedIn = sharedPref.getBoolean(SharedPrefSingle.prefKey.LOGIN_STAT, defaultVal);
 
+        //if user has logged in
         if(loggedIn) {
+            //set title and get email
             recommendTitle.setText("Here are Your Recommended Products:");
             String currUser = sharedPref.getString(SharedPrefSingle.prefKey.CURR_EMAIL, "");
 
+            //build get recommendation request
             String request = new RequestBuilder().buildGetRecommend(currUser);
 
             try {
+                //send request and get response
                 String response = new SendRequest(MainActivity.this).execute(request).get();
                 JSONObject respJSON = new JSONObject(response);
                 String status = respJSON.getString("status");
 
                 if(status.equals("success")) {
+                    //if response indicates success, parse the response for recommendation list
                     final List<Product> recommend = new JSONParser().parseRecommend(response);
 
+                    //set adapter to be recommendations list and display in list view
                     ProductAdapter adapter = new ProductAdapter(MainActivity.this, R.layout.search_result, recommend);
                     ListView recommendList = (ListView) findViewById(R.id.recommend_list);
                     recommendList.setAdapter(adapter);
 
+                    //launch product detail fragment when a product from the list is selected
                     recommendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

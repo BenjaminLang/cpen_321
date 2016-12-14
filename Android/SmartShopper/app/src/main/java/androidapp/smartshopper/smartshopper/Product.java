@@ -14,6 +14,9 @@ public class Product {
     private String quantity;
     private String url;
 
+    /*
+    Constructor to initialize all product information
+     */
     public Product(String name, String price, String store, String img, String url, String quantity) {
         this.name = name;
         this.price = price;
@@ -45,6 +48,9 @@ public class Product {
 
     public String getQuantity() { return quantity; }
 
+    /*
+    Serialize product into a JSON string
+     */
     public String toJSON() {
         try {
             JSONObject jsonString = new JSONObject();

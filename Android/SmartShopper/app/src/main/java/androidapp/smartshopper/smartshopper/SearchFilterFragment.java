@@ -52,27 +52,26 @@ public class SearchFilterFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_search_filter, null);
         builder.setTitle("Search Filter");
 
+        //Initialize dropdown menu for the sorting options
         Spinner sortSpin = (Spinner) view.findViewById(R.id.sort_spinner);
         ArrayAdapter<String> sortAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, sortOpt);
         sortAdpt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortSpin.setAdapter(sortAdpt);
 
+        //Initialize dropdown menu for the number of results to be displayed
         Spinner numItemSpin = (Spinner) view.findViewById(R.id.num_spinner);
         ArrayAdapter<String> numItemAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, numItemOpt);
         numItemAdpt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         numItemSpin.setAdapter(numItemAdpt);
 
+        //get the current positions of the dropdown menus
         final SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(getActivity());
-
-        /*
-        final SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPref.edit();*/
-
         int sortDefault = 0;
         int numDefault = 0;
         int sortSpinPos = sharedPref.getInt(SharedPrefSingle.prefKey.SORT_SPIN_POS, sortDefault);
         int numSpinPos = sharedPref.getInt(SharedPrefSingle.prefKey.NUM_SPIN_POS, numDefault);
 
+        //set the current position
         sortSpin.setSelection(sortSpinPos);
         numItemSpin.setSelection(numSpinPos);
 
@@ -104,36 +103,46 @@ public class SearchFilterFragment extends DialogFragment {
             }
         });
 
+        //Get checkboxes
         final CheckBox walmart = (CheckBox) view.findViewById(R.id.walmart_chk);
         final CheckBox costco = (CheckBox) view.findViewById(R.id.costco_chk);
         final CheckBox superstore = (CheckBox) view.findViewById(R.id.superstore_chk);
 
+        //get current checked status for all checkboxes
         boolean walmart_stat = sharedPref.getBoolean(SharedPrefSingle.prefKey.WALMART_STAT, true);
         final boolean costco_stat = sharedPref.getBoolean(SharedPrefSingle.prefKey.COSTCO_STAT, true);
         boolean superstore_stat = sharedPref.getBoolean(SharedPrefSingle.prefKey.SUPERSTORE_STAT, true);
 
+        //set checked status
         walmart.setChecked(walmart_stat);
         costco.setChecked(costco_stat);
         superstore.setChecked(superstore_stat);
 
+        //Java reference to text fields for max and min price
         final EditText max_prc = (EditText) view.findViewById(R.id.max_prc_field);
         final EditText min_prc = (EditText) view.findViewById(R.id.min_prc_field);
 
+        //get the past selected price
         String curr_max = sharedPref.getString(SharedPrefSingle.prefKey.CURR_MAX, "");
         String curr_min = sharedPref.getString(SharedPrefSingle.prefKey.CURR_MIN, "");
 
+        //set past selected price as current
         max_prc.setText(curr_max);
         min_prc.setText(curr_min);
 
         builder.setPositiveButton("Apply", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
+                //get max and min price as text
                 String new_max = max_prc.getText().toString();
                 String new_min = min_prc.getText().toString();
 
+                //set max and min price string empty status
                 boolean max_empty = (new_max.isEmpty() || new_max == null);
                 boolean min_empty = (new_min.isEmpty() || new_min == null);
 
+                //put the correct data into the correct field or display message
+                //corresponding to the data the user entered
                 if(max_empty && min_empty) {
                     sharedPref.put(SharedPrefSingle.prefKey.CURR_MAX, "");
                     sharedPref.put(SharedPrefSingle.prefKey.CURR_MIN, "");
@@ -159,6 +168,7 @@ public class SearchFilterFragment extends DialogFragment {
                     }
                 }
 
+                //create a list of stores checked
                 List<String> stores = new ArrayList<String>();
                 if(walmart.isChecked())
                     stores.add(walmart.getText().toString());
@@ -167,11 +177,13 @@ public class SearchFilterFragment extends DialogFragment {
                 if(superstore.isChecked())
                     stores.add(superstore.getText().toString());
 
+                //store the checked status of the stores
                 sharedPref.put(SharedPrefSingle.prefKey.WALMART_STAT, walmart.isChecked());
                 sharedPref.put(SharedPrefSingle.prefKey.COSTCO_STAT, costco.isChecked());
                 sharedPref.put(SharedPrefSingle.prefKey.SUPERSTORE_STAT, superstore.isChecked());
-                sharedPref.put(SharedPrefSingle.prefKey.STORE_OPT, storesToJSON(stores));
 
+                //store the modified options
+                sharedPref.put(SharedPrefSingle.prefKey.STORE_OPT, storesToJSON(stores));
                 sharedPref.put(SharedPrefSingle.prefKey.SORT_OPT, sortSelected);
                 sharedPref.put(SharedPrefSingle.prefKey.NUM_ITEM, numSelected);
             }
@@ -187,6 +199,9 @@ public class SearchFilterFragment extends DialogFragment {
         return builder.create();
     }
 
+    /*
+    Takes a list of store names and converts it into a JSON array string
+     */
     private String storesToJSON (List<String> stores) {
         JSONArray storeJSON = new JSONArray();
 

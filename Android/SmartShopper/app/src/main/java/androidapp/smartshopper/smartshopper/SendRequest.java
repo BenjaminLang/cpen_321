@@ -10,6 +10,9 @@ import android.os.AsyncTask;
 class SendRequest extends AsyncTask<String, Void, String> {
     private Context context;
 
+    /*
+    Send the request to the server in the background
+     */
     public SendRequest (Context context){
         this.context = context;
     }
@@ -22,6 +25,9 @@ class SendRequest extends AsyncTask<String, Void, String> {
             return "Connection Not Established";
     }
 
+    /*
+    Retrieve response
+     */
     @Override
     protected void onPostExecute(String request) {
         super.onPostExecute(request);

@@ -32,6 +32,7 @@ public class AccVerifyFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_acc_verify, container, false);
 
+        //Get Java reference to UI elements
         final EditText emailField = (EditText) view.findViewById(R.id.email_to_ver);
         final EditText codeField = (EditText) view.findViewById(R.id.ver_code);
         final Button verify = (Button) view.findViewById(R.id.verify_button);
@@ -39,17 +40,22 @@ public class AccVerifyFragment extends Fragment {
         verify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //get texts in the email and verification code fields
                 String email = emailField.getText().toString();
                 String code = codeField.getText().toString();
 
+                //build verification request
                 String req = new RequestBuilder().buildAccVerifyReq(email, code);
 
                 try {
+                    //send request and get response
                     String resp = new SendRequest(getActivity()).execute(req).get();
 
+                    //get the status of the response
                     JSONObject respJSON = new JSONObject(resp);
                     String status = respJSON.getString("status");
 
+                    //display relevant toast message depending on the returned status
                     if(status.equals("DNE"))
                         Toast.makeText(getActivity(), "User Doesn't Exist", Toast.LENGTH_SHORT).show();
                     else if(status.equals("failed"))

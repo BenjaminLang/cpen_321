@@ -29,7 +29,11 @@ public class JSONParser {
 
     public JSONParser() {}
 
-    public List<Product> parseJSON(String json) {
+    /*
+    USE FOR SEARCH RESULTS
+    Takes JSON string and parse into a list of Product objects.
+     */
+    public List<Product> parseProductList(String json) {
         if(json.equals("")) {
             return new ArrayList<Product>();
         }
@@ -51,11 +55,6 @@ public class JSONParser {
                     String img = currData.getString(IMG_TAG);
                     String url = currData.getString(URL_TAG);
 
-                    /*
-                    if(!img.substring(0, 1).equals("h"))
-                        img = "http:" + img;
-                        */
-
                     Product currProduct = new Product(name, price, store, img, url, null);
                     parseList.add(currProduct);
                 }
@@ -70,6 +69,10 @@ public class JSONParser {
         }
     }
 
+    /*
+    USE FOR PRODUCT RECOMMENDATION
+    Takes JSON string and parse into a list of Product objects.
+     */
     public List<Product> parseRecommend(String json) {
         if(json.equals("")) {
             return new ArrayList<Product>();
@@ -106,6 +109,10 @@ public class JSONParser {
         }
     }
 
+    /*
+    USE FOR PARSING SHOPPING LIST
+    Takes JSON string and parse into a list of Product objects.
+     */
     public List<Product> parseCart(String json) {
         if(json.equals("")) {
             return new ArrayList<Product>();
@@ -142,6 +149,9 @@ public class JSONParser {
         }
     }
 
+    /*
+    Takes JSON string and parse into a list of Strings representing the lists that a user has saved
+     */
     public List<String> parseListNames(String json) {
         if(json.equals("")) {
             return new ArrayList<String>();

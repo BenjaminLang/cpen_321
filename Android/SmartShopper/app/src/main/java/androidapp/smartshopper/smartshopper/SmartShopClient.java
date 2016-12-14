@@ -25,20 +25,21 @@ import javax.net.ssl.TrustManagerFactory;
 public class SmartShopClient {
     private int port = 6969;
     private String addr = "ryangroup.westus.cloudapp.azure.com";
-    //private String addr = "13.88.11.52/ryangroup.westus.cloudapp.azure.com";
     private String server_hostname = "checkedout";
-    private Socket connection;
     private BufferedWriter outputStream;
     private BufferedReader inputStream;
     private boolean connected;
 
-    private char[] keyPass = "ryangroup".toCharArray();
-
+    /*
+    Initialize connection to server, and use context to retrieve certification
+     */
     public SmartShopClient(Context context) {
         try {
+            //initiate certificate factory
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
-            InputStream certIn =  context.getResources().openRawResource(R.raw.ca);
+            //set certificate with ca.crt contained within res folder
+            InputStream certIn = context.getResources().openRawResource(R.raw.ca);
             Certificate ca;
             try {
                 ca = cf.generateCertificate(certIn);
@@ -46,22 +47,27 @@ public class SmartShopClient {
                 certIn.close();
             }
 
+            //set keystore using certificate
             String keyStoreType = KeyStore.getDefaultType();
             KeyStore ks = KeyStore.getInstance(keyStoreType);
             ks.load(null, null);
             ks.setCertificateEntry("ca", ca);
 
+            //set trust manager with keystore
             String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
             TrustManagerFactory trustMan = TrustManagerFactory.getInstance(tmfAlgorithm);
             trustMan.init(ks);
 
+            //initiate ssl
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, trustMan.getTrustManagers(), null);
 
+            //produce ssl socket connecting to correct ip, port, and using correct certificate
             SSLSocketFactory sslSocFact = sslContext.getSocketFactory();
             Socket client_socket = new Socket(addr, port);
             SSLSocket sslSocket = (SSLSocket) sslSocFact.createSocket(client_socket, server_hostname, port, false);
 
+            //input and output stream for reading from and writing to server
             outputStream = new BufferedWriter(
                     new OutputStreamWriter(sslSocket.getOutputStream()));
             inputStream = new BufferedReader(
@@ -74,12 +80,14 @@ public class SmartShopClient {
         }
     }
 
+    /*
+    Send request to socket and retrieve response
+     */
     public String sendRequest(String request){
         try{
             outputStream.write(request);//
             outputStream.flush();
             String response = inputStream.readLine();
-            //System.out.println(response);
             return response;
         } catch (IOException e){
             e.printStackTrace();

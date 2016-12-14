@@ -10,6 +10,9 @@ public class SearchOptions {
     private String price_max;
     private String num;
 
+    /*
+    Constructor to initialize required data
+     */
     public SearchOptions(String stores, String price, String price_min, String price_max, String num){
         this.stores = stores;
         this.price = price;

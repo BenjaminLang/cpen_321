@@ -48,6 +48,7 @@ public class DetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.context = getActivity();
 
+        //get JSON string of product from bundle
         String productJSON;
         Bundle bundle = this.getArguments();
         if (bundle != null)
@@ -55,6 +56,7 @@ public class DetailFragment extends Fragment {
         else
             productJSON = null;
 
+        //convert JSON string to Product object if JSON isn't null
         if(productJSON != null)
             product = jsonToProduct(productJSON);
     }
@@ -65,6 +67,7 @@ public class DetailFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
+        //get Java reference to various UI elements
         ImageView img = (ImageView) view.findViewById(R.id.detail_img);
         TextView name = (TextView) view.findViewById(R.id.product_name);
         TextView price = (TextView) view.findViewById(R.id.product_price);
@@ -79,20 +82,25 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
+                //get instancce of shared preferences and get login status
                 final SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(getActivity());
                 boolean loggedIn = sharedPref.getBoolean(SharedPrefSingle.prefKey.LOGIN_STAT, false);
 
                 String currListName;
+                //If logged in use currently selected list
                 if(loggedIn) {
                     currListName = sharedPref.getString(SharedPrefSingle.prefKey.CURR_LIST, "default_list");
                 }
+                //If not logged in default offline list
                 else {
                     currListName = "default_list";
                 }
 
+                //Get shopping list handler on current selected list
                 ShopListHandler listHandler = new ShopListHandler(getActivity(), currListName);
                 int numToAdd = Integer.parseInt(quantity.getText().toString());
 
+                //try to add item to list
                 if(listHandler.addToList(product, numToAdd))
                     Toast.makeText(getActivity(), "Added to cart!", Toast.LENGTH_SHORT).show();
                 else
@@ -104,11 +112,13 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
+                //put product URL into bundle to pass to web fragment
                 Bundle bundle = new Bundle();
                 bundle.putString("url", product.getURL());
                 ProductWebFragment webFrag = new ProductWebFragment();
                 webFrag.setArguments(bundle);
 
+                //launch web fragment
                 FragmentManager fragMan = getFragmentManager();
                 fragMan.beginTransaction()
                         .replace(R.id.result_frame, webFrag)
@@ -118,6 +128,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        //display image and set relevant text
         Picasso.with(context).load(product.getImg()).into(img);
         name.setText(product.getName());
         price.setText("$"+product.getPrice());
@@ -126,6 +137,9 @@ public class DetailFragment extends Fragment {
         return view;
     }
 
+    /*
+    Takes JSON string and convert to Product object
+     */
     private Product jsonToProduct (String json) {
         try {
             JSONObject obj = new JSONObject(json);

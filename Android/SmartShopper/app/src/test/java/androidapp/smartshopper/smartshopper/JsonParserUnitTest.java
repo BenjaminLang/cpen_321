@@ -41,7 +41,7 @@ public class JsonParserUnitTest {
 
             String testJson = sb.toString();
             JSONParser testParser = new JSONParser();
-            ArrayList<Product> result = (ArrayList<Product>) testParser.parseJSON(testJson);
+            ArrayList<Product> result = (ArrayList<Product>) testParser.parseProductList(testJson);
 
             /*
             List<Product> expected = new ArrayList<Product>(Arrays.asList(

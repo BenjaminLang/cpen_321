@@ -29,6 +29,9 @@ public class ProductAdapter extends ArrayAdapter<Product>{
     int layoutId;
     private List<Product> products;
 
+    /*
+    Constructor initializing all required data
+     */
     public ProductAdapter(Context context, int resource, List<Product> products){
         super(context, resource, products);
 
@@ -52,6 +55,9 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         return i;
     }
 
+    /*
+    Update the adapter and view with a new list
+     */
     public void updateProductList(List<Product> newList) {
         products.clear();
         products.addAll(newList);
@@ -63,10 +69,12 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         View view = convertView;
         ProductHolder holder = null;
 
+        //if view doesn't exist inflate new view
         if(view == null){
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             view = inflater.inflate(layoutId, parent, false);
 
+            //initialize ProductHolder for UI elements
             holder = new ProductHolder();
             holder.name = (TextView) view.findViewById(R.id.name);
             holder.price = (TextView) view.findViewById(R.id.price);
@@ -80,18 +88,23 @@ public class ProductAdapter extends ArrayAdapter<Product>{
             holder = (ProductHolder) view.getTag();
         }
 
+        //put data into corresponding UI elements
         Product currProduct = products.get(position);
         holder.name.setText(currProduct.getName());
         holder.price.setText(currProduct.getPrice());
         holder.store.setText("From: " + currProduct.getStore());
         Picasso.with(context).load(currProduct.getImg()).into(holder.img);
 
+        //if quantity field exists, display it
         if(currProduct.getQuantity() != null)
             holder.quantity.setText("x" + currProduct.getQuantity());
 
         return view;
     }
 
+    /*
+    Get the total price of all the products in the adapter list
+     */
     public double getTotalPrc() {
         double total = 0;
 
@@ -106,6 +119,9 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         return round(total, 2);
     }
 
+    /*
+    Get all the stores associated with the products
+     */
     public String getStores() {
         JSONArray stores = new JSONArray();
 
@@ -129,6 +145,9 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         }
     }
 
+    /*
+    Round a double to "places" amount of decimals
+     */
     private static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
@@ -137,6 +156,9 @@ public class ProductAdapter extends ArrayAdapter<Product>{
         return bd.doubleValue();
     }
 
+    /*
+    Holder for all relevant UI elements
+     */
     static class ProductHolder{
         TextView name;
         TextView price;

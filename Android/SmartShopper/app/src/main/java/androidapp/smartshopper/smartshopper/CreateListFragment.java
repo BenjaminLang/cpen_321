@@ -34,20 +34,25 @@ public class CreateListFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        //inflate save list dialog UI
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_create_list, null);
         builder.setTitle("Create New Shopping List");
 
+        //get Java reference to list name field
         final EditText newListName = (EditText) view.findViewById(R.id.new_list_name);
 
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
+                //get the name
                 String listName = newListName.getText().toString();
 
+                //get the items stored in the default offline list
                 SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(getActivity());
                 String listJSON =  sharedPref.getString("default_list", "");
 
+                //create empty JSON array string if the list is empty
                 if(listJSON.equals("")) {
                     try {
                         JSONObject newListJSON = new JSONObject();
@@ -59,6 +64,7 @@ public class CreateListFragment extends DialogFragment {
                         //put toast
                     }
                 }
+                //create JSON array from cart string otherwise
                 else {
                     try {
                         JSONObject currListJSON = new JSONObject(listJSON);
@@ -73,10 +79,13 @@ public class CreateListFragment extends DialogFragment {
                     }
                 }
 
+                //get the current emailed logged into and build request with list name and actual list
                 String email = sharedPref.getString(SharedPrefSingle.prefKey.CURR_EMAIL, "");
                 request = new RequestBuilder().buildAddListReq(email, listName, listJSON);
                 System.out.println(request);
 
+                //put the saved list into a key with the name just created
+                //and empty out default offline list
                 sharedPref.put(listName, listJSON);
                 sharedPref.put("default_list", "");
             }
@@ -95,6 +104,7 @@ public class CreateListFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
+        //execute the request created above
         SendRequest reqSender = new SendRequest(getActivity());
         reqSender.execute(request);
     }

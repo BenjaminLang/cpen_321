@@ -10,7 +10,10 @@ import org.json.JSONObject;
 public class RequestBuilder {
     public RequestBuilder(){}
 
-    public String buildReadReq(String item, String email, SearchOptions options, String userId){
+    /*
+    Build a read/search request using the item name, email, and search options
+     */
+    public String buildReadReq(String item, String email, SearchOptions options){
         JSONObject request = new JSONObject();
         try {
             //insert message type
@@ -31,7 +34,6 @@ public class RequestBuilder {
             request.put("options", opt);
 
             //insert item names
-            //String[] collections = item.split(" ");
             JSONArray searchItems = new JSONArray();
             searchItems.put(item);
             request.put("items", searchItems);
@@ -42,6 +44,9 @@ public class RequestBuilder {
         }
     }
 
+    /*
+    Build a build collection request
+     */
     public String buildCollectionReq(){
         JSONObject request = new JSONObject();
         try{
@@ -52,6 +57,9 @@ public class RequestBuilder {
         }
     }
 
+    /*
+    Build a create account request using id, email, and password
+     */
     public String buildAccountCreateReq(String id, String email, String pw) {
         JSONObject request = new JSONObject();
         try{
@@ -66,6 +74,9 @@ public class RequestBuilder {
         }
     }
 
+    /*
+    Build an account verification request using email and verification code
+     */
     public String buildAccVerifyReq(String email, String verCode) {
         JSONObject request = new JSONObject();
         try{
@@ -79,11 +90,14 @@ public class RequestBuilder {
         }
     }
 
-    public String buildLoginReq(String id, String pw) {
+    /*
+    Build a login request using email and password
+     */
+    public String buildLoginReq(String email, String pw) {
         JSONObject request = new JSONObject();
         try{
             request.put("message_type", "acc_login");
-            request.put("email", id);
+            request.put("email", email);
             request.put("name", "kooner");
             request.put("password", pw);
 
@@ -93,23 +107,14 @@ public class RequestBuilder {
         }
     }
 
-    public String buildLogoutReq(String id) {
-        JSONObject request = new JSONObject();
-        try{
-            request.put("message_type", "acc_logout");
-            request.put("email", id);
-
-            return request.toString(2);
-        } catch(JSONException e){
-            return "cannot generate message";
-        }
-    }
-
-    public String buildChangePass(String id, String oldPass, String newPass) {
+    /*
+    Build a change password request using email, old password, and new password
+     */
+    public String buildChangePass(String email, String oldPass, String newPass) {
         JSONObject request = new JSONObject();
         try{
             request.put("message_type", "acc_update");
-            request.put("email", id);
+            request.put("email", email);
             request.put("old_password", oldPass);
             request.put("password", newPass);
 
@@ -119,6 +124,9 @@ public class RequestBuilder {
         }
     }
 
+    /*
+    Build a add list request using email, list name, and the list
+     */
     public String buildAddListReq(String email, String listName, String cartItems){
         JSONObject request = new JSONObject();
         try{
@@ -135,19 +143,9 @@ public class RequestBuilder {
         }
     }
 
-    public String buildDeleteListReq(String email, String listName) {
-        JSONObject request = new JSONObject();
-        try{
-            request.put("message_type", "delete_list");
-            request.put("email", email);
-            request.put("list_name", listName);
-
-            return request.toString(2);
-        } catch(JSONException e){
-            return "cannot generate message";
-        }
-    }
-
+    /*
+    Build a get list names request using email
+     */
     public String buildGetListNamesJSON(String email) {
         JSONObject request = new JSONObject();
         try{
@@ -160,6 +158,9 @@ public class RequestBuilder {
         }
     }
 
+    /*
+    Build a get list request using email and list name
+     */
     public String buildGetListReq(String email, String list) {
         JSONObject request = new JSONObject();
         try{
@@ -173,6 +174,9 @@ public class RequestBuilder {
         }
     }
 
+    /*
+    Build a get recommendation request using email
+     */
     public String buildGetRecommend(String email) {
         JSONObject request = new JSONObject();
         try{
@@ -183,11 +187,5 @@ public class RequestBuilder {
         } catch(JSONException e){
             return "cannot generate message";
         }
-    }
-
-    private String[] getSuperString(String[] items){
-        //String[] collections = Collections.getInstance().getCollection();
-        //this is hard
-        return null;
     }
 }

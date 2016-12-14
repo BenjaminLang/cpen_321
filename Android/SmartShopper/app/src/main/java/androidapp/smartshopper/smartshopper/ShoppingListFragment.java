@@ -39,7 +39,6 @@ public class ShoppingListFragment extends Fragment{
     private Context context;
     private ProductAdapter adapter;
     private List<Product> cartItems = new ArrayList<Product>();
-    private double totalPrice;
     private String[] listNameOpts = {};
     private String email;
     private boolean loggedIn;
@@ -57,29 +56,25 @@ public class ShoppingListFragment extends Fragment{
         this.context = getActivity();
         sharedPref = SharedPrefSingle.getInstance(getActivity());
 
+        //get the current selected list, email, and login status
         currList = sharedPref.getString(SharedPrefSingle.prefKey.CURR_LIST, "default_list");
         email = sharedPref.getString(SharedPrefSingle.prefKey.CURR_EMAIL, "");
         loggedIn = sharedPref.getBoolean(SharedPrefSingle.prefKey.LOGIN_STAT, false);
 
         if(loggedIn) {
-
             try {
+                //build get list request
                 String getListsReq = new RequestBuilder().buildGetListNamesJSON(email);
                 String getAllListResp = new SendRequest(getActivity()).execute(getListsReq).get();
 
                 JSONObject respJSON = new JSONObject(getAllListResp);
                 String stat = respJSON.getString("status");
 
-                //JSONArray listsArray = respJSON.getJSONArray("list_names");
-                JSONObject listNamesJSON = new JSONObject();
-
+                //if the all list names retrieval is successful parse it into a string array
                 if(stat.equals("success")) {
                     List<String> listNames = new JSONParser().parseListNames(getAllListResp);
                     listNames.add("Add New List...");
                     listNameOpts = listNames.toArray(new String[0]);
-
-                    //editor.putString("list_names", getAllListResp);
-                    //editor.commit();
                 }
                 else {
                     Toast.makeText(getActivity(), "Shopping Lists Cannot be Retrieved", Toast.LENGTH_SHORT).show();
@@ -96,23 +91,26 @@ public class ShoppingListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
 
+        //set the adapter of the list view wtih an emtpy array list
         adapter = new ProductAdapter(this.context, R.layout.search_result, new ArrayList<Product>());
         ListView list = (ListView) view.findViewById(R.id.cart_list);
         list.setAdapter(adapter);
 
         final TextView total = (TextView) view.findViewById(R.id.cart_summary);
 
+        //Initialize the list dropdown with string array containing list names
         final Spinner listNameSpin = (Spinner) view.findViewById(R.id.all_usr_list);
         ArrayAdapter<String> listNamesAdpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, listNameOpts);
         listNameSpin.setAdapter(listNamesAdpt);
+        //set the position of the dropdown to be on the current selected list
         if(currList.equals("default_list"))
             listNameSpin.setSelection(listNamesAdpt.getPosition("Add New List..."));
         else
             listNameSpin.setSelection(listNamesAdpt.getPosition(currList));
 
+        //initialize multi functional button and set as "save" or "update" depending on list selected
         final Button modList = (Button) view.findViewById(R.id.new_list_button);
         if(currList.equals("default_list"))
             modList.setText("Save List");
@@ -123,18 +121,19 @@ public class ShoppingListFragment extends Fragment{
 
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                //get the selected list
                 String listSelected = listNameOpts[position];
+                //if selected "Add New List..." option, access default offline list
                 if(listSelected.equals("Add New List...")) {
                     modList.setText("Save List");
 
+                    //set currently selected list
                     currList = "default_list";
                     sharedPref.put(SharedPrefSingle.prefKey.CURR_LIST, currList);
 
+                    //get the list and display it
                     String cartString = sharedPref.getString(currList, "");
-
                     try {
-                        //JSONObject cartJSON = new JSONObject(cartString);
-
                         List<Product> updatedList = new JSONParser().parseCart(cartString);
 
                         adapter.updateProductList(updatedList);
@@ -147,14 +146,14 @@ public class ShoppingListFragment extends Fragment{
                 else {
                     modList.setText("Update List");
 
+                    //set currently selected list
                     currList = listSelected;
                     sharedPref.put(SharedPrefSingle.prefKey.CURR_LIST, listSelected);
 
                     if(sharedPref.contains(listSelected)) {
+                        //if the list already exists within local storage, load it locally and display it
                         String cartString = sharedPref.getString(listSelected, "");
                         try {
-                            JSONObject cartJSON = new JSONObject(cartString);
-
                             List<Product> updatedList = new JSONParser().parseCart(cartString);
 
                             adapter.updateProductList(updatedList);
@@ -165,6 +164,7 @@ public class ShoppingListFragment extends Fragment{
                         }
                     }
                     else {
+                        //if list doesn't exist in local storage, retrieve it from the server and display it
                         String request = new RequestBuilder().buildGetListReq(email, listSelected);
 
                         try {
@@ -199,15 +199,20 @@ public class ShoppingListFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 if(currList.equals("default_list")) {
+                    //if the list selected is the default offline list, launch the create new list dialog
                     FragmentManager fm = getFragmentManager();
                     CreateListFragment newListDialog = new CreateListFragment();
                     newListDialog.show(fm, "fragment_new_list");
                 }
                 else {
+                    //if list is a list stored online, update it in the background
+
+                    //get list string
                     String listJSON =  sharedPref.getString(currList, "");
                     String listJSONFinal = "";
 
                     if(listJSON.equals("")) {
+                        //if list is empty create empty JSON array
                         try {
                             JSONObject newListJSON = new JSONObject();
                             JSONArray emptyArray = new JSONArray();
@@ -219,6 +224,7 @@ public class ShoppingListFragment extends Fragment{
                         }
                     }
                     else {
+                        //turn list into JSON object
                         try {
                             JSONObject currListJSON = new JSONObject(listJSON);
                             JSONArray listArray = currListJSON.getJSONArray("list");
@@ -232,13 +238,16 @@ public class ShoppingListFragment extends Fragment{
                         }
                     }
 
+                    //create update list request
                     String updateReq = new RequestBuilder().buildAddListReq(email, currList, listJSONFinal);
                     System.out.println(updateReq);
 
                     try {
+                        //send request and retrieve response
                         String updateResp = new SendRequest(getActivity()).execute(updateReq).get();
                         JSONObject updateRespJSON = new JSONObject(updateResp);
 
+                        //get response status and display toast message corresponding to it
                         String status = updateRespJSON.getString("status");
                         if(status.equals("success")) {
                             Toast.makeText(getActivity(), "List Updated!", Toast.LENGTH_SHORT).show();
@@ -255,16 +264,15 @@ public class ShoppingListFragment extends Fragment{
 
         if(loggedIn) {
             if(currList.isEmpty() || currList == null || currList.equals("")) {
+                //default to default offline list if there is no current list selection
                 currList = "default_list";
             }
 
             if(sharedPref.contains(currList)) {
+                //if the list already exists within local storage, load it locally and display it
                 String cartString = sharedPref.getString(currList, "");
                 try {
-                    //JSONObject cartJSON = new JSONObject(cartString);
-
                     List<Product> updatedList = new JSONParser().parseCart(cartString);
-                    //totalPrice = cartJSON.getDouble("total_price");
 
                     cartItems = updatedList;
                     adapter.updateProductList(updatedList);
@@ -273,6 +281,7 @@ public class ShoppingListFragment extends Fragment{
                 }
             }
             else {
+                //if list doesn't exist in local storage, retrieve it from the server and display it
                 String request = new RequestBuilder().buildGetListReq(email, currList);
 
                 try {
@@ -300,6 +309,7 @@ public class ShoppingListFragment extends Fragment{
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        //find item clicked on and delete the item from the list
                         Product selected = cartItems.get(position);
 
                         ShopListHandler listHandler = new ShopListHandler(getActivity(), currList);
@@ -313,21 +323,22 @@ public class ShoppingListFragment extends Fragment{
             }
         }
         else {
+            //if the user hasn't logged in, disable multiple list feature
             listNameSpin.setVisibility(View.INVISIBLE);
             modList.setEnabled(false);
 
+            //load default offline list and display it
             try {
                 String defaultVal = "";
                 final String cartString = sharedPref.getString("default_list", defaultVal);
-                //JSONObject cartJSON = new JSONObject(cartString);
 
                 cartItems = new JSONParser().parseCart(cartString);
-                //totalPrice = cartJSON.getDouble("total_price");
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             if (cartItems != null) {
+                //find item clicked on and delete the item from the list
                 adapter.updateProductList(cartItems);
 
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -351,26 +362,18 @@ public class ShoppingListFragment extends Fragment{
         getRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String storeList = adapter.getStores();
 
-                System.out.println("something");
                 Intent intent = new Intent(getActivity(), RoutingActivity.class);
+                //get list of stores user needs to go to
+                String storeList = adapter.getStores();
                 Bundle bundle = new Bundle();
                 bundle.putString("stores", storeList);
+                //start routing activity
                 intent.putExtras(bundle);
                 startActivity(intent);
-                System.out.println("fuk");
             }
         });
 
         return view;
-    }
-
-    private static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
     }
 }

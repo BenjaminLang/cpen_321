@@ -35,13 +35,16 @@ public class PostLoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_login, container, false);
 
+        //get current user's name
         final SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(getActivity());
         String defaultVal = "";
         final String currId = sharedPref.getString(SharedPrefSingle.prefKey.CURR_NAME, defaultVal);
 
+        //set user greeting
         TextView userGreeting = (TextView) view.findViewById(R.id.curr_user);
         userGreeting.setText("Welcome, " + currId);
 
+        //get Java reference to UI elements
         Button logout = (Button) view.findViewById(R.id.logout_button);
         final EditText currPw = (EditText) view.findViewById(R.id.curr_pw);
         final EditText newPw = (EditText) view.findViewById(R.id.new_pw);
@@ -52,6 +55,7 @@ public class PostLoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(currId != "") {
+                    //if there is currently a user logged in, log out
                     Toast.makeText(getActivity(), "Logged Out", Toast.LENGTH_SHORT).show();
                     sharedPref.put(SharedPrefSingle.prefKey.LOGIN_STAT, false);
                     getActivity().onBackPressed();
@@ -65,19 +69,24 @@ public class PostLoginFragment extends Fragment {
         changePw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //get text from input fields
                 String currPwString = currPw.getText().toString();
                 String newPwString = newPw.getText().toString();
                 String confirmPwString = confirmPw.getText().toString();
 
                 if(newPwString.equals(confirmPwString)) {
+                    //if new password is same as password confimration, build change password request
                     String changePwReq = new RequestBuilder().buildChangePass(currId, currPwString, newPwString);
 
                     try {
+                        //send request and get response
                         String jsonResponse = new SendRequest(getActivity()).execute(changePwReq).get();
 
+                        //get response status
                         JSONObject respJSON = new JSONObject(jsonResponse);
                         String status = respJSON.getString("status");
 
+                        //print toast message corresponding to response status
                         if (status.equals("DNE"))
                             Toast.makeText(getActivity(), "Wrong Username", Toast.LENGTH_SHORT).show();
                         else if (status.equals("failed"))

@@ -29,7 +29,6 @@ import java.util.List;
 public class ResultFragment extends ListFragment {
     private final String ARG_KEY = "json_response";
 
-    //private ListView listView;
     private String jsonResp;
     private List<Product> result;
     private Context context;
@@ -43,28 +42,26 @@ public class ResultFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         this.context = getActivity();
 
+        //get the JSON string representing list of search results/products
         Bundle bundle = this.getArguments();
         if(bundle != null) {
             jsonResp = bundle.getString(ARG_KEY);
         }
-
-        /*
-        if(jsonResp == null) {
-            Toast.makeText(getActivity(), "The Item You Searched For Doesn't Exist :(", Toast.LENGTH_LONG).show();
-        }*/
 
         if(jsonResp.equals("Connection Not Established")) {
             Toast.makeText(getActivity(), jsonResp, Toast.LENGTH_LONG).show();
             return;
         }
 
+        //parse JSON into list of products
         JSONParser parser = new JSONParser();
-        this.result = parser.parseJSON(jsonResp);
+        this.result = parser.parseProductList(jsonResp);
 
         if(result.isEmpty()) {
             Toast.makeText(getActivity(), "The Item You Searched For Doesn't Exist :(", Toast.LENGTH_LONG).show();
         }
 
+        //set adapter for list view
         ProductAdapter adapter = new ProductAdapter(this.context, R.layout.search_result, this.result);
         this.setListAdapter(adapter);
     }
@@ -78,7 +75,7 @@ public class ResultFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id){
-        //ProductAdapter adapter = (ProductAdapter) l.getAdapter();
+        //get item selected and launch product detail fragment for the selected product
         Product selected = this.result.get(position);
         String productJSON = selected.toJSON();
 

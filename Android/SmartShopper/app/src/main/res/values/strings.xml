@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Smart Shopper</string>
+    <string name="app_name">CheckedOut</string>
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="action_search">Search</string>

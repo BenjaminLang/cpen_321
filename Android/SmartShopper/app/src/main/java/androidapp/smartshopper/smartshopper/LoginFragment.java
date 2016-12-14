@@ -43,6 +43,7 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
+        //get Java reference to UI elements
         final EditText idField = (EditText) view.findViewById(R.id.id);
         final EditText passField = (EditText) view.findViewById(R.id.pw);
         final Button login = (Button) view.findViewById(R.id.login_button);
@@ -50,17 +51,21 @@ public class LoginFragment extends Fragment {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //get text entered into the available fields
                 String id = idField.getText().toString();
                 String pw = passField.getText().toString();
+                //build login request
                 String loginReq = new RequestBuilder().buildLoginReq(id, pw);
-                //loginReq = new RequestBuilder().modAccReq(id, pw);
                 try {
+                    //send request and obtain response
                     String jsonResponse = new SendRequest(getActivity()).execute(loginReq).get();
 
+                    //get status of response and name of user logged in
                     JSONObject respJSON = new JSONObject(jsonResponse);
                     String status = respJSON.getString("status");
                     String name = respJSON.getString("name");
 
+                    //display toast message corresponding to status
                     if(status.equals("DNE"))
                         Toast.makeText(getActivity(), "Wrong Username", Toast.LENGTH_SHORT).show();
                     else if(status.equals("failed"))
@@ -72,9 +77,11 @@ public class LoginFragment extends Fragment {
                     else {
                         Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
 
+                        //put email and name into shared preferences
                         SharedPrefSingle sharedPref = SharedPrefSingle.getInstance(getActivity());
                         sharedPref.put(SharedPrefSingle.prefKey.CURR_EMAIL, id);
                         sharedPref.put(SharedPrefSingle.prefKey.CURR_NAME, name);
+                        //set login status as true
                         sharedPref.put(SharedPrefSingle.prefKey.LOGIN_STAT, true);
                         getActivity().onBackPressed();
                     }
@@ -86,6 +93,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        //launch account creation fragment when corresponding button pressed
         TextView accCreate = (TextView) view.findViewById(R.id.createAcc);
         accCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +109,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        //launch account verify fragment when corresponding button pressed
         TextView accVerify = (TextView) view.findViewById(R.id.verifyAcc);
         accVerify.setOnClickListener(new View.OnClickListener() {
             @Override
