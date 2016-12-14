@@ -84,7 +84,7 @@ function checkUpdateForm(form) {
 function add_alert(alert_type, alert_text) {
   //'alert', 'alert-warning', 'alert-dismissable', 'fade', 'in'
   $('.alert_class').removeClass('alert_class').addClass('alert ' + alert_type + ' alert-dismissable fade in');
-  $('.text-center').text(alert_text);
+  $('#status_message').text(alert_text);
 
   $('.alert').show();
   $('a.close').show();

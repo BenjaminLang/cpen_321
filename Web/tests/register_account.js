@@ -6,7 +6,6 @@ var name = 'testuser';
 var email = 'testemail15@hotmail.com';
 var password = 'TESTPASSWORD1';
 var verification_code = 666666;
-var test = 'True';
 
 module.exports = {
   'Go to Registration': function(browser) {
@@ -46,7 +45,7 @@ module.exports = {
       .setValue('input[name="verify_num"]', verification_code)
       .click('input[type="submit"]')
       .pause(1000)
-      .assert.containsText('h4', 'Email successfully verified.')
+      .assert.containsText('#status_message', 'Email successfully verified.')
   },
 
   'Login' : function(browser) {
@@ -78,7 +77,7 @@ module.exports = {
       .setValue('input[name="password_verify"]', password)
       .click('input[type="submit"]')
       .pause(1000)
-      .assert.containsText('h4', 'That email is already in use.')
+      .assert.containsText('#status_message', 'That email is already in use.')
   },
 
   'Login again' : function(browser) {

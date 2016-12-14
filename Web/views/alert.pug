@@ -2,7 +2,7 @@ div(class="alert_class")
   div(class=alert_type)
     a.close(href='javascript:void(0)', onclick="$('.alert').hide()", aria-label='close')
       | x
-    .text-center
+    .text-center#status_message
       | #{status}
 
 if status
